@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Options</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body style="background-image: url('bg_ig.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+
+    <nav class="navbar">
+        <h2>Your Website</h2>
+        <button class="search-btn" id="searchBtn">Search</button>
+    </nav>
+
+    <!-- Dropdown form for search -->
+    <div class="search-form-container" id="searchFormContainer">
+        <form id="searchForm">
+            <label for="id">User ID:</label>
+            <input type="text" id="id" name="id" >
+
+            <label for="username">User Name:</label>
+            <input type="text" id="username" name="username" >
+
+            <label for="phoneNo">Phone No:</label>
+            <input type="phoneNo" id="phoneNo" name="phoneNo" >
+
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+    <div id="superuser-options-box">
+        <h1>Options</h1>
+        <a href="login.html">
+            <button id="add-user" class="add-user">Add User</button>
+        </a>
+        <br><br>
+
+        <div class="input-group">
+            <label for="user-id">UserID</label>
+            <input type="text" id="user-id" name="user-id" required>
+        </div>
+        <br>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="input-group">
+            <label for="confirm-password"> Confirm Password</label>
+            <input type="confirm-password" id="confirm-password"" name="confirm-password" required>
+        </div>
+
+        <a href="login.html">
+            <button id="get-details" class="get-details">Get Details</button>
+        </a>
+    </div>
+    <script src="scripts/search.js"></script>
+
+</body>
+
+</html>
