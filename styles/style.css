@@ -28,7 +28,7 @@ body {
 
 /* container for superusre page */
 .container {
-  background: rgba(128, 110, 110, 0.614);
+  background: rgba(202, 189, 189, 0.822);
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -76,8 +76,8 @@ body {
 }
 
 .btn-purple {
-  width: 35%;
-  background-color: #3f0d9a;
+  width: 40%;
+  background-color: #6f42c1;
   color: white;
   margin: auto;
 }
@@ -88,7 +88,7 @@ body {
 }
 
 .btn-purple:hover {
-  background-color: #624b88;
+  background-color: #5a3397;
 }
 
 
@@ -104,7 +104,7 @@ body {
   width: 300px;
   padding: 20px;
   margin: 100px auto;
-  background: rgba(128, 110, 110, 0.614);
+  background: rgba(189, 170, 170, 0.614);
   border-radius: 8px;
   text-align: center;
 }

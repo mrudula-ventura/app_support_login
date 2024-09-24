@@ -1,40 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Superuser Page</title>
-    <link rel="stylesheet" href="style/style.css">
-   
+    <link rel="stylesheet" href="styles/style.css"> 
 </head>
-<body style="background-image: url('style/bg1.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
 
+<body
+    style="background-image: url('styles/sbg.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+
+    
     <div class="navbar">
-        Welcome to the portal!
+        Superuser Panel
+       
+
     </div>
 
+  
     <div class="container">
-        <img src="style/logo.jfif" alt="Company Logo" class="company-logo">
+        <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
+
+        <!-- Input for email/mobile -->
         <div class="input-group">
             <label for="email-mobile">Email/Mobile:</label>
-            <input type="text" id="email-mobile" name="email-mobile">
+            <input type="text" id="email-mobile" name="email-mobile" placeholder="email or email-mobile" >
         </div>
-        <button class="btn" onclick="searchClientId()">Get ClientID</button>
+        <button class="btn" id="get-client-id">Get Client ID</button>
         <br>
-        <div id="client-id-display" style="margin-top: 5px; font-weight: bold;">Client ID: Indeterminate</div>
+
+        <!-- Input for client ID -->
         <div class="input-group">
             <label for="client-id">Client ID:</label>
-            <input type="text" id="client-id" name="client-id" >
+            <input type="text" id="client-id" name="client-id"  placeholder="clientID" >
         </div>
-        
-       
-        
         <button class="btn" onclick="submitClientId()">Submit</button>
         <br>
         <br>
-        <button class="btn btn-purple small-btn">Add Users</button>
+
+        <!-- <button class="btn btn-purple">Add Users</button> -->
     </div>
+
+    <!-- <script>
+        
+        function fetchClientId(emailOrMobile) {
+            
+            const users = [
+                { email: "user1@example.com", mobile: "1234567890", clientId: "ABC123" },
+                { email: "user2@example.com", mobile: "0987654321", clientId: "XYZ789" }
+            ];
+
+        
+            const user = users.find(user => user.email === emailOrMobile || user.mobile === emailOrMobile);
+            return user ? user.clientId : null;
+        }
+
+       
+        document.getElementById('get-client-id').addEventListener('click', function () {
+            const emailOrMobile = document.getElementById('email-mobile').value;
+            const clientIdField = document.getElementById('client-id');
+
+            if (emailOrMobile.trim() === "") {
+                alert("Please enter a valid email or mobile number.");
+                return;
+            }
+
+            const clientId = fetchClientId(emailOrMobile);
+
+            // Only autofill if the client ID field is empty
+            if (clientId && clientIdField.value.trim() === "") {
+                clientIdField.value = clientId;
+            } else if (!clientId) {
+                alert("Client ID not found for the provided email or mobile number.");
+            }
+        });
+
+        function submitClientId() {
+    const clientId = document.getElementById('client-id').value;
+    if (clientId) {
+        window.location.href = `client_page.html?clientId=${clientId}`;
+    } else {
+        alert('Please enter a Client ID');
+    }
+}
+    </script> -->
     <script src="scripts/superuser.js"></script>
 
 </body>
+
 </html>
