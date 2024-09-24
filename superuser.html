@@ -1,62 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Options</title>
+    <title>Superuser Page</title>
     <link rel="stylesheet" href="style/style.css">
+   
 </head>
+<body style="background-image: url('style/bg1.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
 
-<body style="background-image: url('bg_ig.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-
-    <nav class="navbar">
-        <h2>Your Website</h2>
-        <button class="search-btn" id="searchBtn">Search</button>
-    </nav>
-
-    <!-- Dropdown form for search -->
-    <div class="search-form-container" id="searchFormContainer">
-        <form id="searchForm">
-            <label for="id">User ID:</label>
-            <input type="text" id="id" name="id" >
-
-            <label for="username">User Name:</label>
-            <input type="text" id="username" name="username" >
-
-            <label for="phoneNo">Phone No:</label>
-            <input type="phoneNo" id="phoneNo" name="phoneNo" >
-
-            <button type="submit" class="btn">Search</button>
-        </form>
+    <div class="navbar">
+        Welcome to the portal!
     </div>
-    <div id="superuser-options-box">
-        <h1>Options</h1>
-        <a href="login.html">
-            <button id="add-user" class="add-user">Add User</button>
-        </a>
-        <br><br>
 
+    <div class="container">
+        <img src="style/logo.jfif" alt="Company Logo" class="company-logo">
         <div class="input-group">
-            <label for="user-id">UserID</label>
-            <input type="text" id="user-id" name="user-id" required>
+            <label for="email-mobile">Email/Mobile:</label>
+            <input type="text" id="email-mobile" name="email-mobile">
         </div>
+        <button class="btn" onclick="searchClientId()">Get ClientID</button>
         <br>
+        <div id="client-id-display" style="margin-top: 5px; font-weight: bold;">Client ID: Indeterminate</div>
         <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <label for="client-id">Client ID:</label>
+            <input type="text" id="client-id" name="client-id" >
         </div>
-        <div class="input-group">
-            <label for="confirm-password"> Confirm Password</label>
-            <input type="confirm-password" id="confirm-password"" name="confirm-password" required>
-        </div>
-
-        <a href="login.html">
-            <button id="get-details" class="get-details">Get Details</button>
-        </a>
+        
+       
+        
+        <button class="btn" onclick="submitClientId()">Submit</button>
+        <br>
+        <br>
+        <button class="btn btn-purple small-btn">Add Users</button>
     </div>
-    <script src="scripts/search.js"></script>
+    <script src="scripts/superuser.js"></script>
 
 </body>
-
 </html>
