@@ -4,31 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Options</title>
+    <title>Superuser Page</title>
     <link rel="stylesheet" href="styles/style.css"> 
+    <style>
+       
+        .add-users-btn {
+            position: fixed;
+            bottom:10px;
+            right: 10px;
+            background-color: #6f42c1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+       
+        .add-users-btn:hover {
+            background-color: #5a3397;
+        }
+
+        
+        .container {
+            position: relative;
+            padding-top: 40px;
+            top: 10px;
+        }
+
+        /* Additional styling to prevent navbar or background from overlapping */
+        .navbar {
+            padding: 15px;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 900;
+        }
+    </style>
 </head>
 
-<body style="background-image: url('styles/images.jfif'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+<body style="background-image: url('styles/sbg.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
 
-    <div id="user-options-box">
-       
-
-        <div class="input-group">
-            <label for="user-id">UserID</label>
-            <input type="text" id="user-id" name="user-id" required>
-        </div>
-        <br>
-
-        <a href="login.html">
-            <button id="get-details" class="get-details">Get Details</button>
-        </a>
+  
+    <div class="navbar">
+       User Panel
     </div>
+
+    
+    <div class="container" style="margin-top: 60px;">
+        <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
+
+        
+        <div class="input-group">
+            <label for="email-mobile">Email/Mobile:</label>
+            <input type="text" id="email-mobile" name="email-mobile" placeholder="Enter Email or Mobile">
+        </div>
+        <button class="btn" id="get-client-id">Get Client ID</button>
+
+       
+        <div class="input-group">
+            <label for="client-id">Client ID:</label>
+            <input type="text" id="client-id" name="client-id" placeholder="Enter Client ID manually or auto-fill">
+        </div>
+        <button class="btn" id="submit-btn">Submit</button>
+    </div>
+
+   
+   
+
+   <script src="scripts/superuser.js"></script>
+
 
 </body>
 
 </html>
-
-
-
-
-

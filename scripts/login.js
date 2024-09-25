@@ -4,13 +4,13 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // // example users
-    // const users = [
-    //     { username: "user1@example.com", password: "password123", is_superuser: false },
-    //     { username: "admin@example.com", password: "adminpass", is_superuser: true }
-    // ];
+    // example users
+    const users = [
+        { username: "user1@example.com", password: "password123", is_superuser: false },
+        { username: "admin@example.com", password: "adminpass", is_superuser: true }
+    ];
 
-    // const user = users.find(user => user.username === username && user.password === password);
+    const user = users.find(user => user.username === username && user.password === password);
 
     document.getElementById("login").addEventListener("click", function() {
         const data = { 

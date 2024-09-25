@@ -5,141 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Superuser Page</title>
-    <link rel="stylesheet" href="styles/style.css"> <!-- Link your style.css -->
+    <link rel="stylesheet" href="styles/style.css"> 
     <style>
-        /* Add positioning for Add Users button */
+       
         .add-users-btn {
-            position: absolute;
-            top: 10px;   /* Distance from the top */
-            right: 10px; /* Distance from the right */
-            background-color: #6f42c1; /* Color for the button */
+            position: fixed;
+            top: 80px;
+            right: 10px;
+            background-color: #6f42c1;
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
             color: white;
             cursor: pointer;
+            z-index: 1000;
         }
 
-        /* Hover effect */
         .add-users-btn:hover {
             background-color: #5a3397;
         }
 
-       
-        .container {
+
+        /* .container {
             position: relative;
-            padding-top: 40px; 
-        }
+            padding-top: 40px;
+            top: 10px;
+        } */
+
+        
+        /* .navbar {
+            padding: 15px;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 900;
+        } */
     </style>
 </head>
 
-<body style="background-image: url('styles/cbg.jpg'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+<body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
 
-    <!-- Navbar with fixed position -->
+    
     <div class="navbar">
         Superuser Panel
     </div>
 
-    <!-- Container for the form, centered on the page -->
-    <div class="container">
+    
+    <div class="container" style="margin-top: 60px;"> 
         <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
 
-        <!-- Input for email/mobile -->
+       
         <div class="input-group">
             <label for="email-mobile">Email/Mobile:</label>
             <input type="text" id="email-mobile" name="email-mobile" placeholder="Enter Email or Mobile">
         </div>
         <button class="btn" id="get-client-id">Get Client ID</button>
 
-        <!-- Input for client ID -->
+        
         <div class="input-group">
-            <label for="client-id" id="client-id">Client ID:</label>
+            <label for="client-id">Client ID:</label>
             <input type="text" id="id" name="client-id" placeholder="Enter Client ID manually or auto-fill">
         </div>
         <button class="btn" id="submit-btn">Submit</button>
-
-        <!-- Add Users button positioned at the top-right corner -->
-        <button class="add-users-btn">Add Users</button>
     </div>
 
-    <script>
-        // Dummy function to simulate fetching client ID
-        function fetchClientId(emailOrMobile) {
-            // Simulate a database lookup
-            const users = [
-                { email: "user1@example.com", mobile: "1234567890", clientId: "ABC123" },
-                { email: "user2@example.com", mobile: "0987654321", clientId: "XYZ789" }
-            ];
+   
+    <button class="add-users-btn">Add Users</button>
 
-            // Find the user by email or mobile
-            const user = users.find(user => user.email === emailOrMobile || user.mobile === emailOrMobile);
-            return user ? user.clientId : null;
-        }
+   <script src="scripts/superuser.js"></script>
 
-        // Event listener for Get Client ID button
-        document.getElementById('get-client-id').addEventListener('click', function () {
-            const emailOrMobile = document.getElementById('email-mobile').value;
-            const clientIdField = document.getElementById('client-id');
-
-            if (emailOrMobile.trim() === "") {
-                alert("Please enter a valid email or mobile number.");
-                return;
-            }
-
-            const clientId = fetchClientId(emailOrMobile);
-
-            // Only autofill if the client ID field is empty
-            if (clientId && clientIdField.value.trim() === "") {
-                clientIdField.value = clientId;
-
-                // Automatically click the Submit button if the Client ID is auto-filled
-                autoSubmitForm();
-            } else if (!clientId) {
-                alert("Client ID not found for the provided email or mobile number.");
-            }
-        });
-
-        // Function to automatically submit the form
-        function autoSubmitForm() {
-            // Trigger the submit button click programmatically
-            document.getElementById('submit-btn').click();
-        }
-
-        // Add event listener to handle form submission (optional, based on server)
-        document.getElementById('submit-btn').addEventListener('click', function () {
-            const clientId = document.getElementById('client-id').value;
-            if (clientId) {
-                // Logic to handle form submission, e.g., sending data to the server
-                alert('Form submitted with Client ID: ' + clientId);
-                // Replace the alert with actual form submission or redirection logic
-                window.location.href = "client_page.html";
-            } else {
-                alert("Please enter or auto-fill the Client ID.");
-            }
-        });
-
-        document.getElementById("login").addEventListener("click", function() {
-        const data = { 
-            id:id,
-            emailOrMobile:emailOrMobile
-        };
-
-        fetch('http://localhost:5000/getclientid', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-    </script>
 
 </body>
 
