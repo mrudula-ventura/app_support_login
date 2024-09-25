@@ -7,24 +7,28 @@
     <title>Superuser Page</title>
     <link rel="stylesheet" href="styles/style.css"> 
     <style>
-       
-
-       .dropdown{
-
-        position: fixed;
-            top: 10px;
+        .dropdown {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50px; /* Adjust to position below the button */
             right: 10px;
-            background-color: #ddddde;
-            padding: 10px 15px;
-            border: none;
+            background-color: #ffffff; /* Change to white for better contrast */
+            border: 1px solid #ccc;
             border-radius: 5px;
-            color: white;
-            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+        }
 
-       }
+        .dropdown a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
 
-
+        .dropdown a:hover {
+            background-color: #8e7e7eb7;
+        }
 
         .add-users-btn {
             position: fixed;
@@ -39,26 +43,18 @@
             z-index: 1000;
         }
 
-
         .add-users-btn:hover {
             background-color: #5a3397;
         }
-
-
     </style>
 </head>
 
 <body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-
     
-    <div class="navbar">
-        Superuser Panel
-    </div>
-
+    <div class="navbar">Superuser Panel</div>
     
     <div class="container" style="margin-top: 60px;"> 
         <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
-
        
         <div class="input-group">
             <label for="email-mobile">Email/Mobile:</label>
@@ -67,7 +63,6 @@
         <button class="btn" id="get-client-id">Get Client ID</button>
         <br>
 
-        
         <div class="input-group">
             <label for="client-id">Client ID:</label>
             <input type="text" id="id" name="client-id" placeholder="Enter Client ID ">
@@ -75,37 +70,16 @@
         <button class="btn" id="submit-btn">Submit</button>
     </div>
 
-    <!-- <button class="add-users-btn" id="manageUser">Manage Users</button> -->
-    
-   
-   
     <button class="add-users-btn" id="manageUser">Manage Users</button>
-    <div id="dropdownMenu" class="dropdown-content">
-        <a href="https://www.example1.com" target="_blank">Add User</a>
-        <a href="https://www.example2.com" target="_blank">Forgot Password</a>
-        <a href="https://www.example3.com" target="_blank"></a>
+    <div id="dropdownMenu" class="dropdown">
+        <a href="add_user.html" target="_blank">Add User</a>
+        <a href="forgot_password.html" target="_blank">Forgot Password</a>
+        <a href="xyz.html" target="_blank">xyz</a>
     </div>
 
-  <script>  document.getElementById('manageUser').addEventListener('click', function() {
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-});
 
 
-window.onclick = function(event) {
-    if (!event.target.matches('#dropdownButton')) {
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        if (dropdownMenu.style.display === 'block') {
-            dropdownMenu.style.display = 'none';
-        }
-    }
-};
-
-</script>
-
-   <script src="scripts/superuser.js"></script>
-
-
+    <script src="scripts/superuser.js"></script>
 </body>
 
 </html>

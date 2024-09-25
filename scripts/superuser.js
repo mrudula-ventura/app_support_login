@@ -62,6 +62,21 @@ document.getElementById('submit-btn').addEventListener('click', function () {
 });
 
 
+document.getElementById('manageUser').addEventListener('click', function() {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+});
+
+window.onclick = function(event) {
+    if (!event.target.matches('#manageUser')) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        }
+    }
+};
+
+
 //api for sending data to backend 
 // async function fetchClientIdFromBackend(emailOrMobile) {
 //     try {
