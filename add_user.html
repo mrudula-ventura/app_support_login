@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add user page</title>
+    <link rel="stylesheet" href="styles/style.css"> 
+    <style>
+       
+        .add-users-btn {
+            position: fixed;
+            top: 80px;
+            right: 10px;
+            background-color: #6f42c1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .add-users-btn:hover {
+            background-color: #5a3397;
+        }
+
+
+        /* .container {
+            position: relative;
+            padding-top: 40px;
+            top: 10px;
+        } */
+
+        
+        /* .navbar {
+            padding: 15px;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 900;
+        } */
+    </style>
+</head>
+
+<body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+
+    
+    <div class="navbar">
+      Add User pannel
+    </div>
+
+    
+    <div class="container" style="margin-top: 60px;"> 
+        <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
+         
+
+        
+
+
+       
+        <div class="input-group">
+            <label for="newUsrNm">User Name:</label>
+            <input type="text" id="newUsrNm" name="newUsrNm" placeholder="Enter username" required>
+        </div>
+        <div class="input-group">
+            <label for="newUsrMail">Email:</label>
+            <input type="text" id="newUsrMail" name="newUsrMail" placeholder="Enter email">
+        </div>
+        <div class="input-group">
+            <label for="newUserPswd">password:</label>
+            <input type="text" id="newUserPswd" name="newUserPswd" placeholder="Enter password" required>
+        </div>
+        <div class="input-group">
+            <label for="newUserCPswd">Confirm password:</label>
+            <input type="text" id="newUsrPswd" name="newUsrPswd" placeholder="Confirm password" required>
+        </div>
+        
+        <label for="checkbox" aria-posinset="left"><input type="checkbox">Add user as superuser</label>
+        <br>
+        <br>
+
+
+        <button class="btn" id="addUsr">Add</button>
+        <br>
+
+     
+   
+ 
+<!-- 
+   <script src="scripts/superuser.js"></script> -->
+
+   <script>
+
+    document.getElementById('addUser').addEventListener('click',async function () {
+    const newUsrNm = getElementById('newUsrNm').value;
+    const newUsrMail=getElementById('newUsrMail').value;
+    const newUsrPswd=getElementById('newUsrPswd').value;
+    const newUserCPswd=getElementById('newUserCPswd').value;
+
+})
+const isNEmail = newUsrMail.includes('@');
+if(!isNEmail){
+    alert("Please enter valid email")
+}
+
+// documet.getElementById()
+
+   </script>
+
+
+</body>
+
+</html>

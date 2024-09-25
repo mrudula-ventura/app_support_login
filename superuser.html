@@ -8,9 +8,27 @@
     <link rel="stylesheet" href="styles/style.css"> 
     <style>
        
+
+       .dropdown{
+
+        position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #ddddde;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+
+       }
+
+
+
         .add-users-btn {
             position: fixed;
-            top: 80px;
+            top: 10px;
             right: 10px;
             background-color: #6f42c1;
             padding: 10px 15px;
@@ -21,30 +39,12 @@
             z-index: 1000;
         }
 
+
         .add-users-btn:hover {
             background-color: #5a3397;
         }
 
 
-        /* .container {
-            position: relative;
-            padding-top: 40px;
-            top: 10px;
-        } */
-
-        
-        /* .navbar {
-            padding: 15px;
-            font-size: 24px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 900;
-        } */
     </style>
 </head>
 
@@ -65,17 +65,43 @@
             <input type="text" id="email-mobile" name="email-mobile" placeholder="Enter Email or Mobile">
         </div>
         <button class="btn" id="get-client-id">Get Client ID</button>
+        <br>
 
         
         <div class="input-group">
             <label for="client-id">Client ID:</label>
-            <input type="text" id="id" name="client-id" placeholder="Enter Client ID manually or auto-fill">
+            <input type="text" id="id" name="client-id" placeholder="Enter Client ID ">
         </div>
         <button class="btn" id="submit-btn">Submit</button>
     </div>
 
+    <!-- <button class="add-users-btn" id="manageUser">Manage Users</button> -->
+    
    
-    <button class="add-users-btn">Add Users</button>
+   
+    <button class="add-users-btn" id="manageUser">Manage Users</button>
+    <div id="dropdownMenu" class="dropdown-content">
+        <a href="https://www.example1.com" target="_blank">Add User</a>
+        <a href="https://www.example2.com" target="_blank">Forgot Password</a>
+        <a href="https://www.example3.com" target="_blank"></a>
+    </div>
+
+  <script>  document.getElementById('manageUser').addEventListener('click', function() {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+});
+
+
+window.onclick = function(event) {
+    if (!event.target.matches('#dropdownButton')) {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        }
+    }
+};
+
+</script>
 
    <script src="scripts/superuser.js"></script>
 
