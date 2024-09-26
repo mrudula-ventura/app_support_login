@@ -140,4 +140,23 @@ body {
 }
 
 
+.generatePswd{
+  display: block;
+  width:50%;
+  padding: 10px;
+  background-color: #28a745;
+  text-align: center;
+  color: white;
+  height: 0.9cm;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin: auto;
+}
 
+.generatePswd:hover{
+  background-color: #3e744a;
+
+}
