@@ -57,7 +57,7 @@ document.getElementById('addUser').addEventListener('click', function () {
         } else {
             const result_2 = await response.json();
             let errorMessage;
-            if (response.status === 401) {
+            if (response.status === 400) {
                 errorMessage = result_2.message || "User already exists.";
             } else if (response.status >= 500) {
                 errorMessage = result_2.message || "Error adding user. Please try again later.";

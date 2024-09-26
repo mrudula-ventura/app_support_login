@@ -5,7 +5,7 @@ document.getElementById('dltUser').addEventListener('click', function () {
     document.getElementById('error-message').textContent = '';
 
    
-    if (!!email) {
+    if (!email) {
         document.getElementById('error-message').textContent = "Please Enter Email.";
         return;
     }
@@ -22,7 +22,7 @@ document.getElementById('dltUser').addEventListener('click', function () {
     };
 
     // Post data to backend
-    fetch('https://your-backend-api.com/delete-user', {
+    fetch('http://localhost:5000/delete-user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

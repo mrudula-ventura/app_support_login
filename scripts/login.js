@@ -23,16 +23,21 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     .then(result => {
         console.log('Success:', result);
         if (result.error) {
-            document.getElementById('error-message').textContent = result.error;  
-        } else if (result.is_super_user) {
+            document.getElementById('error-message').textContent = result.error;
+        } else if (result.is_super_user && result.is_active) {
             console.log('Superuser logged in:', result);
-            window.location.href = 'superuser.html';  
-        } else {
+            document.getElementById('error-message').textContent = result.message || "Superuser logged in successfully.";
+            window.location.href = 'superuser.html';
+        } else if (!result.is_super_user && result.is_active) {
             console.log('Normal user logged in:', result);
-            window.location.href = 'user.html';  
+            document.getElementById('error-message').textContent = result.message || "Normal user logged in successfully.";
+            window.location.href = 'user.html';
+        } else {
+            document.getElementById('error-message').textContent = "This user account is deactivated.";
         }
     })
     .catch(error => {
         console.error('Error:', error);
+        document.getElementById('error-message').textContent = "Please check your VPN connection or contact support.";
     });
 });
