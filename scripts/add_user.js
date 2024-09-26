@@ -33,8 +33,19 @@ document.getElementById('addUser').addEventListener('click', function () {
     const isSuperuser = document.getElementById('isSuperuser').checked;
 
 
+    function validateEmail(email) {
+        
+        const domain = "@venturasecurities.com";
+        return email.endsWith(domain);
+    }
+
+    // if (!validateEmail(email)) {
+    //     alert("Please enter a valid email.");
+    //     return;
+    // }
+    
     if (!validateEmail(email)) {
-        alert("Please enter a valid email.");
+        alert("Please enter a valid email with @venturasecurities.com");
         return;
     }
 
