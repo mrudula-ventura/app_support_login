@@ -40,7 +40,7 @@ def add_user():
             app.logger.info("User exists")
             return jsonify({"message": "User already exists"}), 401
         
-        is_superuser = data.get("superuser", False) 
+        is_superuser = data.get("isSuperuser", False) 
 
         new_user = Users(
             username=data["username"],
@@ -49,6 +49,7 @@ def add_user():
             is_super_user=is_superuser, 
             is_user_readonly=False if is_superuser else True  
         )
+        print(new_user.is_super_user, new_user.is_user_readonly)
 
         app_support_session.add(new_user)
         app_support_session.commit()
