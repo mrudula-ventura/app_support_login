@@ -77,27 +77,29 @@ window.onclick = function(event) {
 };
 
 
-//api for sending data to backend 
-// async function fetchClientIdFromBackend(emailOrMobile) {
-//     try {
-//         const response = await fetch('https://your-backend-api.com/get-client-id', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ emailOrMobile, id }) // Send the email or mobile to backend
+// api for sending data to backend 
+async function fetchClientIdFromBackend(emailOrMobile) {
+    const clientIdField = document.getElementById('id');
 
-//         });
+    try {
+        const response = await fetch('https://your-backend-api.com/get-client-id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({clientIdField}) 
 
-//         if (response.ok) {
-//             const data = await response.json();
-//             return data.clientId;  // Assuming API returns { clientId: "ABC123" }
-//         } else {
-//             throw new Error('Error fetching client ID');
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         alert('Error fetching client ID from the server');
-//         return null;
-//     }
-// }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data.clientId;  
+        } else {
+            throw new Error('Error fetching client ID');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Error fetching client ID from the server');
+        return null;
+    }
+}

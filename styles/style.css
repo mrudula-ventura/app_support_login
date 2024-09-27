@@ -160,3 +160,56 @@ body {
   background-color: #3e744a;
 
 }
+
+/*ipo*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 20px;
+}
+
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%; /* Table covers the entire page width */
+    border-collapse: collapse; /* Remove extra space between borders */
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd; /* Add border to all cells */
+}
+
+th {
+    background-color: #007BFF;
+    color: white;
+    text-transform: uppercase;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+td {
+    font-size: 1rem;
+}
+
+.client-id {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        font-size: 0.9rem;
+    }
+}

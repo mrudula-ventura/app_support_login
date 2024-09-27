@@ -21,7 +21,7 @@ document.getElementById('dltUser').addEventListener('click', function () {
         email: email
     };
 
-    // Post data to backend
+  
     fetch('http://localhost:5000/delete-user', {
         method: 'POST',
         headers: {
