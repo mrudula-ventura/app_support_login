@@ -90,10 +90,9 @@ function displayIpoTable() {
     const tableBody = document.querySelector('#ipo-table tbody');
     
     ipoData.forEach(ipo => {
-        // Create a new row
+      
         const row = document.createElement('tr');
         
-        // Insert IPO data into each column
         row.innerHTML = `
             <td>${ipo.name}</td>
             <td>${ipo.applyDate}</td>
@@ -102,7 +101,7 @@ function displayIpoTable() {
             <td>${ipo.allocated}</td>
         `;
         
-        // Append the row to the table body
+
         tableBody.appendChild(row);
     });
 }
