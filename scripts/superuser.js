@@ -1,16 +1,16 @@
 
 
-async function fetchClientIdFromBackend(emailOrMobile) {
+// async function fetchClientIdFromBackend(emailOrMobile) {
 
-    const testData = [
-        { email: "user1@example.com", mobile: "1234567890", clientId: "ABC123" },
-        { email: "user2@example.com", mobile: "0987654321", clientId: "XYZ789" }
-    ];
+//     const testData = [
+//         { email: "user1@example.com", mobile: "1234567890", clientId: "ABC123" },
+//         { email: "user2@example.com", mobile: "0987654321", clientId: "XYZ789" }
+//     ];
 
 
-    const user = testData.find(u => u.email === emailOrMobile || u.mobile === emailOrMobile);
-    return user ? user.clientId : null;
-}
+//     const user = testData.find(u => u.email === emailOrMobile || u.mobile === emailOrMobile);
+//     return user ? user.clientId : null;
+// }
 
 
 document.getElementById('get-client-id').addEventListener('click', async function () {
@@ -37,7 +37,7 @@ document.getElementById('get-client-id').addEventListener('click', async functio
     }
 
 
-    const clientId = await fetchClientIdFromBackend(emailOrMobile);
+    // const clientId = await fetchClientIdFromBackend(emailOrMobile);
 
 
     if (clientId && clientIdField.value.trim() === "") {
@@ -82,16 +82,38 @@ async function fetchClientIdFromBackend(emailOrMobile) {
     const clientIdField = document.getElementById('id');
 
     try {
-        const response = await fetch('https://your-backend-api.com/get-client-id', {
+        const response = await fetch('http://localhost:5000/get-client-id', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({clientIdField}) 
 
+        }) .then(result => {
+            console.log('Success:', result);
+            if (result.status==200) {
+               alert("clientId found");
+            } else if (res) {
+                console.log('Superuser logged in:', result);
+                document.getElementById('error-message').textContent = result.message || "Superuser logged in successfully.";
+                window.location.href = 'superuser.html';
+            } else if (!result.is_super_user && result.is_active) {
+                console.log('Normal user logged in:', result);
+                document.getElementById('error-message').textContent = result.message || "Normal user logged in successfully.";
+                window.location.href = 'user.html';
+            } else {
+                document.getElementById('error-message').textContent = "This user account is deactivated.";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('error-message').textContent = "Please check your VPN connection or contact support.";
         });
 
+
+
         if (response.ok) {
+            
             const data = await response.json();
             return data.clientId;  
         } else {

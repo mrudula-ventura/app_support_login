@@ -3,14 +3,14 @@ from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import get_config
-from utils import Users  
+from utils import Users, UserInfo 
 import datetime
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  
 
-def db_connection():
-    config = get_config("app_support")  
+def db_connection(env):
+    config = get_config(env)  
     DATABASE_URL = f"postgresql://{config['DB_USER']}:{config['DB_PASSWORD']}@{config['DB_HOST']}/{config['DB_NAME']}"
     engine = create_engine(DATABASE_URL)
     SessionLocal = sessionmaker(bind=engine)
@@ -81,7 +81,21 @@ def deleteuser():
         return jsonify({"message": "User deactivated"}), 200
     return jsonify({"message": "Unable to delete user"}), 400
 
+@app.route('/get-client-id', methods = ['POST'])
+def get_client_id():
+    data = request.json
+    clientid = sso_session.query(UserInfo.client_id).filter(UserInfo.client_id == data["clientIdField"]).first()
+    client_id = clientid[0]
+
+    if clientid:
+        return jsonify({"message": "User found"}, client_id), 200
+    return jsonify({"Client id not found"}), 400
+
+
 
 if __name__ == '__main__':
-    app_support_session = db_connection()
+    app_support_session = db_connection("app_support")
+    sso_session = db_connection("sso_prod")
+
+
     app.run(debug=True, use_reloader=False)

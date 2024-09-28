@@ -15,4 +15,22 @@ class Users(Base):
     is_active = Column(Boolean)
     added_by = Column(VARCHAR)
     created_dttm = Column(TIMESTAMP)
+
+class UserInfo(Base):
+    __table_args__ = {"schema": "login_v4"}
+    __tablename__ = 'user_info'
+    client_id = Column(VARCHAR, primary_key=True)
+    account_status=Column(VARCHAR)
+    isequity=Column(VARCHAR)
+    iscommodity=Column(VARCHAR)
+    mtfflag=Column(VARCHAR)
+    mflogin=Column(VARCHAR)
+    mtfflagdetective=Column(VARCHAR)
+    nsecash=Column(VARCHAR)
+    nsefno=Column(VARCHAR)
+    bsecash=Column(VARCHAR)
+    nseslbm=Column(VARCHAR)
+    nsecds=Column(VARCHAR)
+    poa=Column(VARCHAR)
+    accesstype=Column(VARCHAR)
     
