@@ -1,184 +1,113 @@
-// Array of IPO data
-const ipoData = [
-    {
-        name: "IPO 1",
-        applyDate: "2024-01-10",
-        mandateSentDate: "2024-01-11",
-        mandateApproved: "2024-01-12",
-        allocated: "Yes",
-        noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 2",
-        applyDate: "2023-12-01",
-        mandateSentDate: "2023-12-02",
-        mandateApproved: "2023-12-03",
-        allocated: "No",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 3",
-        applyDate: "2024-02-15",
-        mandateSentDate: "2024-02-16",
-        mandateApproved: "2024-02-17",
-        allocated: "Yes",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 4",
-        applyDate: "2024-03-01",
-        mandateSentDate: "2024-03-02",
-        mandateApproved: "2024-03-03",
-        allocated: "No",
-        noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 5",
-        applyDate: "2024-01-10",
-        mandateSentDate: "2024-01-11",
-        mandateApproved: "2024-01-12",
-        allocated: "Yes",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 6",
-        applyDate: "2023-12-01",
-        mandateSentDate: "2023-12-02",
-        mandateApproved: "2023-12-03",
-        allocated: "No",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 7",
-        applyDate: "2024-02-15",
-        mandateSentDate: "2024-02-16",
-        mandateApproved: "2024-02-17",
-        allocated: "Yes",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 8",
-        applyDate: "2024-03-01",
-        mandateSentDate: "2024-03-02",
-        mandateApproved: "2024-03-03",
-        allocated: "No",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 9",
-        applyDate: "2024-03-01",
-        mandateSentDate: "2024-03-02",
-        mandateApproved: "2024-03-03",
-        allocated: "No",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    },
-    {
-        name: "IPO 10",
-        applyDate: "2024-03-01",
-        mandateSentDate: "2024-03-02",
-        mandateApproved: "2024-03-03",
-        allocated: "No",
-         noLotsAppl:"10",
-        noLotsAlloc: "8"
-    }
-];
+let ipoData = [];
+const rowsPerPage = 10; 
+let currentPage = 1;
 
 
-
- 
-    // const clientIdDisplay = document.getElementById('clientIdDisplay');
-
-    // Display the Client ID at the top of the page
-    // if (clientId) {
-    //     clientIdDisplay.textContent = `Client ID: ${clientId}`;
-    // } else {
-    //     clientIdDisplay.textContent = `Client ID: Not Available`;
-    // }
-
-
-// Function to display the table rows dynamically
-function displayIpoTable() {
+function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
+    tableBody.innerHTML = ''; 
+
     
-    ipoData.forEach(ipo => {
-      
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedIpoData = filteredData.slice(start, end); 
+
+    paginatedIpoData.forEach(ipo => {
         const row = document.createElement('tr');
+
         
         row.innerHTML = `
             <td>${ipo.name}</td>
             <td>${ipo.applyDate}</td>
             <td>${ipo.mandateSentDate}</td>
-            <td>${ipo.mandateApproved}</td>
+            <td>${ipo.paymentStatus}</td>
             <td>${ipo.allocated}</td>
-            <td>${ipo.noLotsAppl}</td>
-            <td>${ipo.noLotsAlloc}</td>
+            <td>${ipo.applicationNo || 'N/A'}</td>
         `;
-        
 
         tableBody.appendChild(row);
     });
+
+    updatePaginationControls(filteredData);
 }
 
-window.onload = displayIpoTable;
 
+function updatePaginationControls(filteredData) {
+    const paginationContainer = document.querySelector('#pagination');
+    paginationContainer.innerHTML = '';
 
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
+    
+    if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.onclick = () => {
+            currentPage--;
+            displayIpoTable(filteredData);
+        };
+        paginationContainer.appendChild(prevButton);
+    }
 
-
-
-// Function to fetch IPO data from the backend API
-async function fetchIpoData() {
-    try {
-        const response = await fetch('http://localhost:5000/api/ipos', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            displayIpoTable(data);  // Pass the fetched data to displayIpoTable
-        } else {
-            console.error('Failed to fetch IPO data:', response.statusText);
+    
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.onclick = () => {
+            currentPage = i;
+            displayIpoTable(filteredData);
+        };
+        if (i === currentPage) {
+            pageButton.disabled = true; 
         }
-    } catch (error) {
-        console.error('Error fetching IPO data:', error);
+        paginationContainer.appendChild(pageButton);
+    }
+
+    
+    if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.onclick = () => {
+            currentPage++;
+            displayIpoTable(filteredData);
+        };
+        paginationContainer.appendChild(nextButton);
     }
 }
-// Function to display the table rows dynamically
-function displayIpoTable(ipoData) {
-    const tableBody = document.querySelector('#ipo-table tbody');
-    tableBody.innerHTML = ''; // Clear the table body before appending rows
-    
-    ipoData.forEach(ipo => {
-        // Create a new row
-        const row = document.createElement('tr');
 
-        
-        // Insert IPO data into each column
-        row.innerHTML = `
-            <td>${ipo.name}</td>
-            <td>${ipo.applyDate}</td>
-            <td>${ipo.mandateSentDate}</td>
-            <td>${ipo.mandateApproved}</td>
-            <td>${ipo.allocated}</td>
-        `;
-        
-        // Append the row to the table body
-        tableBody.appendChild(row);
-    });
+function getClientId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('clientId');
 }
 
-// Call the function to fetch IPO data and display the table on page load
-window.onload = fetchIpoData;
+async function fetchIPOData() {
+    const clientId = getClientId();
 
+    const response = await fetch(`http://localhost:5000/api/ipos?clientId=${clientId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        ipoData = data.ipoData;
+        console.log(data); 
+        displayIpoTable(); 
+    } else {
+        console.error('Error fetching IPO data:', await response.json());
+    }
+}
+
+function filterIpoTable() {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const filteredData = ipoData.filter(ipo => 
+        ipo.name.toLowerCase().includes(searchValue) ||
+        (ipo.applicationNo && ipo.applicationNo.toLowerCase().includes(searchValue))
+    );
+
+    currentPage = 1; 
+    displayIpoTable(filteredData); 
+}
+window.onload = fetchIPOData;

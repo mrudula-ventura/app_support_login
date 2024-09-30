@@ -1,5 +1,5 @@
 document.getElementById('dltUser').addEventListener('click', function () {
-    const email = document.getElementById('usrEmail').value.trim();
+    const email = document.getElementById('eUsrMail').value.trim();
 
  
     document.getElementById('error-message').textContent = '';
@@ -29,16 +29,15 @@ document.getElementById('dltUser').addEventListener('click', function () {
         },
         body: JSON.stringify(userData)
     })
-    .then(response => {
-        return response.json().then(data => {
-            if (!response.ok) {
-                throw new Error(data.error || "Error deleting user.");
-            }
-            return data; 
-        });
+    .then(async response => {
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.error || "Error deleting user.");
+        }
+        return data;
     })
     .then(data => {
-        alert("User deleted successfully.");
+        alert("Removed access for the user successfully");
     })
     .catch(error => {
         console.error(error);

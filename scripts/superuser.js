@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('submitButton:', submitButton);
     console.log('clientIdInput:', clientIdInput);
 
-    if (!submitButton || !clientIdInput || !manageUserButton) {
+    if (!submitButton || !clientIdInput) {
         console.error('Element not found');
         return;
     }
@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Client found: " + clientId);
                 window.location.href = `client_page.html?clientId=${clientId}`;
             } else {
                 alert("Client ID not found.");
@@ -45,16 +44,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle manageUser dropdown toggle
-    manageUserButton.addEventListener('click', function() {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
+    if (manageUserButton && dropdownMenu) {
+        manageUserButton.addEventListener('click', function() {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
 
-    window.onclick = function(event) {
-        if (!event.target.matches('#manageUser')) {
-            if (dropdownMenu.style.display === 'block') {
-                dropdownMenu.style.display = 'none';
+        window.onclick = function(event) {
+            if (!event.target.matches('#manageUser')) {
+                if (dropdownMenu.style.display === 'block') {
+                    dropdownMenu.style.display = 'none';
+                }
             }
-        }
-    };
+        };
+    }
 });

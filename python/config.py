@@ -10,6 +10,12 @@ CONFIG = {
         "DB_PASSWORD": "rReaDdUusSEr123sSor",
         "DB_HOST": "ventura1-prod-postgres-rds-sso-mvp.cxsiogefb5hv.ap-south-1.rds.amazonaws.com",
         "DB_NAME": "ssodb"
+    },
+    "ipo":{
+        "DB_USER": "ipo_readonly",
+        "DB_PASSWORD": "WsfgHJedWse346Mng",
+        "DB_HOST": "ventura-prod-rds-ipo-opensection.cxsiogefb5hv.ap-south-1.rds.amazonaws.com",
+        "DB_NAME": "ipo"
     }
 
 }
