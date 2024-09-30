@@ -86,7 +86,7 @@ flex: 1 1 auto;
         
         <button class="btn" onclick="openPage('IPO.html')">wallet</button>
         
-        <button class="btn" onclick="openPage('SSO.html')">IPO</button>
+        <button class="btn" onclick="openPage('IPO.html')">IPO</button>
      
         <button class="btn" onclick="openPage('SSO.html')">SSO</button>
        
@@ -103,19 +103,6 @@ flex: 1 1 auto;
         <button class="btn" onclick="openPage('COB.html')">COB</button>
        
     </div>
-    <script>
-        function getClientId() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('clientId');
-        }
-
-        function openPage(page) {
-            window.location.href = `${page}.html`;
-        }
-    </script>
-
-    <script>
-        document.getElementById('client-id-display').innerText = getClientId();
-    </script>
+    <script src="scripts/client_page.js">    </script>
 </body>
 </html>

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="styles/style.css"> 
     <style>
         .dropdown {
-            display: none; /* Hidden by default */
+            display: none; 
             position: fixed;
-            top: 50px; /* Adjust to position below the button */
+            top: 50px; 
             right: 10px;
-            background-color: #ffffff; /* Change to white for better contrast */
+            background-color: #ffffff; 
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -49,11 +49,11 @@
     </style>
 </head>
 
-<body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-    
+<body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;"></body>
+
     <div class="navbar">Superuser Panel</div>
-    
-    <div class="container" style="margin-top: 60px;"> 
+
+    <div class="container" style="margin-top: 60px;">
         <img src="styles/logo.jfif" alt="Company Logo" class="company-logo">
        
         <div class="input-group">
@@ -65,21 +65,17 @@
 
         <div class="input-group">
             <label for="client-id">Client ID:</label>
-            <input type="text" id="id" name="client-id" placeholder="Enter Client ID ">
+            <input type="text" id="client-id" name="client-id" placeholder="Enter Client ID">
         </div>
         <button class="btn" id="submit-btn">Submit</button>
     </div>
 
     <button class="add-users-btn" id="manageUser">Manage Users</button>
     <div id="dropdownMenu" class="dropdown">
-        <a href="add_user.html" target="_blank">Add User</a>
-        <a href="reset_password.html" target="_blank">Reset Password</a>
-        <a href="delete_user.html" target="_blank">Delete User</a>
+        <a href="add_user.html">Add User</a>
+        <a href="reset_password.html">Reset Password</a>
+        <a href="delete_user.html">Delete User</a>
     </div>
-
-
-
     <script src="scripts/superuser.js"></script>
 </body>
-
 </html>

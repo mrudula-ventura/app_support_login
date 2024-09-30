@@ -1,79 +1,46 @@
 document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+    e.preventDefault(); 
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // example users
-    const users = [
-        { username: "user1@example.com", password: "password123", is_superuser: false },
-        { username: "admin@example.com", password: "adminpass", is_superuser: true }
-    ];
+    const data = { 
+        username: username,
+        password: password
+    };
 
-    const user = users.find(user => user.username === username && user.password === password);
-
-    document.getElementById("login").addEventListener("click", function() {
-        const data = { 
-            username:username,
-            passsword: password
-        };
-
-        fetch('http://localhost:5000/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-
-    
-    let response = {};
-    if (user) {
-        response.success = true;
-        response.is_superuser = user.is_superuser; 
-    } else {
-        response.success = false;
-        response.message = "Invalid username or password.";
-    }
-
-   
-    setTimeout(() => {
-        if (response.success) {
-           
-            if (response.is_superuser) {
-               
-                window.location.href = 'superuser.html';
-            } else {
-                
-                window.location.href = 'user.html';
-            }
-        } else {
-           
-            document.getElementById('error-message').textContent = response.message;
+    fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
         }
-    }, 500); 
+        return response.json();
+    })
+    .then(result => {
+        console.log('Success:', result);
+        // Check if there is an error in the result and display it
+        if (result.error) {
+            document.getElementById('error-message').textContent = result.error;
+        } else if (result.is_super_user && result.is_active) {
+            console.log('Superuser logged in:', result);
+            document.getElementById('error-message').textContent = result.message || "Superuser logged in successfully.";
+            window.location.href = 'superuser.html'; // Redirect to superuser page
+        } else if (!result.is_super_user && result.is_active) {
+            console.log('Normal user logged in:', result);
+            document.getElementById('error-message').textContent = result.message || "Normal user logged in successfully.";
+            window.location.href = 'user.html'; // Redirect to normal user page
+        } else {
+            document.getElementById('error-message').textContent = "This user account is deactivated.";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('error-message').textContent = result.error || "Please check your VPN connection or contact support.";
+    });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
