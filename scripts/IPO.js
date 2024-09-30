@@ -5,70 +5,90 @@ const ipoData = [
         applyDate: "2024-01-10",
         mandateSentDate: "2024-01-11",
         mandateApproved: "2024-01-12",
-        allocated: "Yes"
+        allocated: "Yes",
+        noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 2",
         applyDate: "2023-12-01",
         mandateSentDate: "2023-12-02",
         mandateApproved: "2023-12-03",
-        allocated: "No"
+        allocated: "No",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 3",
         applyDate: "2024-02-15",
         mandateSentDate: "2024-02-16",
         mandateApproved: "2024-02-17",
-        allocated: "Yes"
+        allocated: "Yes",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 4",
         applyDate: "2024-03-01",
         mandateSentDate: "2024-03-02",
         mandateApproved: "2024-03-03",
-        allocated: "No"
+        allocated: "No",
+        noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 5",
         applyDate: "2024-01-10",
         mandateSentDate: "2024-01-11",
         mandateApproved: "2024-01-12",
-        allocated: "Yes"
+        allocated: "Yes",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 6",
         applyDate: "2023-12-01",
         mandateSentDate: "2023-12-02",
         mandateApproved: "2023-12-03",
-        allocated: "No"
+        allocated: "No",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 7",
         applyDate: "2024-02-15",
         mandateSentDate: "2024-02-16",
         mandateApproved: "2024-02-17",
-        allocated: "Yes"
+        allocated: "Yes",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 8",
         applyDate: "2024-03-01",
         mandateSentDate: "2024-03-02",
         mandateApproved: "2024-03-03",
-        allocated: "No"
+        allocated: "No",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 9",
         applyDate: "2024-03-01",
         mandateSentDate: "2024-03-02",
         mandateApproved: "2024-03-03",
-        allocated: "No"
+        allocated: "No",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     },
     {
         name: "IPO 10",
         applyDate: "2024-03-01",
         mandateSentDate: "2024-03-02",
         mandateApproved: "2024-03-03",
-        allocated: "No"
+        allocated: "No",
+         noLotsAppl:"10",
+        noLotsAlloc: "8"
     }
 ];
 
@@ -99,6 +119,8 @@ function displayIpoTable() {
             <td>${ipo.mandateSentDate}</td>
             <td>${ipo.mandateApproved}</td>
             <td>${ipo.allocated}</td>
+            <td>${ipo.noLotsAppl}</td>
+            <td>${ipo.noLotsAlloc}</td>
         `;
         
 

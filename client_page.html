@@ -103,19 +103,49 @@ flex: 1 1 auto;
         <button class="btn" onclick="openPage('COB.html')">COB</button>
        
     </div>
+   
+
     <script>
+        document.getElementById('client-id-display').innerText = getClientId();
+        // Get Client ID from URL parameters
         function getClientId() {
             const params = new URLSearchParams(window.location.search);
             return params.get('clientId');
         }
 
+       
+        document.getElementById('client-id-display').innerText = getClientId();
+
+       
         function openPage(page) {
             window.location.href = `${page}.html`;
         }
-    </script>
 
-    <script>
-        document.getElementById('client-id-display').innerText = getClientId();
+        
+        function sendClientIdToBackend(clientId) {
+            fetch('https://your-backend-api.com/client', {  // Replace with your backend API URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ clientId: clientId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+       
+        window.onload = () => {
+            const clientId = getClientId();
+            if (clientId) {
+                sendClientIdToBackend(clientId);
+            }
+        };
     </script>
 </body>
 </html>
