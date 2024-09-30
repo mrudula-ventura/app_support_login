@@ -77,7 +77,7 @@ const ipoData = [
  
     // const clientIdDisplay = document.getElementById('clientIdDisplay');
 
-    // // Display the Client ID at the top of the page
+    // Display the Client ID at the top of the page
     // if (clientId) {
     //     clientIdDisplay.textContent = `Client ID: ${clientId}`;
     // } else {
@@ -113,41 +113,50 @@ window.onload = displayIpoTable;
 
 
 
-// // Function to fetch IPO data from the backend API
-// async function fetchIpoData() {
-//     try {
-//         const response = await fetch('http://localhost:3000/api/ipos');
-//         const data = await response.json();
-//         displayIpoTable(data); // Pass the fetched data to displayIpoTable
-//     } catch (error) {
-//         console.error('Error fetching IPO data:', error);
-//     }
-// }
+// Function to fetch IPO data from the backend API
+async function fetchIpoData() {
+    try {
+        const response = await fetch('http://localhost:5000/api/ipos', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
-// // Function to display the table rows dynamically
-// function displayIpoTable(ipoData) {
-//     const tableBody = document.querySelector('#ipo-table tbody');
-//     tableBody.innerHTML = ''; // Clear the table body before appending rows
+        if (response.ok) {
+            const data = await response.json();
+            displayIpoTable(data);  // Pass the fetched data to displayIpoTable
+        } else {
+            console.error('Failed to fetch IPO data:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching IPO data:', error);
+    }
+}
+// Function to display the table rows dynamically
+function displayIpoTable(ipoData) {
+    const tableBody = document.querySelector('#ipo-table tbody');
+    tableBody.innerHTML = ''; // Clear the table body before appending rows
     
-//     ipoData.forEach(ipo => {
-//         // Create a new row
-//         const row = document.createElement('tr');
+    ipoData.forEach(ipo => {
+        // Create a new row
+        const row = document.createElement('tr');
 
         
-//         // Insert IPO data into each column
-//         row.innerHTML = `
-//             <td>${ipo.name}</td>
-//             <td>${ipo.applyDate}</td>
-//             <td>${ipo.mandateSentDate}</td>
-//             <td>${ipo.mandateApproved}</td>
-//             <td>${ipo.allocated}</td>
-//         `;
+        // Insert IPO data into each column
+        row.innerHTML = `
+            <td>${ipo.name}</td>
+            <td>${ipo.applyDate}</td>
+            <td>${ipo.mandateSentDate}</td>
+            <td>${ipo.mandateApproved}</td>
+            <td>${ipo.allocated}</td>
+        `;
         
-//         // Append the row to the table body
-//         tableBody.appendChild(row);
-//     });
-// }
+        // Append the row to the table body
+        tableBody.appendChild(row);
+    });
+}
 
-// // Call the function to fetch IPO data and display the table on page load
-// window.onload = fetchIpoData;
+// Call the function to fetch IPO data and display the table on page load
+window.onload = fetchIpoData;
 

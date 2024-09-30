@@ -1,13 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from config import get_config
 from utils import Users, UserInfo 
 import datetime
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 def db_connection(env):
     config = get_config(env)  
@@ -84,13 +84,22 @@ def deleteuser():
 @app.route('/get-client-id', methods = ['POST'])
 def get_client_id():
     data = request.json
-    clientid = sso_session.query(UserInfo.client_id).filter(UserInfo.client_id == data["clientIdField"]).first()
-    client_id = clientid[0]
+    clientid = sso_session.query(UserInfo.client_id).filter(UserInfo.client_id == func.lower(data["clientIdField"])).first()
 
     if clientid:
-        return jsonify({"message": "User found"}, client_id), 200
-    return jsonify({"Client id not found"}), 400
+        client_id = clientid[0]
+        return jsonify({"message": "User found", "client_id": client_id}), 200 
+    return jsonify({"message": "Client id not found"}), 400
 
+@app.route("/api/ipos", methods=['GET'])
+def ipo_data():
+    client = get_client_id()
+    client_id = client.json().get("client_id")
+    print(client_id, "-----------------------------------")
+    if client_id:
+        # Process with the client_id
+        return jsonify({"message": "Client ID retrieved", "client_id": client_id}), 200
+    return jsonify({"error": "Client ID not found"}), 400
 
 
 if __name__ == '__main__':
