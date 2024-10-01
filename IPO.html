@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body style="background-image: url('styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-    <!-- <div class="navbar"><div class="client-id" id="clientIdDisplay">Client ID: </div></div>
-    -->
-  
+   <!-- <div class="navbar"></div> -->
     
-
+    <div class="loader"></div>
     <div class="table-container">
 
 
@@ -19,24 +17,11 @@
             <thead>
                 <tr>
                     <th>IPO name</th>
-                    <th>
-                        Application date 
-                        <span class="sort-arrows" onclick="sortTableByDate('applyDate', 'asc')">&#9650;</span>
-                        <span class="sort-arrows" onclick="sortTableByDate('applyDate', 'desc')">&#9660;</span>
-                    </th>
-                    <th>
-                        Mandate sent date 
-                        <span class="sort-arrows" onclick="sortTableByDate('mandateSentDate', 'asc')">&#9650;</span>
-                        <span class="sort-arrows" onclick="sortTableByDate('mandateSentDate', 'desc')">&#9660;</span>
-                    </th>
-                    <th>
-                        Mandate approved date 
-                        <span class="sort-arrows" onclick="sortTableByDate('mandateApproved', 'asc')">&#9650;</span>
-                        <span class="sort-arrows" onclick="sortTableByDate('mandateApproved', 'desc')">&#9660;</span>
-                    </th>
+                    <th>Apply date  </th>
+                    <th>Mandate sent date</th>
+                    <th>Paymenment Status</th>
                     <th>Allocated</th>
-                    <th>No of lots applied</th>
-                    <th>No of lots allocated</th>
+                    <th>Application No.</th>
                 </tr>
             </thead>
             <tbody>

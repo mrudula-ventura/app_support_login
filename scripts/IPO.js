@@ -2,56 +2,15 @@ let ipoData = [];
 const rowsPerPage = 10; 
 let currentPage = 1;
 
-function displayIpoTable(filteredData = ipoData) {
-    const tableContainer = document.querySelector('.table-container');
-    const tableBody = document.querySelector('#ipo-table tbody');
-    const noDataMessage = document.createElement('div');
-    noDataMessage.style.textAlign = 'center';
-    noDataMessage.style.margin = '20px';
 
-    // Clear existing table data
+function displayIpoTable(filteredData = ipoData) {
+    const tableBody = document.querySelector('#ipo-table tbody');
+    const tableHead = document.querySelector('#ipo-table');
+    const loader = document.querySelector('.loader');
+    console.log(tableHead)
     tableBody.innerHTML = ''; 
 
-    if (filteredData.length === 0) {
-        // Show message when no data is found
-        noDataMessage.textContent = 'No IPO found for this client ID';
-        tableContainer.innerHTML = ''; // Clear the table
-        tableContainer.appendChild(noDataMessage); // Add the message
-        return; // Exit early since there's no data to display
-    }
-
-    // Show the table headers
-    const tableHeader = document.createElement('table');
-    tableHeader.id = 'ipo-table';
-    tableHeader.innerHTML = `
-        <thead>
-            <tr>
-                <th>IPO name</th>
-                <th>
-                    Application date 
-                    <span class="sort-arrows" onclick="sortTableByDate('applyDate', 'asc')">&#9650;</span>
-                    <span class="sort-arrows" onclick="sortTableByDate('applyDate', 'desc')">&#9660;</span>
-                </th>
-                <th>
-                    Mandate sent date 
-                    <span class="sort-arrows" onclick="sortTableByDate('mandateSentDate', 'asc')">&#9650;</span>
-                    <span class="sort-arrows" onclick="sortTableByDate('mandateSentDate', 'desc')">&#9660;</span>
-                </th>
-                <th>
-                    Mandate approved date 
-                    <span class="sort-arrows" onclick="sortTableByDate('mandateApproved', 'asc')">&#9650;</span>
-                    <span class="sort-arrows" onclick="sortTableByDate('mandateApproved', 'desc')">&#9660;</span>
-                </th>
-                <th>Allocated</th>
-                <th>No of lots applied</th>
-                <th>No of lots allocated</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    `;
-    tableContainer.appendChild(tableHeader); // Add table headers
-
+    
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedIpoData = filteredData.slice(start, end); 
@@ -59,6 +18,7 @@ function displayIpoTable(filteredData = ipoData) {
     paginatedIpoData.forEach(ipo => {
         const row = document.createElement('tr');
 
+        
         row.innerHTML = `
             <td>${ipo.name}</td>
             <td>${ipo.applyDate}</td>
@@ -70,40 +30,54 @@ function displayIpoTable(filteredData = ipoData) {
 
         tableBody.appendChild(row);
     });
+    loader.style.display = 'none';
+    tableHead.style.display = 'table';
 
     updatePaginationControls(filteredData);
 }
+
 
 function updatePaginationControls(filteredData) {
     const paginationContainer = document.querySelector('#pagination');
     paginationContainer.innerHTML = '';
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-    
-    createPaginationButton(paginationContainer, 'Previous', currentPage > 1, () => {
-        currentPage--;
-        displayIpoTable(filteredData);
-    });
 
-    for (let i = 1; i <= totalPages; i++) {
-        createPaginationButton(paginationContainer, i.toString(), i !== currentPage, () => {
-            currentPage = i;
+    
+    if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.onclick = () => {
+            currentPage--;
             displayIpoTable(filteredData);
-        });
+        };
+        paginationContainer.appendChild(prevButton);
     }
 
-    createPaginationButton(paginationContainer, 'Next', currentPage < totalPages, () => {
-        currentPage++;
-        displayIpoTable(filteredData);
-    });
-}
+    
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.onclick = () => {
+            currentPage = i;
+            displayIpoTable(filteredData);
+        };
+        if (i === currentPage) {
+            pageButton.disabled = true; 
+        }
+        paginationContainer.appendChild(pageButton);
+    }
 
-function createPaginationButton(container, text, enabled, onClick) {
-    const button = document.createElement('button');
-    button.textContent = text;
-    button.disabled = !enabled;
-    button.onclick = enabled ? onClick : null;
-    container.appendChild(button);
+    
+    if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.onclick = () => {
+            currentPage++;
+            displayIpoTable(filteredData);
+        };
+        paginationContainer.appendChild(nextButton);
+    }
 }
 
 function getClientId() {
@@ -113,31 +87,21 @@ function getClientId() {
 
 async function fetchIPOData() {
     const clientId = getClientId();
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    
-    // Show loading indicator
-    loadingIndicator.style.display = 'block';
 
-    try {
-        const response = await fetch(`http://localhost:5000/api/ipos?clientId=${clientId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
+    const response = await fetch(`http://localhost:5000/api/ipos?clientId=${clientId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
         }
+    });
 
+    if (response.ok) {
         const data = await response.json();
-        ipoData = data.ipoData || []; // Handle cases where ipoData might be undefined
+        ipoData = data.ipoData;
+        console.log(data); 
         displayIpoTable(); 
-    } catch (error) {
-        console.error('Error fetching IPO data:', error);
-    } finally {
-        // Hide loading indicator
-        loadingIndicator.style.display = 'none';
+    } else {
+        console.error('Error fetching IPO data:', await response.json());
     }
 }
 
@@ -151,5 +115,4 @@ function filterIpoTable() {
     currentPage = 1; 
     displayIpoTable(filteredData); 
 }
-
 window.onload = fetchIPOData;

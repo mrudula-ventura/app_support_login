@@ -26,14 +26,14 @@ def login():
     user = app_support_session.query(Users).filter_by(email=username, password=password).first()
     if not user:
         return jsonify({"error": "User not found"}), 400
-    if user:
-        active_status = app_support_session.query(Users.is_active).filter(Users.email == data["username"]).first()
-        print(active_status[0], "active_status")
-        if active_status[0] == True:
-            return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": active_status[0]}), 200
-        else:
-            return jsonify({"message": f"{data["username"]} is deactivated"}), 200
-    return jsonify({"error": "User not found"}), 400
+    
+    active_status = app_support_session.query(Users.is_active).filter(Users.email == data["username"]).first()
+    print(active_status[0], "active_status")
+    if active_status[0] == True:
+        return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": active_status[0]}), 200
+    else:
+        return jsonify({"message": f"{data["username"]} is deactivated"}), 200
+    # return jsonify({"error": "User not found"}), 400
 
 
 @app.route('/addUser', methods=['POST'])
