@@ -16,6 +16,11 @@ CONFIG = {
         "DB_PASSWORD": "WsfgHJedWse346Mng",
         "DB_HOST": "ventura-prod-rds-ipo-opensection.cxsiogefb5hv.ap-south-1.rds.amazonaws.com",
         "DB_NAME": "ipo"
+    },"mpprod":{
+        "DB_USER": "myprofile_user",
+        "DB_PASSWORD": "WsDFGT45Mn237GDEMnU",
+        "DB_HOST": "ventura-prod-cob-support-myprofile-rds.cmy1micvvxjq.ap-south-1.rds.amazonaws.com",
+        "DB_NAME": "myprofile"
     }
 
 }

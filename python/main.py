@@ -3,7 +3,7 @@ from flask_cors import CORS
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from config import get_config
-from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel
+from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel, SegmentModel
 import datetime
 
 app = Flask(__name__)
@@ -95,44 +95,87 @@ def get_client_id():
 def ipo_data():
     client_id = request.args.get('clientId')
     
-    if client_id:
-        ipo_app = ipo_session.query(ApplicantDetailsModel).filter(ApplicantDetailsModel.client_id == client_id).first()
-        
-        if ipo_app:
-            applicant_id = ipo_app.applicant_id
-            ipo_details = ipo_session.query(IpoApplicationModel).filter(IpoApplicationModel.applicant_id == applicant_id).all()
-            if ipo_details:
-                ipo = []
-
-                for i in ipo_details:
-                    ipo_detail = ipo_session.query(IpoDetailsModel).filter(IpoDetailsModel.ipo_id == i.ipo_id).all()
-                    if ipo_detail:
-                        for j in ipo_detail:
-                            ipo.append({
-                                "name": j.company_name,
-                                "applyDate": i.created_datetime,
-                                "mandateSentDate": i.payment_mandate_sent_date if i.payment_mandate_sent_date else " ",
-                                "paymentStatus": i.payment_status,
-                                "allocated": "Yes" if i.application_status == "Alloted" else "No",
-                                "applicationNo": i.application_no
-                            })
-                return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
-            return jsonify({"message": "No IPO details found", "ipoData":{
-                                "name": "None",
-                                "applyDate": "None",
-                                "mandateSentDate": "None",
-                                "paymentStatus": "None",
-                                "allocated": "None",
-                                "applicationNo": "None"
-                            }}), 400
+    if not client_id:
+        return jsonify({"error": "Client ID not found in query parameters"}), 400
+    
+    ipo_app = ipo_session.query(ApplicantDetailsModel).filter(ApplicantDetailsModel.client_id == client_id).first()
+    
+    if not ipo_app:
         return jsonify({"message": "No application found for this client ID"}), 400
-    return jsonify({"error": "Client ID not found in query parameters"}), 400
+    
+    applicant_id = ipo_app.applicant_id
+    ipo_details = ipo_session.query(IpoApplicationModel).filter(IpoApplicationModel.applicant_id == applicant_id).all()
+    
+    if not ipo_details:
+         return jsonify({
+             "message": "No IPO details found", 
+             "ipoData":{
+                        "name": "None",
+                        "applyDate": "None",
+                        "mandateSentDate": "None",
+                        "paymentStatus": "None",
+                        "allocated": "None",
+                        "applicationNo": "None"
+                    }}), 400
+    ipo = []
+    for i in ipo_details:
+        ipo_detail = ipo_session.query(IpoDetailsModel).filter(IpoDetailsModel.ipo_id == i.ipo_id).all()
+        if ipo_detail:
+            for j in ipo_detail:
+                ipo.append({
+                    "name": j.company_name,
+                    "applyDate": i.created_datetime,
+                    "mandateSentDate": i.payment_mandate_sent_date if i.payment_mandate_sent_date else " ",
+                    "paymentStatus": i.payment_status,
+                    "allocated": "Yes" if i.application_status == "Alloted" else "No",
+                    "applicationNo": i.application_no
+                })
+    return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
+   
+
+@app.route("/profile_bank", methods = ['GET'])
+def profile_bank():
+    client_id = request.args.get('clientId')
+    if not client_id:
+        return jsonify({"message": "Client id not found in headers"})
+    
+    mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == client_id).first()
+    if not mp_query:
+        return jsonify({f"message: No record in profile for {client_id}"})
+    
+    client_detail_id = mp_query.client_detail_id_incr
+    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
+    if not client_bank_details:
+        return jsonify({f"message: No Bank details for {client_id}"})
+    bank_list = []
+    for i in client_bank_details:
+        bank_list.append({
+            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
+            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
+            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
+            "BANK NAME": "None",
+            "IS BANK CURRENTLY ACTIVE": i.is_active,
+            "IS BANK PRIMARY": i.is_primary_bank,
+            "IS BANK VERIFIED": i.is_bank_verified,
+            "BANK ACCOUNT STATUS": i.bank_account_status,
+            "BANK ADDED DATE": i.created_timestamp
+        })
+    return jsonify({
+        "message": "Bank details fetched successfully",
+        "Bank Details": bank_list
+    })
+
+# def profile_segment():
+#     segment_query = profile_session.query(SegmentModel).filter(SegmentModel.client_detail_id == )
+    
+
 
 
 if __name__ == '__main__':
     app_support_session = db_connection("app_support")
     sso_session = db_connection("sso_prod")
     ipo_session = db_connection("ipo")
+    profile_session = db_connection("mpprod")
 
 
     app.run(debug=True, use_reloader=False)
