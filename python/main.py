@@ -24,8 +24,8 @@ def login():
     password = data["password"]
 
     user = app_support_session.query(Users).filter_by(email=username, password=password).first()
-    # if not user:
-        # return jsonify({"error": "User not found"}), 400
+    if not user:
+        return jsonify({"error": "User not found"}), 400
     if user:
         active_status = app_support_session.query(Users.is_active).filter(Users.email == data["username"]).first()
         print(active_status[0], "active_status")

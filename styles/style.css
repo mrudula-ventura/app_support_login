@@ -214,3 +214,68 @@ td {
         font-size: 0.9rem;
     }
 }
+
+/*sort arrows*/
+.sort-arrows {
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.add-users-btn {
+  position: fixed;
+  top: 7px;
+  right: 10px;
+  background-color: #6f42c1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.add-users-btn:hover {
+  background-color: #5a3397;
+}
+
+
+.dropdown {
+  display: none; 
+  position: fixed;
+  top: 50px; 
+  right: 10px;
+  background-color: #ffffff; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown a:hover {
+  background-color: #8e7e7eb7;
+}
+
+.add-users-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #6f42c1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.add-users-btn:hover {
+  background-color: #5a3397;
+}
