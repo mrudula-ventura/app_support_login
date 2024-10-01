@@ -5,6 +5,9 @@ let currentPage = 1;
 
 function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
+    const tableHead = document.querySelector('#ipo-table');
+    const loader = document.querySelector('.loader');
+    console.log(tableHead)
     tableBody.innerHTML = ''; 
 
     
@@ -27,6 +30,8 @@ function displayIpoTable(filteredData = ipoData) {
 
         tableBody.appendChild(row);
     });
+    loader.style.display = 'none';
+    tableHead.style.display = 'table';
 
     updatePaginationControls(filteredData);
 }
