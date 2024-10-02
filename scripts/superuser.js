@@ -14,10 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    submitButton.addEventListener('click', async function (event) {
-        event.preventDefault();  // Prevent form submission
-        const clientId = clientIdInput.value;
-        if (clientId.trim() === "") {
+    
+    submitButton.addEventListener('click', async function(event) {
+        event.preventDefault();  
+        const clientId = clientIdInput.value.trim(); 
+        if (clientId === "") {
             alert("Please enter a valid Client ID.");
             return;
         }

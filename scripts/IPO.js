@@ -25,7 +25,6 @@ function displayIpoTable(filteredData = ipoData) {
             <td>${ipo.mandateSentDate}</td>
             <td>${ipo.paymentStatus}</td>
             <td>${ipo.allocated}</td>
-            <td>${ipo.applicationNo || 'N/A'}</td>
         `;
 
         tableBody.appendChild(row);
