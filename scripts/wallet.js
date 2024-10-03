@@ -20,15 +20,15 @@ function displayIpoTable(filteredData = walletData) {
 
 
         row.innerHTML = `
-            <td>${wallet['Timestamp']}</td>
-            <td>${wallet['Transaction type']}</td>
-            <td>${wallet['final Status']}</td>
-            <td>${wallet['Bank Status']}</td>
-            <td>${wallet['RS Status']}</td>
-            <td>${wallet['accord status']}</td>
-            <td>${wallet['Reference no']}</td>
-            <td>${wallet['amount']}</td>
             <td>${wallet['client_code']}</td>
+            <td>${wallet['Reference no']}</td>
+            <td>${wallet['Transaction type']}</td>
+            <td>${wallet['Bank Status']}</td>
+            <td>${wallet['accord status']}</td>
+            <td>${wallet['RS Status']}</td>
+            <td>${wallet['final Status']}</td>
+            <td>${wallet['amount']}</td>
+            <td>${wallet['Timestamp']}</td>
 
         `;
 

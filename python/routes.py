@@ -266,7 +266,7 @@ def wallet_details():
                         dt = value
                     else:
                         continue    
-                    wallet[column] = dt.strftime('%d %b %Y %H:%M')
+                    wallet[column] = dt.strftime('%d-%m-%Y %H:%M')
                 else:
                     wallet[column] = value
             wallet_data.append(wallet)
