@@ -106,7 +106,7 @@ def ipo_data():
     application_details_table = ipo_session.query(ApplicantDetailsModel).filter(ApplicantDetailsModel.client_id == func.lower(client_id)).first()
     
     if not application_details_table:
-        return jsonify({"message": "No application found for this client ID"}), 400
+        return jsonify({"message": "No application found for this client ID"}), 404
     
     ipo_applications_table = ipo_session.query(IpoApplicationModel).filter(IpoApplicationModel.applicant_id == application_details_table.applicant_id).order_by(IpoApplicationModel.created_datetime.desc()).all()
     
@@ -120,7 +120,7 @@ def ipo_data():
                 "paymentStatus": "None",
                 "allocated": "None"
             }
-        }), 400
+        }), 404
     ipo_details_list = {i.ipo_id: i.bid_quantity for i in ipo_applications_table}
     ipo_detail = ipo_session.query(IpoDetailsModel).filter(IpoDetailsModel.ipo_id.in_(ipo_details_list.keys())).all()
     company_name = {i.ipo_id: {"company_name": i.company_name, "lot_size": i.lot_size} for i in ipo_detail}
