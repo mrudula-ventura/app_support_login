@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const clientIdInput = document.getElementById('client-id');
     const manageUserButton = document.getElementById('manageUser');
     const dropdownMenu = document.getElementById('dropdownMenu');
+   
 
     console.log('submitButton:', submitButton);
     console.log('clientIdInput:', clientIdInput);
-
+ const emailOrPhone = document.getElementById('email-mobile').value;
     if (!submitButton || !clientIdInput) {
         console.error('Element not found');
         return;
@@ -24,12 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/get-client-id', {
+            const response = await fetch('http://localhost:5000/api/details&&module=superuser?clientId=${clientId}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ clientIdField: clientId }),
+                body: JSON.stringify({ clientIdField: clientId, emailOrPhone:emailOrPhone }),
             });
 
             const data = await response.json();
