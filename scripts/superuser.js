@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/details&&module=superuser?clientId=${clientId}', {
+            const response = await fetch('http://localhost:5000/get-client-id', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

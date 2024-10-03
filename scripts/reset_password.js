@@ -41,7 +41,7 @@ document.getElementById('reset').addEventListener('click', async function () {
     };
 
     try {
-        const response = await fetch('http://localhost:5000/api/details&&module=resetPassword?clientId=${clientId}', {
+        const response = await fetch('http://localhost:5000/reset-passwordclientId=${clientId}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

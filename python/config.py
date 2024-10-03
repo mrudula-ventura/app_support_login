@@ -21,6 +21,11 @@ CONFIG = {
         "DB_PASSWORD": "WsDFGT45Mn237GDEMnU",
         "DB_HOST": "ventura-prod-cob-support-myprofile-rds.cmy1micvvxjq.ap-south-1.rds.amazonaws.com",
         "DB_NAME": "myprofile"
+    },"cash_prod":{
+    "DB_USER":"metabase",
+    "DB_HOST":"cash-prod-rds-postgres.cs6gkdopmrcl.ap-south-1.rds.amazonaws.com",
+    "DB_PASSWORD":"met%40b%40$E_%40%40dMin",
+    "DB_NAME":"cash_equities"
     }
 
 }

@@ -20,14 +20,16 @@ function displayIpoTable(filteredData = walletData) {
 
 
         row.innerHTML = `
-            <td>${wallet.created}</td>
-            <td>${wallet.type}</td>
-            <td>${wallet.finalStat}</td>
-            <td>${wallet.bankStat}</td>
-            <td>${wallet.rsStat}</td>
-             <td>${wallet.errMsg}</td>
-            <td>${wallet.venId}</td>
-            <td>${wallet.acrdId}</td>
+            <td>${wallet['Timestamp']}</td>
+            <td>${wallet['Transaction type']}</td>
+            <td>${wallet['final Status']}</td>
+            <td>${wallet['Bank Status']}</td>
+            <td>${wallet['RS Status']}</td>
+            <td>${wallet['accord status']}</td>
+            <td>${wallet['Reference no']}</td>
+            <td>${wallet['amount']}</td>
+            <td>${wallet['client_code']}</td>
+
         `;
 
         tableBody.appendChild(row);
@@ -92,7 +94,7 @@ function getClientId() {
 async function fetchIPOData() {
     const clientId = getClientId();
 
-    const response = await fetch(`http://localhost:5000/api/details&&module=wallet?clientId=${clientId}`, {
+    const response = await fetch(`http://localhost:5000/wallet?clientId=${clientId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
