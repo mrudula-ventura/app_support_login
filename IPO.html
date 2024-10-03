@@ -12,7 +12,7 @@
    <div class="loader"></div>
    <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
     <div class="table-container">
-
+        <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" />
 
         <table id="ipo-table">
             <thead>
@@ -28,6 +28,8 @@
               <!-- dynamic additions of rows -->
             </tbody>
         </table>
+        <div id="pagination"></div> <!-- Pagination controls -->
+
     </div>
 
     <script src="scripts/IPO.js"></script>
