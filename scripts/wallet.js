@@ -92,7 +92,7 @@ function getClientId() {
 async function fetchIPOData() {
     const clientId = getClientId();
 
-    const response = await fetch(`api`, {
+    const response = await fetch(`http://localhost:5000/api/details&&module=wallet?clientId=${clientId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

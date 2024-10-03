@@ -243,7 +243,7 @@ td {
 
 .dropdown {
   display: none; 
-  position: fixed;
+  position:fixed;
   top: 50px; 
   right: 10px;
   background-color: #ffffff; 
@@ -316,10 +316,10 @@ td {
 /*logout button*/
 .lo_btn{
   position: fixed;
-  top: 558px;
+  bottom: 3px;
   right: 40px;
   background-color: #6f42c1;
-  padding: 8px 9px;
+  padding: 8px 10px;
   border: none;
   border-radius: 5px;
   color: white;
@@ -332,34 +332,29 @@ td {
   background-color: #5a3397;
 }
 
-.footer{
+.footer {
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
   color: white;
-  padding: 15px;
-  position: fixed;
-  top: 552px;
-  left: 0;
+  padding: 20px;
+  position: fixed; /* Fixes the footer to the bottom */
+  bottom: 0px; /* Positions it at the bottom */
+  left: 0; /* Aligns it to the left */
   text-align: center;
   font-size: 10px;
   font-weight: bold;
   z-index: 10;
 }
 
-/*back button*/
-.back-btn {
+.back-btn{
   position: fixed;
   top: 10px;
-  left: 10px;
+  left: 40px;
   background-color: #6f42c1;
-  padding: 10px 15px;
+  padding: 8px 10px;
   border: none;
   border-radius: 5px;
   color: white;
   cursor: pointer;
-  z-index: 1000;
-}
-
-.back-btn:hover {
-  background-color: #5a3397;
+  z-index:2000;
 }

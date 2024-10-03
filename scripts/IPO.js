@@ -87,7 +87,7 @@ function getClientId() {
 async function fetchIPOData() {
     const clientId = getClientId();
 
-    const response = await fetch(`http://localhost:5000/api/ipos?clientId=${clientId}`, {
+    const response = await fetch(`http://localhost:5000/api/details&&module=ipo?clientId=${clientId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -11,13 +11,13 @@
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
   color: white;
-  padding: 10px;
+  padding: 3px;
   position: fixed;
   top: 0;
   left: 0;
   height: 8%;
-  text-align: center;
-  font-size: 20px;
+  text-align:center;
+  font-size:20px;
   font-weight: inherit;
   z-index: 4;
 }
@@ -63,14 +63,15 @@ flex: 1 1 auto;
 </head>
 <body style="background-image: url('styles/lbg.webp');background-repeat: no-repeat;background-size: cover;background-attachment: fixed;background-position: center;">
     <div class="navbar">
-        <h4>Client ID: <span id="client-id-display"></span></h4> 
+        <h5>Client ID: <span id="client-id-display"></span></h5> 
+        <a href="superuser.html"><button class="back-btn">Back</button></a>
     </div>
 
     <div class="btn-container">
         <!-- <img src="styles/logo.jfif" alt="Company Logo" class="company-logo"> -->
         
         
-        <button class="btn" onclick="openPage('IPO.html')">wallet</button>
+        <button class="btn" onclick="openPage('wallet.html')">wallet</button>
         
         <button class="btn" onclick="openPage('IPO.html')">IPO</button>
      
@@ -91,9 +92,7 @@ flex: 1 1 auto;
     </div>
     <script src="scripts/client_page.js">    </script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
-    <div class="footer"> 
-        footer
-    </div>
+    <div class="footer"> </div>
 
 </body>
 </html>

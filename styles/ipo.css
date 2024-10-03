@@ -37,8 +37,8 @@ body {
 }
 
 table {
-    width: 100%; /* Table covers the entire page width */
-    border-collapse: collapse; /* Remove extra space between borders */
+    width: 100%; 
+    border-collapse: collapse; 
     margin-top: 50px;
 }
 
