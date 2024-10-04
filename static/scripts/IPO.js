@@ -31,6 +31,8 @@ function displayIpoTable(filteredData = ipoData) {
     });
     loader.style.display = 'none';
     tableHead.style.display = 'table';
+    searchInput.style.display='block;'
+
 
     updatePaginationControls(filteredData);
 }
@@ -103,6 +105,7 @@ async function fetchIPOData() {
         loader.style.display = 'none'; // Hide loader
         noIposMessage.style.display = 'block'; // Show no IPOs message
         tableHead.style.display = 'none'; // Hide table
+        searchInput.style.display='none';
 
     }
     else {

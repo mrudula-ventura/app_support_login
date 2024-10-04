@@ -137,3 +137,30 @@ to {
 /* #wallet-table{
 display: none;
 } */
+
+
+.back-btn{
+  position: fixed;
+  top: 10px;
+  left: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index:2000;
+}
+
+.back-btn{
+  position: fixed;
+  top: 5px;
+  left: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index:2000;
+}

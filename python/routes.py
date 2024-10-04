@@ -65,11 +65,11 @@ def deleteuser():
         return jsonify({"message": "User deactivated"}), 200
     return jsonify({"message": "Unable to delete user"}), 400
 
-@app.route('/get-client-id', methods=['POST'])
+@app.route('/submit-client-id', methods=['POST'])
 def get_client_id():
     data = request.json
     # email_or_mobile = data['emailOrMobile']
-    client_id = data['clientIdField']
+    client_id = data['clientId']
     pu_key, pr_key = get_keys()
     if client_id:
         client_data = look_by_client_id(client_id)
