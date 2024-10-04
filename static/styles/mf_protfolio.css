@@ -16,17 +16,17 @@ body {
     width: 100%;
     background-color: rgba(12, 8, 8, 0.833);
     color: white;
-    padding: 20px;
+    padding: 5px;
     position: fixed;
     top: 0;
     left: 0;
     text-align: center;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
     z-index: 10;
   }
-
-.table-container {
+  
+  .table-container {
     position:absolute;
     top: 0px;
     width: 100%;
@@ -34,86 +34,85 @@ body {
     margin: 0 auto;
     overflow-x: auto;
     background-color: #ccc;
-}
-
-table {
-    width: 100%; 
-    border-collapse: collapse; 
+  }
+  
+  table {
+    width: 100%; /* Table covers the entire page width */
+    border-collapse: collapse; /* Remove extra space between borders */
     margin-top: 50px;
-}
-
-th, td {
+  }
+  
+  th, td {
     padding: 12px;
     text-align: left;
     border: 1px solid #ddd; /* Add border to all cells */
-}
-
-th {
+  }
+  
+  th {
     background-color: #007BFF;
     color: white;
     text-transform: uppercase;
-}
-
-tr:hover {
+  }
+  
+  tr:hover {
     background-color: #f1f1f1;
-}
-
-td {
+  }
+  
+  td {
     font-size: 1rem;
-}
-
-.client-id {
+  }
+  
+  .client-id {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
+  }
+  
+  @media (max-width: 768px) {
     th, td {
         font-size: 0.9rem;
     }
-}
-
-.footer{
-    width: 100%;
-    background-color: rgba(12, 8, 8, 0.833);
-    color: white;
-    padding: 32px;
-    position: fixed;
-    top: 560px;
-    left: 0;
-    text-align: center;
-    font-size: 10px;
-    font-weight: bold;
-    z-index: 10;
   }
-
-
+  
+  
+  
   /*logout button*/
-.lo_btn{
-    position: fixed;
-    top: 558px;
-    right: 40px;
-    background-color: #6f42c1;
-    padding: 9px 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    z-index:2000;
+  .lo_btn{
+  position: fixed;
+  bottom: 3px;
+  right: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index:2000;
   
   }
   
   .lo_btn:hover{
-    background-color: #5a3397;
+  background-color: #5a3397;
   }
-
-
+  
+  .footer {
+  width: 100%;
+  background-color: rgba(12, 8, 8, 0.833);
+  color: white;
+  padding: 20px;
+  position: fixed; /* Fixes the footer to the bottom */
+  bottom: 0px; /* Positions it at the bottom */
+  left: 0; /* Aligns it to the left */
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 10;
+  }
   .loader {
   width: 80px;
   height: 80px;
   padding: 8px;
- position: absolute;
+  position: absolute;
   aspect-ratio: 1;
   border-radius: 100%;
   background: #25b09b;
@@ -125,36 +124,35 @@ td {
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
   animation: l3 1s infinite linear;
-}
-
-@keyframes l3 {
+  }
+  
+  @keyframes l3 {
   to {
       transform: rotate(1turn);
   }
-}
-
-
-
-#ipo-table{
+  }
+  
+  
+  
+  /* #wallet-table{
   display: none;
-}
+  } */
 
+  #crnt_amnt_disp{
+    position: relative;
+    font-size:10px;
+    top: 0%;
+    font-size: 18px;
+    font-weight: bold;
+    right:450px;
+    }
 
-/*logout button*/
-.lo_btn{
-    position: fixed;
-    top: 562px;
-    right: 40px;
-    background-color: #6f42c1;
-    padding: 8px 9px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    z-index:2000;
-  
-  }
-  
-  .lo_btn:hover{
-    background-color: #5a3397;
-  }
+    #prchs_amnt_disp{
+        position: relative;
+        font-size:10px;
+        top: 0%;
+        font-size: 18px;
+        font-weight: bold;
+        right:450px;
+        }
+    
