@@ -1,12 +1,13 @@
 from flask import request, jsonify
 from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel
-from sqlalchemy import func, text
+from sqlalchemy import func, text, or_
 from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
+import json
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -17,13 +18,15 @@ def login():
     encrypted_password = encrypt(password if type(password) == str else str(password), pu_key)
 
     user = app_support_session.query(Users).filter_by(email=username, password=encrypted_password).first()
+    # active_status = app_support_session.query(Users.is_active).filter(Users.email == username).first()
+    # if active_status[0]:
+    
     if user:
-        active_status = app_support_session.query(Users.is_active).filter(Users.email == username).first()
-        if active_status[0]:
-            return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": active_status[0]}), 200
+        if user.is_active:
+            return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": True}), 200
         else:
-            return jsonify({"message": f"{username} is deactivated"}), 200
-    return jsonify({"error": "User not found"}), 400
+            return jsonify({"message": f"{username} is deactivated", "is_active": False}), 200
+    return jsonify({"message": "Invalid Credentials"}), 400
 
 @app.route('/addUser', methods=['POST'])
 def add_user():
@@ -64,6 +67,35 @@ def deleteuser():
         app_support_session.commit()
         return jsonify({"message": "User deactivated"}), 200
     return jsonify({"message": "Unable to delete user"}), 400
+import base64
+@app.route('/get-client-id', methods = ['POST'])
+def check_if_data_exists():
+    data = request.json
+    email_mobile = data.get('emailOrPhone').lower()
+    if not email_mobile:
+        return jsonify({"message": "Email or Phone is missing"}), 400
+
+    try:
+        pu_key, pr_key = get_keys() 
+        encrypted_email_mobile = encrypt(email_mobile, pu_key)
+    except Exception as e:
+        return jsonify({"message": "Decryption failed: Invalid ciphertext"}), 400
+
+    sso_query = sso_session.query(UserInfo.client_id).filter(
+            or_(UserInfo.mobile_no == encrypted_email_mobile,
+                UserInfo.email_id == encrypted_email_mobile
+            )
+    ).first()
+    print(sso_query, " --------------")
+
+    if not sso_query:
+        return jsonify({
+            "message": "Email / Mobile does not exist", 
+            "clientId": None, 
+            "clientId": None
+        }), 404
+    return jsonify({"clientId": sso_query[0]})
+
 
 @app.route('/submit-client-id', methods=['POST'])
 def get_client_id():
@@ -72,28 +104,10 @@ def get_client_id():
     client_id = data['clientId']
     pu_key, pr_key = get_keys()
     if client_id:
-        client_data = look_by_client_id(client_id)
-    # if email_or_mobile:
-    #     encyrypted_email = encrypt(email_or_mobile, pu_key)
-    #     client_data = look_by_email_or_mobile(encyrypted_email)
-
-    if client_data:
-        return jsonify({"message": "Client found", "clientId": client_data["client_id"]}), 200
-    else:
-        return jsonify({"message": "Client ID or Email/Mobile not found."}), 404
-
-
-def look_by_client_id(client_id):
-    client_id_backend = sso_session.query(UserInfo.client_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
-    if not client_id_backend:
-        return None
-    return {"client_id": client_id[0]}
-
-# def look_by_email_or_mobile(emailOrMobile):
-#     client_email_encrypted = sso_session.query(UserInfo.client_id).filter((UserInfo.email_id) == emailOrMobile or (UserInfo.mobile_no) == emailOrMobile).first()
-#     if not client_email_encrypted:
-#         return None
-#     return {"client_id": client_email_encrypted[0]}
+        client_id_backend = sso_session.query(UserInfo.client_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
+        if not client_id_backend:
+            return None
+        return {"client_id": client_id[0]}
 
 
 @app.route("/ipo", methods=['GET'])
@@ -106,20 +120,14 @@ def ipo_data():
     application_details_table = ipo_session.query(ApplicantDetailsModel).filter(ApplicantDetailsModel.client_id == func.lower(client_id)).first()
     
     if not application_details_table:
-        return jsonify({"message": "No application found for this client ID"}), 404
+        return jsonify({"message": "No application found for this client ID", "data": False}), 404
     
     ipo_applications_table = ipo_session.query(IpoApplicationModel).filter(IpoApplicationModel.applicant_id == application_details_table.applicant_id).order_by(IpoApplicationModel.created_datetime.desc()).all()
     
     if not ipo_applications_table:
         return jsonify({
-            "message": "No IPO details found", 
-            "ipoData": {
-                "name": "None",
-                "applyDate": "None",
-                "mandateSentDate": "None",
-                "paymentStatus": "None",
-                "allocated": "None"
-            }
+            "message": "No IPO details found",
+            "data": False
         }), 404
     ipo_details_list = {i.ipo_id: i.bid_quantity for i in ipo_applications_table}
     ipo_detail = ipo_session.query(IpoDetailsModel).filter(IpoDetailsModel.ipo_id.in_(ipo_details_list.keys())).all()
@@ -259,6 +267,7 @@ def wallet_details():
         for row in result_fetch:
             wallet = {}
             for column, value in zip(columns, row):
+                # print(column, "-------------------------")
                 if column == 'Timestamp' and value  is not None:
                     if isinstance(value, str):
                         dt = datetime.datetime.strptime(value, '%a, %d %b %Y %H:%M:%S %Z')
@@ -267,6 +276,12 @@ def wallet_details():
                     else:
                         continue    
                     wallet[column] = dt.strftime('%d-%m-%Y %H:%M')
+                elif column == 'RS Status' and value is not None:
+                    try:
+                        status = json.loads(value)
+                        wallet[column] = status.get('status')
+                    except json.JSONDecodeError:
+                        wallet[column] = "NA"
                 else:
                     wallet[column] = value
             wallet_data.append(wallet)

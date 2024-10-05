@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    function isValidEmail(email) {
-        const regex = /^[a-zA-Z0-9._%+-]+@venturasecurities\.com$/; // Adjust regex as needed
-        return regex.test(email);
-    }
+    // function isValidEmail(email) {
+    //     const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // Adjust regex as needed
+    //     return regex.test(email);
+    // }
 
     function isValidPhoneNumber(phone) {
-        const regex = /^\d{10}$/; // Checks for exactly 10 digits
+        const regex = /^\d{10}$/; 
         return regex.test(phone);
     }
 
@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please enter an email or phone number');
             return;
         }
-
-        if (isValidEmail(emailOrPhone) || isValidPhoneNumber(emailOrPhone)) {
+            // isValidEmail(emailOrPhone) || 
+        if (isValidPhoneNumber(emailOrPhone)) {
             try {
                 const response = await fetch('http://localhost:5000/get-client-id', {
                     method: 'POST',
