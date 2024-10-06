@@ -58,14 +58,84 @@ flex: 1 1 auto;
   background-position: right center; 
 }
 
+.navbar {
+    width: 100%;
+    background-color: rgba(12, 8, 8, 0.833);
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 4;
+    font-size: 18px;
+}
+
+
+/* Style for the user info container */
+.user-info-container {
+  display: flex;
+  align-items: center; /* Vertically centers the items */
+  justify-content: flex-end; /* Aligns content to the right */
+  position: absolute;
+  right: 20px; /* Adjusts the distance from the right edge */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically centers the container */
+  color: white;
+}
+
+.user-info-container h5 {
+  margin: 0 25px; /* Adds sufficient space between labels */
+  white-space: nowrap; /* Prevents text from wrapping */
+  font-size: 14px; /* Adjusts font size to fit more content */
+}
+
+.user-info-container span {
+  font-weight: normal; /* Makes the span text normal weight */
+  margin-left: 10px; /* Adds a little space between label and information */
+}
+
+
+
+/* Back button */
+.back-btn {
+  position: fixed;
+  top: 5px;
+  left: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+.back-btn:hover {
+  background-color: #5a3397;
+}
+
  </style>
    
 </head>
 <body style="background-image: url('../static/styles/lbg.webp');background-repeat: no-repeat;background-size: cover;background-attachment: fixed;background-position: center;">
-    <div class="navbar">
+  <div class="navbar">
+    <div class="user-info-container">
         <h5>Client ID: <span id="client-id-display"></span></h5> 
+        <h5>Full Name: <span id="client-full-name"></span></h5>
+        <h5>Email: <span id="client-email"></span></h5>
+        <h5>Mobile No: <span id="client-mobile"></span></h5>
+    </div>
+    <div class="back-btn-container">
         <a href="superuser.html"><button class="back-btn">Back</button></a>
     </div>
+</div>
+
+
+
 
     <div class="btn-container">
         <!-- <img src="styles/logo.jfif" alt="Company Logo" class="company-logo"> -->

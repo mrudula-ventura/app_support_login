@@ -2,14 +2,14 @@ let walletData = [];
 const rowsPerPage = 10;
 let currentPage = 1;
 
-
 function displayIpoTable(filteredData = walletData) {
     const tableBody = document.querySelector('#wallet-table tbody');
     const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
-    console.log(tableHead)
-    tableBody.innerHTML = '';
+    const loadingText = document.querySelector('.loading-text');
 
+    // Clear the table content before updating it
+    tableBody.innerHTML = '';
 
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -17,8 +17,6 @@ function displayIpoTable(filteredData = walletData) {
 
     paginatedWalletData.forEach(wallet => {
         const row = document.createElement('tr');
-
-
         row.innerHTML = `
             <td>${wallet['Timestamp']}</td>
             <td>${wallet['client_code']}</td>
@@ -29,26 +27,23 @@ function displayIpoTable(filteredData = walletData) {
             <td>${wallet['accord status']}</td>
             <td>${wallet['RS Status']}</td>
             <td>${wallet['final Status']}</td>
-
         `;
-
         tableBody.appendChild(row);
     });
 
-
+    // Hide loader and loading text, show table when data is available
     loader.style.display = 'none';
-    tableHead.style.display = 'table';
+    loadingText.style.display = 'none';
+    tableHead.style.display = 'table';  // Show table once data is fetched
 
     updatePaginationControls(filteredData);
 }
-
 
 function updatePaginationControls(filteredData) {
     const paginationContainer = document.querySelector('#pagination');
     paginationContainer.innerHTML = '';
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
 
     if (currentPage > 1) {
         const prevButton = document.createElement('button');
@@ -59,7 +54,6 @@ function updatePaginationControls(filteredData) {
         };
         paginationContainer.appendChild(prevButton);
     }
-
 
     for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement('button');
@@ -73,7 +67,6 @@ function updatePaginationControls(filteredData) {
         }
         paginationContainer.appendChild(pageButton);
     }
-
 
     if (currentPage < totalPages) {
         const nextButton = document.createElement('button');
@@ -106,23 +99,9 @@ async function fetchIPOData() {
         walletData = data.walletData;
         console.log(data);
         displayIpoTable();
-    } else if(response.ok){
-     
-
-    }
-    else {
+    } else {
         console.error('Error fetching wallet data:', await response.json());
     }
 }
 
-function filterwalletTable() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = walletData.filter(wallet =>
-        wallet.name.toLowerCase().includes(searchValue) ||
-        (wallet.applicationNo && wallet.applicationNo.toLowerCase().includes(searchValue))
-    );
-
-    currentPage = 1;
-    displayIpoTable(filteredData);
-}
 window.onload = fetchIPOData;

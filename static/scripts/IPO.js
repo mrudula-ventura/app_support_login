@@ -2,23 +2,25 @@ let ipoData = [];
 const rowsPerPage = 10; 
 let currentPage = 1;
 
-
+// Function to display the IPO table
 function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
     const tableHead = document.querySelector('#ipo-table');
-    const loader = document.querySelector('.loader');
-    console.log(tableHead)
-    tableBody.innerHTML = ''; 
-
+    const loader = document.querySelector('.loader-container');
+    const searchInput = document.getElementById('searchInput');
+    const noIposMessage = document.querySelector('.no-ipos-message');
+    const tableContainer = document.querySelector('.table-container');
     
+    tableBody.innerHTML = ''; // Clear the table body
+
+    // Pagination setup
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedIpoData = filteredData.slice(start, end); 
 
+    // Populate the table with IPO data
     paginatedIpoData.forEach(ipo => {
         const row = document.createElement('tr');
-
-        
         row.innerHTML = `
             <td>${ipo.name}</td>
             <td>${ipo.applyDate}</td>
@@ -26,25 +28,31 @@ function displayIpoTable(filteredData = ipoData) {
             <td>${ipo.paymentStatus}</td>
             <td>${ipo.allocated}</td>
         `;
-
         tableBody.appendChild(row);
     });
-    loader.style.display = 'none';
-    tableHead.style.display = 'table';
-    searchInput.style.display='block;'
 
+    // Hide the loader, show the table and search input
+    loader.style.display = 'none';
+    if (filteredData.length > 0) {
+        tableContainer.style.display = 'block';
+        searchInput.style.display = 'block';
+        noIposMessage.style.display = 'none'; // Hide no IPO message if data exists
+    } else {
+        noIposMessage.style.display = 'block'; // Show no IPO message if no data exists
+        tableContainer.style.display = 'none'; // Hide table and search input
+        searchInput.style.display = 'none';
+    }
 
     updatePaginationControls(filteredData);
 }
 
-
+// Function to update pagination controls
 function updatePaginationControls(filteredData) {
     const paginationContainer = document.querySelector('#pagination');
     paginationContainer.innerHTML = '';
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-    
     if (currentPage > 1) {
         const prevButton = document.createElement('button');
         prevButton.textContent = 'Previous';
@@ -55,7 +63,6 @@ function updatePaginationControls(filteredData) {
         paginationContainer.appendChild(prevButton);
     }
 
-    
     for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
@@ -69,7 +76,6 @@ function updatePaginationControls(filteredData) {
         paginationContainer.appendChild(pageButton);
     }
 
-    
     if (currentPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Next';
@@ -81,40 +87,49 @@ function updatePaginationControls(filteredData) {
     }
 }
 
+// Function to get the client ID from the URL
 function getClientId() {
     const params = new URLSearchParams(window.location.search);
     return params.get('clientId');
 }
 
+// Function to fetch IPO data from the backend
 async function fetchIPOData() {
     const clientId = getClientId();
+    const loader = document.querySelector('.loader-container');
+    const noIposMessage = document.querySelector('.no-ipos-message');
 
-    const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
+    try {
+        const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            ipoData = data.ipoData;
+
+            if (ipoData.length === 0) {
+                noIposMessage.style.display = 'block'; // Show no IPOs message if data is empty
+                loader.style.display = 'none'; // Hide loader
+            } else {
+                displayIpoTable(); // Display IPO data if available
+            }
+        } else if (response.status === 404) {
+            loader.style.display = 'none'; // Hide loader
+            noIposMessage.textContent = 'No IPOs available for this client ID.';
+            noIposMessage.style.display = 'block'; // Show message for no IPOs
+        } else {
+            throw new Error('Error fetching IPO data');
         }
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        ipoData = data.ipoData;
-        console.log(data); 
-        displayIpoTable(); 
-    } else if(response.status==400){
-        loader.style.display = 'none'; // Hide loader
-        noIposMessage.style.display = 'block'; // Show no IPOs message
-        tableHead.style.display = 'none'; // Hide table
-        searchInput.style.display='none';
-
+    } catch (error) {
+        console.error('Error fetching IPO data:', error);
     }
-    else {
-        console.error('Error fetching IPO data:', await response.json());
-    }
-
 }
 
-
+// Function to filter the IPO table based on search input
 function filterIpoTable() {
     const searchValue = document.getElementById('searchInput').value.toLowerCase();
     const filteredData = ipoData.filter(ipo => 
@@ -125,4 +140,6 @@ function filterIpoTable() {
     currentPage = 1; 
     displayIpoTable(filteredData); 
 }
+
+// Load IPO data when the page is loaded
 window.onload = fetchIPOData;

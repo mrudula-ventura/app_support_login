@@ -7,39 +7,40 @@
     <link rel="stylesheet" href="../static/styles/ipo.css">
 </head>
 <body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-   <div class="navbar">
-    <a href="client_page.html"><button class="back-btn">Back</button></a>
-   </div>
-    
-   <div class="loader"></div>
-   <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
-    <div class="table-container">
-        <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" />
+    <div class="navbar">
+        <a href="client_page.html"><button class="back-btn">Back</button></a>
+    </div>
 
-        <table id="ipo-table">
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">Loading...</p>
+    </div>
+
+    <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
+    
+    <div class="table-container" style="display: none;"> <!-- Hidden initially -->
+        <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" style="display: none;" /> <!-- Hidden initially -->
+
+        <table id="ipo-table" style="display: none;"> <!-- Hidden initially -->
             <thead>
                 <tr>
                     <th>IPO name</th>
-                    <th>Apply date  </th>
+                    <th>Apply date</th>
                     <th>Mandate sent date</th>
                     <th>Share Per Lot</th>
-                    <th>Lot apllied</th>
+                    <th>Lot applied</th>
                 </tr>
             </thead>
             <tbody>
               <!-- dynamic additions of rows -->
             </tbody>
-            
         </table>
-        <div id="pagination"></div> <!-- Pagination controls -->
 
+        <div id="pagination"></div>
     </div>
 
     <script src="../static/scripts/IPO.js"></script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
     <div class="footer"></div>
-
 </body>
-</html> 
-
-
+</html>

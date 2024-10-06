@@ -118,7 +118,7 @@ def get_client_id():
         mobile_decrypt = decrypt(mobile, pr_key)
         if not client_id_backend:
             return None
-        return {"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile No.": mobile_decrypt}
+        return  jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile No.": mobile_decrypt})
 
 # IPO DETAILS
 @app.route("/ipo", methods=['GET'])
