@@ -1,7 +1,7 @@
 from flask import request, jsonify
-from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel
+from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel, MutualFundPortfolio
 from sqlalchemy import func, text, or_
-from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session
+from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session, mf_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
@@ -9,12 +9,16 @@ from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
 import json
 
+# def getting_keys():
+pu_key, pr_key = get_keys()
+    # return pu_key, pr_key
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data["username"]
     password = data["password"]
-    pu_key, pr_key = get_keys()
+    # pu_key, pr_key = get_keys()
     encrypted_password = encrypt(password if type(password) == str else str(password), pu_key)
 
     user = app_support_session.query(Users).filter_by(email=username, password=encrypted_password).first()
@@ -28,12 +32,13 @@ def login():
             return jsonify({"message": f"{username} is deactivated", "is_active": False}), 200
     return jsonify({"message": "Invalid Credentials"}), 400
 
+# ADD USER 
 @app.route('/addUser', methods=['POST'])
 def add_user():
     try:
         data = request.json
         password = data['password']
-        pu_key, pr_key = get_keys()
+        # pu_key, pr_key = get_keys()
 
         existing_user = app_support_session.query(Users).filter_by(email=data["email"]).first()
         if existing_user:
@@ -56,7 +61,8 @@ def add_user():
     except Exception as e:
         app_support_session.rollback()  
         return jsonify({"message": "Error adding user", "error": str(e)}), 500
-    
+
+#DELETE USER 
 @app.route('/delete-user', methods=['POST'])
 def deleteuser():
     data = request.json
@@ -66,8 +72,9 @@ def deleteuser():
         app_support_session.query(Users).filter(Users.email == data["email"]).update({Users.is_active: False}, synchronize_session=False)
         app_support_session.commit()
         return jsonify({"message": "User deactivated"}), 200
-    return jsonify({"message": "Unable to delete user"}), 400
-import base64
+    return jsonify({"message": "User no found"}), 400
+
+# CHECK MOBILE / EMAIL EXISTS IN SSO DB 
 @app.route('/get-client-id', methods = ['POST'])
 def check_if_data_exists():
     data = request.json
@@ -76,7 +83,7 @@ def check_if_data_exists():
         return jsonify({"message": "Email or Phone is missing"}), 400
 
     try:
-        pu_key, pr_key = get_keys() 
+        # pu_key, pr_key = get_keys() 
         encrypted_email_mobile = encrypt(email_mobile, pu_key)
     except Exception as e:
         return jsonify({"message": "Decryption failed: Invalid ciphertext"}), 400
@@ -86,7 +93,7 @@ def check_if_data_exists():
                 UserInfo.email_id == encrypted_email_mobile
             )
     ).first()
-    print(sso_query, " --------------")
+    # print(sso_query, " --------------")
 
     if not sso_query:
         return jsonify({
@@ -96,20 +103,24 @@ def check_if_data_exists():
         }), 404
     return jsonify({"clientId": sso_query[0]})
 
-
+# GET CLIENT ID IF IT EXISTS
 @app.route('/submit-client-id', methods=['POST'])
 def get_client_id():
     data = request.json
     # email_or_mobile = data['emailOrMobile']
     client_id = data['clientId']
-    pu_key, pr_key = get_keys()
+    # pu_key, pr_key = get_keys()
     if client_id:
-        client_id_backend = sso_session.query(UserInfo.client_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
+        client_id_backend = sso_session.query(UserInfo.client_id, UserInfo.first_name, UserInfo.last_name, UserInfo.mobile_no, UserInfo.email_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
+        client_id_, f_name, l_name, mobile, email = client_id_backend
+        l_name_decrypt = decrypt(l_name, pr_key)
+        email_decrypt = decrypt(email, pr_key)
+        mobile_decrypt = decrypt(mobile, pr_key)
         if not client_id_backend:
             return None
-        return {"client_id": client_id[0]}
+        return {"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile No.": mobile_decrypt}
 
-
+# IPO DETAILS
 @app.route("/ipo", methods=['GET'])
 def ipo_data():
     client_id = request.args.get('clientId')
@@ -146,6 +157,7 @@ def ipo_data():
                 })
     return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
 
+# MY PROFILE BANK DETAILS
 @app.route("/profile_bank", methods = ['GET'])
 def profile_bank():
     client_id = request.args.get('clientId')
@@ -178,10 +190,7 @@ def profile_bank():
         "Bank Details": bank_list
     })
 
-# def profile_segment():
-#     segment_query = profile_session.query(SegmentModel).filter(SegmentModel.client_detail_id == )
-
-@app.route('/wallet', methods = ['GET'])
+@app.route('/wallet', methods=['GET'])
 def wallet_details():
     client_id = request.args.get('clientId')
 
@@ -294,3 +303,39 @@ def wallet_details():
     
     except Exception as e:
         return jsonify({"message": f"Error occurred: {str(e)}"}), 500
+ 
+@app.route('/mf', methods = ['GET'])
+def mf():
+    # client_id = request.args.get('clientId')
+    client_id = func.upper('18j018')
+    mf_query = mf_session.query(MutualFundPortfolio.summary_json).filter(MutualFundPortfolio.client_id == client_id).first()
+    
+    if not mf_query:
+        return jsonify({"message": "No MF data available for the client"})
+    
+    summary = mf_query[0]
+    result = []
+    
+    for g_total, summary_data in summary.items(): # g_tot = g_tot, summary, client_details
+        if g_total == 'summary':
+            for asset, scheme_name_and_data in summary_data.items(): # asset = liquid. etc / scheme_name_and_data = g_tot or schemes
+                    for g_tot_or_schemes, schemes_data in scheme_name_and_data.items(): # g_tot = schemes / schemes_data = mf wise data                
+                        if g_tot_or_schemes == 'schemes':
+                            for scheme_name, data in schemes_data.items(): # scheme_name = mf names / data = m's respectiv data
+                                result.append({
+                                    "Scheme_name": scheme_name,
+                                    "Asset": asset,
+                                    "Curent_amount": data.get('c_amt'),
+                                    "Purchase_amount": data.get('p_amt'),
+                                    "Units": data.get('units'),
+                                    "Folio_Number": data.get('folio_no'),
+                                    "Nav": data.get('nav')
+                                })
+    
+    if not result:
+        return jsonify({"message": "No result"})
+    
+    return jsonify({"Data": result})
+    
+    
+    

@@ -1,6 +1,6 @@
 from sqlalchemy import VARCHAR, Column, Integer, String, DateTime, Boolean, BigInteger, TIMESTAMP, Float, JSON, Numeric
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import BYTEA
+from sqlalchemy.dialects.postgresql import JSONB
 
 Base = declarative_base()
 
@@ -220,3 +220,10 @@ class SegmentModel(Base):
     created_timestamp = Column(String, nullable=False)
     updated_timestamp = Column(String, nullable=False)
     segment_status = Column(String(20))
+
+class MutualFundPortfolio(Base):
+    __tablename__ = 'portfolio_pcook'
+    __table_args__ = {"schema": 'report'}
+    client_id = Column(VARCHAR, primary_key=True)
+    summary_json = Column(JSONB)
+    out_json_summary = Column(JSONB)

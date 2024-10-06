@@ -26,6 +26,12 @@ CONFIG = {
     "DB_HOST":"cash-prod-rds-postgres.cs6gkdopmrcl.ap-south-1.rds.amazonaws.com",
     "DB_PASSWORD":"met%40b%40$E_%40%40dMin",
     "DB_NAME":"cash_equities"
+    },
+    "mfprod":{
+    "DB_USER": "mf_prod_readonly",
+    "DB_PASSWORD": "QEadZc%40341#2",
+    "DB_HOST": "mf-prod-rds-postgress.cpcx0uidjlpk.ap-south-1.rds.amazonaws.com",
+    "DB_NAME": "prod_mf_db"
     }
 
 }

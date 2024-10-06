@@ -85,7 +85,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 if (response.ok) {
-                    window.location.href = `client_page.html?clientId=${clientId}`; // Redirect to client page
+                    const result = await response.json();  // Parse the response data as JSON
+                    // console.log(result.message);  // Log the message from the response
+                    window.location.href = `client_page.html?clientId=${clientId}`;
+                    // console.log("Done");
                 } else {
                     console.error("Client ID submission failed.");
                     alert("Client ID not found.");
