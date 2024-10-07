@@ -4,8 +4,7 @@ from sqlalchemy import func, text, or_
 from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session, mf_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
-from Cryptodome.Cipher import AES
-from Cryptodome.PublicKey import RSA
+from Crypto.PublicKey import RSA
 from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
 import json
@@ -119,7 +118,7 @@ def get_client_id():
         mobile_decrypt = decrypt(mobile, pr_key)
         if not client_id_backend:
             return None
-        return  jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile No.": mobile_decrypt})
+        return jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile No.": mobile_decrypt})
 
 # IPO DETAILS
 @app.route("/ipo", methods=['GET'])
