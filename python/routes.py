@@ -4,7 +4,8 @@ from sqlalchemy import func, text, or_
 from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session, mf_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
+from Cryptodome.Cipher import AES
+from Cryptodome.PublicKey import RSA
 from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
 import json

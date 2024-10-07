@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Page</title>
-    <link rel="stylesheet" href="../static/styles/style.css">
-    <style>
+    <link rel="stylesheet" href="../static/styles/client_page.css">
+    <!-- <style>
       
 .navbar {
   width: 100%;
@@ -15,7 +15,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 8%;
+  height: 7%;
   text-align:center;
   font-size:20px;
   font-weight: inherit;
@@ -40,12 +40,14 @@
 background-image: linear-gradient(to right, hsl(142, 88%, 31%) 0%, #2ec209 51%, #1bc359 100%);
 font-size: 18px;
 margin: 0 auto;
+border: none;
 width: 300px;
 font-weight: bold;
 flex: 1 1 auto;
   margin: 10px;
   padding: 30px;
   text-align: center;
+  text-decoration:none; 
   text-transform: uppercase;
   transition: 0.5s;
   background-size: 200% auto;
@@ -57,23 +59,6 @@ flex: 1 1 auto;
 .btn:hover {
   background-position: right center; 
 }
-
-.navbar {
-    width: 100%;
-    background-color: rgba(12, 8, 8, 0.833);
-    color: white;
-    padding: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 4;
-    font-size: 18px;
-}
-
 
 /* Style for the user info container */
 .user-info-container {
@@ -103,7 +88,7 @@ flex: 1 1 auto;
 /* Back button */
 .back-btn {
   position: fixed;
-  top: 5px;
+  top: 8px;
   left: 40px;
   background-color: #6f42c1;
   padding: 8px 10px;
@@ -117,9 +102,22 @@ flex: 1 1 auto;
 .back-btn:hover {
   background-color: #5a3397;
 }
+.footer {
+  width: 100%;
+  background-color: rgba(12, 8, 8, 0.833);
+  color: white;
+  padding: 20px;
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 10;
+}
 
  </style>
-   
+    -->
 </head>
 <body style="background-image: url('../static/styles/lbg.webp');background-repeat: no-repeat;background-size: cover;background-attachment: fixed;background-position: center;">
   <div class="navbar">
@@ -141,23 +139,23 @@ flex: 1 1 auto;
         <!-- <img src="styles/logo.jfif" alt="Company Logo" class="company-logo"> -->
         
         
-        <button class="btn" onclick="openPage('wallet.html')">wallet</button>
+       <a href="wallet.html"><button class="btn">wallet</button></a> 
         
-        <button class="btn" onclick="openPage('IPO.html')">IPO</button>
+       <a href="IPO.html"><button class="btn">IPO</button></a>
      
-        <button class="btn" onclick="openPage('SSO.html')">SSO</button>
+       <a href="wallet.html"><button class="btn">SSO</button></a>
        
-        <button class="btn" onclick="openPage('mf_protfolio.html')">Mutual Funds</button>
+        <a href="mf_protfolio.html"><button class="btn">Mutual Funds</button></a>
        
-        <button class="btn" onclick="openPage('ET.html')">Equity Transactions</button>
+        <a href="wallet.html"><button class="btn">Equity Transactions</button></a>
         
-        <button class="btn" onclick="openPage('DT.html')">Derivative Transactions</button>
+        <a href="wallet.html"><button class="btn">Derivative Transactions</button></a>
         
-        <button class="btn" onclick="openPage('Pledge.html')">Pledge</button>
+        <a href="wallet.html"><button class="btn">Pledge</button></a>
        
-        <button class="btn" onclick="openPage('My_Prof.html')">My Profile</button>
+        <a href="wallet.html"><button class="btn">My Profile</button>
        
-        <button class="btn" onclick="openPage('COB.html')">COB</button>
+          <a href="wallet.html"><button class="btn">COB</button></a>
        
     </div>
     <script src="../static/scripts/client_page.js">    </script>

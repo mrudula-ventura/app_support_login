@@ -89,9 +89,10 @@ function updatePaginationControls(filteredData) {
 
 // Function to get the client ID from the URL
 function getClientId() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('clientId');
+    const params = new URLSearchParams(window.location.search); // Get the query string part of the URL
+    return params.get('clientId'); // Extract the value of 'clientId'
 }
+
 
 // Function to fetch IPO data from the backend
 async function fetchIPOData() {
