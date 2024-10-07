@@ -1,15 +1,15 @@
 let walletData = [];
-const rowsPerPage = 10;
+const rowsPerPage = 12;
 let currentPage = 1;
 
-
-function displayIpoTable(filteredData = walletData) {
+function displayWalletTable(filteredData = walletData) {
     const tableBody = document.querySelector('#wallet-table tbody');
     const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
-    console.log(tableHead)
-    tableBody.innerHTML = '';
+    const loadingText = document.querySelector('.loading-text');
 
+    // Clear the table content before updating it
+    tableBody.innerHTML = '';
 
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -17,8 +17,6 @@ function displayIpoTable(filteredData = walletData) {
 
     paginatedWalletData.forEach(wallet => {
         const row = document.createElement('tr');
-
-
         row.innerHTML = `
             <td>${wallet['Timestamp']}</td>
             <td>${wallet['client_code']}</td>
@@ -29,19 +27,17 @@ function displayIpoTable(filteredData = walletData) {
             <td>${wallet['accord status']}</td>
             <td>${wallet['RS Status']}</td>
             <td>${wallet['final Status']}</td>
-
         `;
-
         tableBody.appendChild(row);
     });
 
-
+    // Hide loader and loading text, show table when data is available
     loader.style.display = 'none';
-    tableHead.style.display = 'table';
+    loadingText.style.display = 'none';
+    tableHead.style.display = 'table';  // Show table once data is fetched
 
     updatePaginationControls(filteredData);
 }
-
 
 function updatePaginationControls(filteredData) {
     const paginationContainer = document.querySelector('#pagination');
@@ -49,17 +45,15 @@ function updatePaginationControls(filteredData) {
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-
     if (currentPage > 1) {
         const prevButton = document.createElement('button');
         prevButton.textContent = 'Previous';
         prevButton.onclick = () => {
             currentPage--;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(prevButton);
     }
-
 
     for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement('button');
@@ -74,13 +68,12 @@ function updatePaginationControls(filteredData) {
         paginationContainer.appendChild(pageButton);
     }
 
-
     if (currentPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Next';
         nextButton.onclick = () => {
             currentPage++;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(nextButton);
     }
@@ -91,7 +84,7 @@ function getClientId() {
     return params.get('clientId');
 }
 
-async function fetchIPOData() {
+async function fetchWalletData() {
     const clientId = getClientId();
 
     const response = await fetch(`http://localhost:5000/wallet?clientId=${clientId}`, {
@@ -105,24 +98,18 @@ async function fetchIPOData() {
         const data = await response.json();
         walletData = data.walletData;
         console.log(data);
-        displayIpoTable();
-    } else if(response.ok){
-     
-
-    }
-    else {
-        console.error('Error fetching wallet data:', await response.json());
+        displayWalletTable();
+    } else {
+            loader.style.display = 'none';  // Ensure loader is hidden on error
+            noIposMessage.textContent = 'No wallet data available for this client ID.';
+            noIposMessage.style.display = 'block';
+            tableBody.style.display='none';
     }
 }
 
-function filterwalletTable() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = walletData.filter(wallet =>
-        wallet.name.toLowerCase().includes(searchValue) ||
-        (wallet.applicationNo && wallet.applicationNo.toLowerCase().includes(searchValue))
-    );
 
-    currentPage = 1;
-    displayIpoTable(filteredData);
+function goBack() {
+    window.history.back();
 }
-window.onload = fetchIPOData;
+
+window.onload = fetchWalletData;

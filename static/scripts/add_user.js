@@ -87,3 +87,8 @@ document.getElementById('generatePswd').addEventListener('click', function () {
 
     togglePasswordVisibility(passwordField, confirmPasswordField, true);
 });
+
+
+function goBack() {
+    window.history.back();
+}

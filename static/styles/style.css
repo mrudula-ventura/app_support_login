@@ -316,8 +316,8 @@ td {
 /*logout button*/
 .lo_btn{
   position: fixed;
-  bottom: 3px;
-  right: 40px;
+  top: 10px;
+  left: 120px;
   background-color: #6f42c1;
   padding: 8px 10px;
   border: none;
@@ -332,19 +332,6 @@ td {
   background-color: #5a3397;
 }
 
-.footer {
-  width: 100%;
-  background-color: rgba(12, 8, 8, 0.833);
-  color: white;
-  padding: 20px;
-  position: fixed; /* Fixes the footer to the bottom */
-  bottom: 0px; /* Positions it at the bottom */
-  left: 0; /* Aligns it to the left */
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-  z-index: 10;
-}
 
 .back-btn{
   position: fixed;

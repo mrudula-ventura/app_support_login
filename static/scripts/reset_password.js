@@ -60,3 +60,7 @@ document.getElementById('reset').addEventListener('click', async function () {
         alert('An unexpected error occurred. Please try again.');
     }
 });
+
+function goBack() {
+    window.history.back();
+}
