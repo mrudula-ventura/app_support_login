@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Dashboard</title>
+    <link rel="stylesheet" href="../static/styles/equity.css">
+</head>
+
+<body>
+
+    <h1>Equity Dashboard</h1>
+
+    <!-- Navigation Tabs -->
+    <div class="nav" id="positions-tab" onclick="showTab('positions')">Positions</div>
+    <div class="nav" id="holdings-tab" onclick="showTab('holdings')">Holdings</div>
+
+    <!-- Position Tab Content -->
+    <div id="positions" class="tab">
+        <h2>Position Summary</h2>
+        <div id="position-summary" class="summary-card"></div>
+
+        <h2>Open Positions</h2>
+        <table id="open-position-list">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>PnL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Open Position Data Will Be Injected Here -->
+            </tbody>
+        </table>
+
+        <h2>Closed Positions</h2>
+        <table id="closed-position-list">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>PnL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Closed Position Data Will Be Injected Here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Holding Tab Content -->
+    <div id="holdings" class="tab">
+        <h2>Holding Summary</h2>
+        <div id="holding-summary" class="summary-card"></div>
+
+        <h2>Holding List</h2>
+        <table id="holding-list" class="table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Quantity</th>
+                    <th>Avg. Price</th>
+                    <th>LTP</th>
+                    <th>Current Value</th>
+                    <th>Day PnL</th>
+                    <th>Overall PnL</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Script Section -->
+    <script>
+        // Set initial active tab
+        document.getElementById("positions-tab").classList.add("active");
+        document.getElementById("positions").classList.add("active");
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(function (el) { el.classList.remove('active'); });
+            document.querySelectorAll('.nav').forEach(function (el) { el.classList.remove('active'); });
+
+            document.getElementById(tab).classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        async function loadData() {
+            const response = await fetch('/get_equity');
+            const data = await response.json();
+
+            // Display Holding Summary
+            const holdingSummary = data[1].result;
+            const dailyPLClass = holdingSummary.d_pl >= 0 ? 'profit' : 'loss';
+            const totalPLClass = holdingSummary.t_pl >= 0 ? 'profit' : 'loss';
+
+            document.getElementById("holding-summary").innerHTML = `
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <strong>Current Market Value:</strong><br>
+                        <span class="value">₹${holdingSummary.cur_mv}</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Amount Invested:</strong><br>
+                        <span class="value">₹${holdingSummary.amt_inv}</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Daily Profit/Loss:</strong><br>
+                        <span class="value ${dailyPLClass}">₹${holdingSummary.d_pl} (${(holdingSummary.d_pl / holdingSummary.amt_inv * 100).toFixed(2)}%)</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Total Profit/Loss:</strong><br>
+                        <span class="value ${totalPLClass}">₹${holdingSummary.t_pl} (${(holdingSummary.t_pl / holdingSummary.amt_inv * 100).toFixed(2)}%)</span>
+                    </div>
+                </div>
+            `;
+
+            // Display Holding List
+            const holdingList = data[0][8];
+            if (Array.isArray(holdingList)) {
+                document.querySelector("#holding-list tbody").innerHTML = holdingList.map(holding => {
+                    const profitClass = holding[16] > 0 ? 'profit' : 'loss';
+                    const dayProfitClass = holding[14] > 0 ? 'profit' : 'loss';
+                    return `
+                        <tr class="primary-row">
+                            <td>${holding[0]}</td>
+                            <td>${holding[1]}</td>
+                            <td>${holding[6]}</td>
+                            <td>₹${holding[12]}</td>
+                            <td>₹${holding[7]}</td>
+                            <td>₹${holding[8]}</td>
+                            <td class="${dayProfitClass}">₹${holding[14]}</td>
+                            <td class="${profitClass}">₹${holding[16]}</td>
+                        </tr>
+                        <tr class="secondary-row">
+                            <td>Invested: ₹${holding[5]}</td>
+                            <td colspan="5"></td>
+                            <td class="${dayProfitClass}">${holding[15]}%</td>
+                            <td class="${profitClass}">${holding[17]}%</td>
+                        </tr>`;
+                }).join('');
+            } else {
+                document.querySelector("#holding-list tbody").innerHTML = '<tr><td colspan="8" class="no-data">No holdings available.</td></tr>';
+            }
+
+            // Display Position Summary
+            const positionSummary = data[3].result;
+            document.getElementById("position-summary").innerHTML = `
+                <strong>Net Obligation:</strong> ${positionSummary.net_obl}<br>
+                <strong>Total Profit/Loss:</strong> ${positionSummary.pl}
+            `;
+
+            // Display Open Positions
+            const openPositions = data[2].result.positions.opn_pos;
+            if (Array.isArray(openPositions) && openPositions.length > 0) {
+                document.querySelector("#open-position-list tbody").innerHTML = openPositions.map(position => {
+                    const profitClass = position.pnl > 0 ? 'profit' : 'loss';
+                    return `
+                        <tr>
+                            <td>${position.sym}</td>
+                            <td>${position.exch}</td>
+                            <td>${position.action}</td>
+                            <td>${position.t_qty}</td>
+                            <td class="${profitClass}">${position.pnl}</td>
+                        </tr>`;
+                }).join('');
+            } else {
+                document.querySelector("#open-position-list tbody").innerHTML = '<tr><td colspan="5" class="no-data">No open positions.</td></tr>';
+            }
+
+            // Display Closed Positions
+            const closedPositions = data[2].result.positions.cls_pos;
+            if (Array.isArray(closedPositions) && closedPositions.length > 0) {
+                document.querySelector("#closed-position-list tbody").innerHTML = closedPositions.map(position => {
+                    const profitClass = position.pnl > 0 ? 'profit' : 'loss';
+                    return `
+                        <tr>
+                            <td>${position.sym}</td>
+                            <td>${position.exch}</td>
+                            <td>${position.action}</td>
+                            <td>${position.t_qty}</td>
+                            <td class="${profitClass}">${position.pnl}</td>
+                        </tr>`;
+                }).join('');
+            } else {
+                document.querySelector("#closed-position-list tbody").innerHTML = '<tr><td colspan="5" class="no-data">No closed positions.</td></tr>';
+            }
+        }
+
+        window.onload = loadData;
+    </script>
+    
+</body>
+
+</html>

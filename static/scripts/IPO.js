@@ -32,7 +32,7 @@ function displayIpoTable(filteredData = ipoData) {
     });
 
     // Hide the loader, show the table and search input
-    loader.style.display = 'none';
+     loader.style.display = 'none';
     if (filteredData.length > 0) {
         tableContainer.style.display = 'block';
         searchInput.style.display = 'block';

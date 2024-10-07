@@ -145,9 +145,9 @@ flex: 1 1 auto;
      
        <a href="wallet.html"><button class="btn">SSO</button></a>
        
-        <a href="mf_protfolio.html"><button class="btn">Mutual Funds</button></a>
+        <button class="btn" onclick="openPage('mf_protfolio.html')">Mutual Funds</button></a>
        
-        <a href="wallet.html"><button class="btn">Equity Transactions</button></a>
+        <a href="equity.html"><button class="btn">Equity Transactions</button></a>
         
         <a href="wallet.html"><button class="btn">Derivative Transactions</button></a>
         
@@ -165,6 +165,9 @@ flex: 1 1 auto;
       // Function to get the client ID from the URL
       function getClientId() {
           const params = new URLSearchParams(window.location.search);
+          // const clientId = params.get('clientId');
+          // document.getElementById('client-id-display').textContent = clientId;
+          // console.log(clientId);
           return params.get('clientId');
       }
   

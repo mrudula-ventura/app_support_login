@@ -11,7 +11,8 @@ function fetchClientDetails(clientId) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify({ clientId }),
         }
     )
         .then(response => response.json())

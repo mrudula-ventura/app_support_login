@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     const clientId = data.clientId;
+                    // console.log(data);
                     if (clientId) {
                         clientIdInput.value = clientId; 
                         window.location.href = `client_page.html?clientId=${clientId}`; 
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function submitClientId() {
         const clientId = clientIdInput.value.trim();
+        // console.log();
         if (clientId) {
             try {
                 const response = await fetch('http://localhost:5000/submit-client-id', {
@@ -86,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (response.ok) {
                     const result = await response.json();  // Parse the response data as JSON
+                    console.log(result);
                     // console.log(result.message);  // Log the message from the response
                     window.location.href = `client_page.html?clientId=${clientId}`;
                     // console.log("Done");

@@ -2,13 +2,13 @@ from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import  RSA
 
 def get_keys():
-    with open(r"C:\Users\interndig\Desktop\keys\public_pem.pem", "r") as file:
+    with open(r"C:\MyProfile\ProfileDetailsFunction\public_pem.pem", "r") as file:
         file_content = file.read()
         if not file_content:
             return "Public key nahi mili"
         pu_key = RSA.import_key(file_content)
 
-    with open(r"C:\Users\interndig\Desktop\keys\private_pem.pem", "r") as file:
+    with open(r'C:\MyProfile\ProfileDetailsFunction\private_pem.pem', "r") as file:
         file_content = file.read()
         if not file_content:
             return "Private key nahi mili"
