@@ -27,44 +27,57 @@ body {
     z-index: 4;
   }
    
-  .btn-container {
-    display:grid ;
-    grid-template-columns: repeat(3,1fr);
-    gap: 20px;
-    /* background: rgba(128, 110, 110, 0.614); */
-    height: 60%;
-    padding: 30px;
-    border-radius: 5px;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-    width: 90%;
-    text-align: center;
-    position: absolute;
-    top: 100px; 
-  }
-  .btn {
+  /* Button container with grid layout */
+.btn-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
+  gap: 20px; /* Space between the buttons */
+  justify-items: center; /* Center the buttons horizontally */
+  align-items: center; /* Center the buttons vertically */
+  width: 90%; /* Set width for the container */
+  max-width: 1200px; /* Avoid overly large container on big screens */
+  margin: 0 auto; /* Center the entire container */
+  position: absolute;
+  top: 150px; /* Adjust the vertical position */
+  text-align: center;
+}
+
+/* Button styles */
+.btn {
   background-image: linear-gradient(to right, hsl(142, 88%, 31%) 0%, #2ec209 51%, #1bc359 100%);
   font-size: 18px;
-  margin: auto;
+  width: 250px; /* Fixed width for all buttons */
+  height: 100px; /* Fixed height for all buttons */
   border: none;
-  width: 300px;
   font-weight: bold;
-  flex: 1 1 auto;
-    margin: auto;
-    padding: 30px;
-    text-align: center;
-    text-decoration:none; 
-    text-transform: uppercase;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: white;
-    /* box-shadow: 0 0 20px #eee; */
-    border-radius: 10px;
-  
+  padding: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Hover effect for buttons */
+.btn:hover {
+  background-position: right center;
+}
+
+/* Responsive design: stack buttons vertically on smaller screens */
+@media (max-width: 600px) {
+  .btn-container {
+      grid-template-columns: 1fr; /* Stack buttons in a single column */
+      gap: 15px; /* Adjust gap for smaller screens */
   }
-  .btn:hover {
-    background-position: right center; 
+
+  .btn {
+      width: 100%; /* Take up full width on smaller screens */
+      height: auto; /* Allow height to adjust based on content */
+      padding: 15px;
   }
-  
+}
+
   /* Style for the user info container */
   .user-info-container {
     display: flex;
