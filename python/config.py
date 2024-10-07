@@ -1,4 +1,20 @@
 CONFIG = {
+    "CASH_HOLDING_LIST_V1_URL": "http://internal-cash-backend-apis-alb-1698875002.ap-south-1.elb.amazonaws.com:8002/txn/holding/v1/get",
+        "CASH_HOLDING_SUMMARY_V2_URL": "http://internal-cash-backend-apis-alb-1698875002.ap-south-1.elb.amazonaws.com:8002/txn/holding/v2/summary",
+        "X_API_KEY": "emhT0wJcEaQ5hHOpdP54J81Vl9Zdigital",
+        "CASH_POSITION_LIST_V2_URL": "http://internal-cash-backend-apis-alb-1698875002.ap-south-1.elb.amazonaws.com:8002/txn/positions/v2/list",
+        "CASH_POSITION_SUMMARY_V2_URL": "http://internal-cash-backend-apis-alb-1698875002.ap-south-1.elb.amazonaws.com:8002/txn/positions/v2/summary",
+        "HOLDING_LIST_V1_PAYLOAD": {
+                                    "sort_by": 1,
+                                    "size": 0,
+                                    "page": 0,
+                                    "searchKey": ""
+                                    },
+        "HOLDING_SUMMARY_V2_PAYLOAD": {"client_id":"^^"},
+        "POSITION_LIST_V2_PAYLOAD": {},
+        "POSITION_SUMMARY_V2_PAYLOAD": {},
+
+
     "app_support":{
         "DB_USER": "rm_admin",
         "DB_PASSWORD": "oswL5#7fspoxptl7acjncdkcl",
