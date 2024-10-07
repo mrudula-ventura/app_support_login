@@ -157,39 +157,6 @@ def ipo_data():
                 })
     return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
 
-# MY PROFILE BANK DETAILS
-@app.route("/profile_bank", methods = ['GET'])
-def profile_bank():
-    client_id = request.args.get('clientId')
-    if not client_id:
-        return jsonify({"message": "Client id not found in headers"})
-    
-    mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == client_id).first()
-    if not mp_query:
-        return jsonify({f"message: No record in profile for {client_id}"})
-    
-    client_detail_id = mp_query.client_detail_id_incr
-    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
-    if not client_bank_details:
-        return jsonify({f"message: No Bank details for {client_id}"})
-    bank_list = []
-    for i in client_bank_details:
-        bank_list.append({
-            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
-            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
-            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
-            "BANK NAME": "None",
-            "IS BANK CURRENTLY ACTIVE": i.is_active,
-            "IS BANK PRIMARY": i.is_primary_bank,
-            "IS BANK VERIFIED": i.is_bank_verified,
-            "BANK ACCOUNT STATUS": i.bank_account_status,
-            "BANK ADDED DATE": i.created_timestamp
-        })
-    return jsonify({
-        "message": "Bank details fetched successfully",
-        "Bank Details": bank_list
-    })
-
 @app.route('/wallet', methods=['GET'])
 def wallet_details():
     client_id = request.args.get('clientId')
@@ -323,13 +290,14 @@ def mf():
                         if g_tot_or_schemes == 'schemes':
                             for scheme_name, data in schemes_data.items(): # scheme_name = mf names / data = m's respectiv data
                                 result.append({
-                                    "Scheme_name": scheme_name,
+                                    "Scheme_name": data.get('s_name'),
                                     "Asset": asset,
                                     "Curent_amount": data.get('c_amt'),
                                     "Purchase_amount": data.get('p_amt'),
                                     "Units": data.get('units'),
                                     "Folio_Number": data.get('folio_no'),
-                                    "Nav": data.get('nav')
+                                    "Nav": data.get('nav'),
+                                    "Online Flag": data.get('online_flag')
                                 })
     
     if not result:
@@ -337,5 +305,34 @@ def mf():
     
     return jsonify({"Data": result})
     
+@app.route('profile', methods = ['GET'])
+def profile():
+    client_id = request.args.get('clientId')
+    if not client_id:
+        return jsonify({"message": "Client id not found in arguments"})
     
+    mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).first()
+    if not mp_query:
+        return jsonify({f"message: No record in profile for {client_id}"})
     
+    client_detail_id = mp_query.client_detail_id_incr
+    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
+    if not client_bank_details:
+        return jsonify({f"message: No Bank details for {client_id}"})
+    bank_list = []
+    for i in client_bank_details:
+        bank_list.append({
+            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
+            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
+            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
+            "BANK NAME": "None",
+            "IS BANK CURRENTLY ACTIVE": i.is_active,
+            "IS BANK PRIMARY": i.is_primary_bank,
+            "IS BANK VERIFIED": i.is_bank_verified,
+            "BANK ACCOUNT STATUS": i.bank_account_status,
+            "BANK ADDED DATE": i.created_timestamp
+        })
+    return jsonify({
+        "message": "Bank details fetched successfully",
+        "Bank Details": bank_list
+    })
