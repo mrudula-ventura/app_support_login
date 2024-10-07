@@ -8,10 +8,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const purchaseAmountElem = document.getElementById('prchs_amnt_disp');
     const xirrElem = document.getElementById('xirr');
 
+
+    // Function to get the client ID from the URL
+function getClientId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('clientId');
+}
+
+
     // Function to fetch MF data
     async function fetchMFData() {
+        
+        const clientId = getClientId();
         try {
-            const response = await fetch('/mf');
+            const response = await fetch(`http://localhost:5000/mf?clientId=${clientId}`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
             if (response.ok) {
                 const data = await response.json();
 
