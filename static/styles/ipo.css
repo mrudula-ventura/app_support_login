@@ -34,7 +34,7 @@ body {
   margin: 0 auto;
   overflow-x: auto;
   background-color: #ccc;
-  display: none; /* Hide by default and show after data is loaded */
+  /* display: none;  */
 }
 
 table {
@@ -76,28 +76,14 @@ td {
   }
 }
 
-/* Footer */
-.footer {
-  width: 100%;
-  background-color: rgba(12, 8, 8, 0.833);
-  color: white;
-  padding: 20px;
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-  z-index: 10;
-}
 
 /* Logout button */
 .lo_btn {
   position: fixed;
- bottom: 5px;
-  right: 40px;
-  background-color: #6f42c1;
-  padding: 9px 10px;
+    top: 6px;
+    left: 120px;
+    background-color: #6f42c1;
+    padding: 8px 10px;
   border: none;
   border-radius: 5px;
   color: white;
@@ -149,18 +135,22 @@ td {
 
 /* Search bar */
 #searchInput {
+  position:relative;
+  left:100px;
+  top: 15px;
   width: 50%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
   transition: border-color 0.3s;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 10px;
   display: none; /* Hide initially and show after data loads */
 }
 
 #searchInput:focus {
+  top: 30px;
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);

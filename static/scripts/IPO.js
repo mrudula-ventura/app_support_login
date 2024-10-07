@@ -1,5 +1,5 @@
 let ipoData = [];
-const rowsPerPage = 10; 
+const rowsPerPage = 15; 
 let currentPage = 1;
 
 // Function to display the IPO table
@@ -89,9 +89,11 @@ function updatePaginationControls(filteredData) {
 
 // Function to get the client ID from the URL
 function getClientId() {
-    const params = new URLSearchParams(window.location.search); // Get the query string part of the URL
-    return params.get('clientId'); // Extract the value of 'clientId'
+    const params = new URLSearchParams(window.location.search);
+    return params.get('clientId');
 }
+
+
 
 
 // Function to fetch IPO data from the backend
@@ -101,7 +103,7 @@ async function fetchIPOData() {
     const noIposMessage = document.querySelector('.no-ipos-message');
 
     try {
-        const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, {
+        const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, { 
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,24 +113,27 @@ async function fetchIPOData() {
         if (response.ok) {
             const data = await response.json();
             ipoData = data.ipoData;
+            console.log(ipoData);  // Check the fetched data in console
+
+            loader.style.display = 'none';  // Ensure loader is hidden
 
             if (ipoData.length === 0) {
-                noIposMessage.style.display = 'block'; // Show no IPOs message if data is empty
-                loader.style.display = 'none'; // Hide loader
+                noIposMessage.style.display = 'block'; // Show no IPOs message
             } else {
-                displayIpoTable(); // Display IPO data if available
+                displayIpoTable();  // Display IPO data if available
             }
-        } else if (response.status === 404) {
-            loader.style.display = 'none'; // Hide loader
-            noIposMessage.textContent = 'No IPOs available for this client ID.';
-            noIposMessage.style.display = 'block'; // Show message for no IPOs
         } else {
-            throw new Error('Error fetching IPO data');
+            loader.style.display = 'none';  // Ensure loader is hidden on error
+            noIposMessage.textContent = 'No IPOs available for this client ID.';
+            noIposMessage.style.display = 'block';
+            tableBody.style.display='none';
         }
     } catch (error) {
+        loader.style.display = 'none';  // Hide loader on error
         console.error('Error fetching IPO data:', error);
     }
 }
+
 
 // Function to filter the IPO table based on search input
 function filterIpoTable() {
@@ -140,6 +145,10 @@ function filterIpoTable() {
 
     currentPage = 1; 
     displayIpoTable(filteredData); 
+}
+
+function goBack() {
+    window.history.back();
 }
 
 // Load IPO data when the page is loaded

@@ -8,7 +8,7 @@
 </head>
 <body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
     <div class="navbar">
-        <a href="client_page.html"><button class="back-btn">Back</button></a>
+    <button class="back-btn" onclick="goBack()">Back</button>
     </div>
 
     <div class="loader-container">
@@ -18,10 +18,10 @@
 
     <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
     
-    <div class="table-container" style="display: none;"> <!-- Hidden initially -->
+    <div class="table-container" > <!-- Hidden initially -->
         <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" style="display: none;" /> <!-- Hidden initially -->
 
-        <table id="ipo-table" style="display: none;"> <!-- Hidden initially -->
+        <table id="ipo-table"> <!-- Hidden initially -->
             <thead>
                 <tr>
                     <th>IPO name</th>
@@ -41,6 +41,6 @@
 
     <script src="../static/scripts/IPO.js"></script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
-    <div class="footer"></div>
+   
 </body>
 </html>

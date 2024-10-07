@@ -128,7 +128,7 @@ flex: 1 1 auto;
         <h5>Mobile No: <span id="client-mobile"></span></h5>
     </div>
     <div class="back-btn-container">
-        <a href="superuser.html"><button class="back-btn">Back</button></a>
+      <button class="back-btn" onclick="goBack()">Back</button>
     </div>
 </div>
 
@@ -139,9 +139,9 @@ flex: 1 1 auto;
         <!-- <img src="styles/logo.jfif" alt="Company Logo" class="company-logo"> -->
         
         
-       <a href="wallet.html"><button class="btn">wallet</button></a> 
-        
-       <a href="IPO.html"><button class="btn">IPO</button></a>
+        <button id="ipo-page-button" class="btn" onclick="openPage('wallet.html')">wallet</button>
+       
+        <button id="ipo-page-button" class="btn" onclick="openPage('ipo.html')">IPO</button>
      
        <a href="wallet.html"><button class="btn">SSO</button></a>
        
@@ -160,7 +160,24 @@ flex: 1 1 auto;
     </div>
     <script src="../static/scripts/client_page.js">    </script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
-    <div class="footer"> </div>
+   
+    <script>
+      // Function to get the client ID from the URL
+      function getClientId() {
+          const params = new URLSearchParams(window.location.search);
+          return params.get('clientId');
+      }
+  
+      // Function to open a new page and pass the client ID
+      function openPage(page) {
+          const clientId = getClientId();
+          if (clientId) {
+              window.location.href = `${page}?clientId=${clientId}`;
+          } else {
+              window.location.href = `${page}`;
+          }
+      }
+  </script>
 
 </body>
 </html>

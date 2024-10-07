@@ -6,14 +6,21 @@ function getClientId() {
 
 // Fetch client details from the backend
 function fetchClientDetails(clientId) {
-    fetch(`http://localhost:5000/client?clientId=${clientId}`)
+    fetch(`http://localhost:5000/submit-client-id?clientId=${clientId}`,{
+
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    )
         .then(response => response.json())
         .then(data => {
             // Display the fetched data on the page
             document.getElementById('client-id-display').innerText = data.client_id;
             document.getElementById('client-full-name').innerText = data.Full_Name;
             document.getElementById('client-email').innerText = data.Email;
-            document.getElementById('client-mobile').innerText = data["Mobile No."];
+            document.getElementById('client-mobile').innerText = data["Mobile_No."];
         })
         .catch(error => console.error('Error fetching client details:', error));
 }
@@ -26,6 +33,9 @@ window.onload = () => {
     }
 };
 
+function goBack() {
+    window.history.back();
+}
 
 
 

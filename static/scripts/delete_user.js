@@ -49,3 +49,8 @@ function validateEmail(email) {
     const domain = "@venturasecurities.com";
     return email.endsWith(domain);
 }
+
+
+function goBack() {
+    window.history.back();
+}

@@ -1,8 +1,8 @@
 let walletData = [];
-const rowsPerPage = 10;
+const rowsPerPage = 12;
 let currentPage = 1;
 
-function displayIpoTable(filteredData = walletData) {
+function displayWalletTable(filteredData = walletData) {
     const tableBody = document.querySelector('#wallet-table tbody');
     const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
@@ -50,7 +50,7 @@ function updatePaginationControls(filteredData) {
         prevButton.textContent = 'Previous';
         prevButton.onclick = () => {
             currentPage--;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(prevButton);
     }
@@ -73,7 +73,7 @@ function updatePaginationControls(filteredData) {
         nextButton.textContent = 'Next';
         nextButton.onclick = () => {
             currentPage++;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(nextButton);
     }
@@ -84,7 +84,7 @@ function getClientId() {
     return params.get('clientId');
 }
 
-async function fetchIPOData() {
+async function fetchWalletData() {
     const clientId = getClientId();
 
     const response = await fetch(`http://localhost:5000/wallet?clientId=${clientId}`, {
@@ -98,10 +98,18 @@ async function fetchIPOData() {
         const data = await response.json();
         walletData = data.walletData;
         console.log(data);
-        displayIpoTable();
+        displayWalletTable();
     } else {
-        console.error('Error fetching wallet data:', await response.json());
+            loader.style.display = 'none';  // Ensure loader is hidden on error
+            noIposMessage.textContent = 'No wallet data available for this client ID.';
+            noIposMessage.style.display = 'block';
+            tableBody.style.display='none';
     }
 }
 
-window.onload = fetchIPOData;
+
+function goBack() {
+    window.history.back();
+}
+
+window.onload = fetchWalletData;
