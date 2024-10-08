@@ -10,11 +10,9 @@
     <div class="navbar">
    <button class="back-btn" onclick="goBack()">Back</button>
 
-    <h1 id="crnt_amnt_disp">Current Amount: <span id="crnt_amnt_disp"></span></h1> 
-    <h1 id="prchs_amnt_disp">Purchase Amount: <span id="past_amnt_disp"></span></h1> 
-    <h1 id="xirr">Xirr: <span id="past_amnt_disp"></span></h1> 
-
-
+   <h3 class="crnt_amnt_value_h"> <span id="crnt_amnt_value"></span></h3>
+   <h3 class="prchs_amnt_value_h"> <span id="prchs_amnt_value"></span></h3>
+   <h3 class="xirr_value_h"> <span id="xirr_value"></span></h3>
 
    </div>
    
@@ -22,6 +20,9 @@
     <div class="loader"></div>
     <p class="loading-text">Loading...</p>
     </div>
+
+
+    <div class="no-ipos-message" style="display: none;">This user has no MF data.</div>
     <!-- <div class="loader"></div> -->
     <div class="table-container">
 
@@ -51,5 +52,3 @@
 
 </body>
 </html> 
-
-

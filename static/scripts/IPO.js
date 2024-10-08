@@ -27,6 +27,10 @@ function displayIpoTable(filteredData = ipoData) {
             <td>${ipo.mandateSentDate}</td>
             <td>${ipo.paymentStatus}</td>
             <td>${ipo.allocated}</td>
+            <td>${ipo.allotment_status}</td>
+            <td>${ipo.allotment_shares}</td>
+
+
         `;
         tableBody.appendChild(row);
     });

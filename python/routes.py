@@ -162,9 +162,9 @@ def ipo_data():
                     "applyDate": i.created_datetime.strftime('%d %b %Y %H:%M'),
                     "mandateSentDate": i.payment_mandate_sent_date.strftime('%d %b %Y %H:%M') if i.payment_mandate_sent_date else " ",
                     "paymentStatus": company_name[i.ipo_id]["lot_size"],
-                    "allocated": ipo_details_list[i.ipo_id] / company_name[i.ipo_id]["lot_size"]
-                    # "Lots per size": company_name[i.ipo_id]["lot_size"],
-                    # "Lots applied": list(ipo_details_list.keys())
+                    "allocated": ipo_details_list[i.ipo_id] / company_name[i.ipo_id]["lot_size"],
+                    "allotment_status": i.allotment_status,
+                    "allotment_shares": i.allotted_shares
                 })
     return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
 
@@ -286,7 +286,7 @@ def wallet_details():
 def mf():
     client_id = request.args.get('clientId')
     # client_id = func.upper('18j018')
-    mf_query = mf_session.query(MutualFundPortfolio.summary_json).filter(MutualFundPortfolio.client_id == client_id).first()
+    mf_query = mf_session.query(MutualFundPortfolio.summary_json).filter(MutualFundPortfolio.client_id == func.upper(client_id)).first()
     
     if not mf_query:
         return jsonify({"message": "No MF data available for the client"})
@@ -295,12 +295,22 @@ def mf():
     result = []
     
     for g_total, summary_data in summary.items(): # g_tot = g_tot, summary, client_details
-        if g_total == 'summary':
+        # print(summary, "---------")
+        if 'g_tot' in g_total:
+
+            result.append({
+                'C_amnt': summary['g_tot']['c_amt'],
+                "P_amt": summary['g_tot']['p_amt'],
+                "XIRR": summary['g_tot']['xirr']
+            })
+            
+        if 'summary' in g_total:
             for asset, scheme_name_and_data in summary_data.items(): # asset = liquid. etc / scheme_name_and_data = g_tot or schemes
                     for g_tot_or_schemes, schemes_data in scheme_name_and_data.items(): # g_tot = schemes / schemes_data = mf wise data                
                         if g_tot_or_schemes == 'schemes':
                             for scheme_name, data in schemes_data.items(): # scheme_name = mf names / data = m's respectiv data
                                 result.append({
+                                    # "c_amt": 
                                     "Scheme_name": data.get('s_name'),
                                     "Asset": asset,
                                     "Curent_amount": data.get('c_amt'),
@@ -308,9 +318,9 @@ def mf():
                                     "Units": data.get('units'),
                                     "Folio_Number": data.get('folio_no'),
                                     "Nav": data.get('nav'),
-                                    "Online Flag": data.get('online_flag')
+                                    "OnlineFlag": data.get('online_flag')
                                 })
-    
+    # print(result)
     if not result:
         return jsonify({"message": "No result"})
     
@@ -348,43 +358,3 @@ def profile():
         "Bank Details": bank_list
     })
 
-@app.route('/get_equity')
-def get_equity():
-    # Technically passed by the frontend
-    client_id = "H011"
-
-    # Get and set all variables
-    X_API_KEY = get_config("X_API_KEY")
-
-    HOLDING_LIST_URL = get_config("CASH_HOLDING_LIST_V1_URL")
-    HOLDING_LIST_PAYLOAD = {"sort_by": 1, "size": 0, "page": 0, "searchKey": ""}  # client id in this?
-
-    HOLDING_SUMMARY_URL = get_config("CASH_HOLDING_SUMMARY_V2_URL")
-
-    POSITION_LIST_URL = get_config("CASH_POSITION_LIST_V2_URL")
-    POSITION_LIST_PAYLOAD = {"sort_by": 8, "searchKey": ""}
-
-    POSITION_SUMMARY_URL = get_config("CASH_POSITION_SUMMARY_V2_URL")
-
-    # Set the header used for all the APIs
-    header = {
-            'x-client-id': f'{client_id}',
-            'x-api-key': f'{X_API_KEY}',
-            'Content-Type': 'application/json'
-            }
-
-    # Start getting all responses. All are post APIs
-    holdings = get_api_resp(HOLDING_LIST_URL, header, HOLDING_LIST_PAYLOAD)
-    holding_summary = get_api_resp(HOLDING_SUMMARY_URL, header)
-    print(f"Holding List: {holdings}\nHolding Summary: {holding_summary}")
-
-    positions = get_api_resp(POSITION_LIST_URL, header, POSITION_LIST_PAYLOAD)
-    position_summary = get_api_resp(POSITION_SUMMARY_URL, header)
-    print(f"Position List: {positions}\nPosition Summary: {position_summary}")
-
-    return jsonify([holdings, holding_summary, positions, position_summary])
-
-
-@app.route('/equity')
-def index():
-    return render_template('equity.html')

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     console.error("Failed to fetch Client ID from the server.");
-                    alert("Error fetching Client ID from server.");
+                    // alert("Error fetching Client ID from server.");
                 }
             } catch (error) {
                 console.error("Network error:", error);
