@@ -227,3 +227,35 @@ class MutualFundPortfolio(Base):
     client_id = Column(VARCHAR, primary_key=True)
     summary_json = Column(JSONB)
     out_json_summary = Column(JSONB)
+    
+class BankMasterModel(Base):
+    __tablename__ = 'bank_master'
+    __table_args__ = {"schema": 'profile'}
+    bank_id_incr = Column(Integer, primary_key=True, nullable=False)
+    bank_name = Column(String(100))
+    is_popular = Column(Boolean)
+    to_display = Column(Boolean)
+    logo_url = Column(String(150))
+
+
+class BranchMasterModel(Base):
+    __tablename__ = 'branch_master'
+    __table_args__ = {"schema": 'profile'}
+    branch_id_incr = Column(Integer, primary_key=True, nullable=False)
+    bank_id = Column(Integer)
+    ifsc_code = Column(String(11))
+    branch_name = Column(String(100))
+    centre = Column(String(50))
+    district = Column(String(50))
+    states = Column(String(100))
+    address = Column(String(500))
+    contact = Column(String(50))
+    is_imps_allowed = Column(Boolean)
+    is_rtgs_allowed = Column(Boolean)
+    city = Column(String(100))
+    iso3166 = Column(String(100))
+    is_neft_allowed = Column(Boolean)
+    micr = Column(String(50))
+    is_upi_allowed = Column(Boolean)
+    swift = Column(String(100))
+    created_datetime = Column(String)

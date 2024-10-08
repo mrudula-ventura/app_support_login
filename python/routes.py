@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify
-from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel, MutualFundPortfolio
-from sqlalchemy import func, text, or_
+from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel, MutualFundPortfolio, BankMasterModel, BranchMasterModel
+from sqlalchemy import func, text, or_, select
 from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session, mf_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
@@ -11,6 +11,7 @@ import json
 import os
 import requests
 from config import get_config
+from holding_position import get_equity_hp
 
 # def getting_keys():
 pu_key, pr_key = get_keys()
@@ -326,35 +327,55 @@ def mf():
     
     return jsonify({"Data": result})
     
-@app.route('/profile', methods = ['GET'])
+@app.route('/profile', methods=['GET'])
 def profile():
-    client_id = request.args.get('clientId')
+    # client_id = request.args.get('clientId')
+    client_id = 'aa0760'
     if not client_id:
         return jsonify({"message": "Client id not found in arguments"})
     
+    # Query the profile details for the client
     mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).first()
     if not mp_query:
-        return jsonify({f"message: No record in profile for {client_id}"})
+        return jsonify({"message": f"No record in profile for {client_id}"})
+    # client_details = []
+    mobile = mp_query.phone_no
+    email = mp_query.email_id
+    decrypted_mobile = decrypt(mobile, pr_key)
+    decrypted_email = decrypt(email, pr_key)
+    client_details = {
+        "First_Name": mp_query.first_name,
+        "Last_Name": mp_query.last_name,
+        "Mobile_NO.": decrypted_mobile,
+        "Email": decrypted_email
+    }
     
-    client_detail_id = mp_query.client_detail_id_incr
-    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
-    if not client_bank_details:
-        return jsonify({f"message: No Bank details for {client_id}"})
     bank_list = []
-    for i in client_bank_details:
-        bank_list.append({
-            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
-            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
-            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
-            "BANK NAME": "None",
-            "IS BANK CURRENTLY ACTIVE": i.is_active,
-            "IS BANK PRIMARY": i.is_primary_bank,
-            "IS BANK VERIFIED": i.is_bank_verified,
-            "BANK ACCOUNT STATUS": i.bank_account_status,
-            "BANK ADDED DATE": i.created_timestamp
-        })
-    return jsonify({
-        "message": "Bank details fetched successfully",
-        "Bank Details": bank_list
-    })
+    client_detail_id = mp_query.client_detail_id_incr
 
+    joins = profile_session.query(ProfileOnboardingModel.first_name, ProfileOnboardingModel.last_name, ProfileOnboardingModel.phone_no, ProfileOnboardingModel.email_id, BankMasterModel.bank_name, BankDetailsModel.account_no, BankDetailsModel.ifsc_code, BankDetailsModel.bank_account_status, BankDetailsModel.is_primary_bank, BankDetailsModel.is_active, BankDetailsModel.is_bank_verified, BankDetailsModel.created_timestamp).select_from(ProfileOnboardingModel).join(BankDetailsModel, BankDetailsModel.client_detail_id == ProfileOnboardingModel.client_detail_id_incr).join(BranchMasterModel, BranchMasterModel.ifsc_code == BankDetailsModel.ifsc_code).join(BankMasterModel, BankMasterModel.bank_id_incr == BranchMasterModel.bank_id).filter(ProfileOnboardingModel.client_detail_id_incr == client_detail_id).all()
+    # client_details = []
+    for bank in joins:
+        decrypted_account_no = decrypt(bank.account_no, pr_key)
+        bank_list.append({
+            "ACCOUNT_NO.": decrypted_account_no or "ACCOUNT NO. NOT PRESENT",
+            "IFSC_CODE": bank.ifsc_code or "IFSC CODE NOT PRESENT",
+            "BANK_NAME": bank.bank_name or "BANK NAME NOT FOUND",
+            "IS_BANK_CURRENTLY_ACTIVE": bank.is_active,
+            "IS_BANK_PRIMARY": bank.is_primary_bank,
+            "IS_BANK_VERIFIED": bank.is_bank_verified,
+            "BANK_ACCOUNT_STATUS": bank.bank_account_status,
+            "BANK_ADDED_DATE": str(bank.created_timestamp)
+        })
+    
+    print(f"message: Bank details fetched successfully,Client_Details: {client_details},Bank_Details: {bank_list}")
+    return jsonify({"client_details": client_details, "bank": bank_list})
+
+@app.route('/get_equity')
+def get_equity():
+   return get_equity_hp()
+
+
+@app.route('/equity')
+def index():
+    return render_template('equity.html')
