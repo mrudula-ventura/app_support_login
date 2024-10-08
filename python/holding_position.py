@@ -1,7 +1,7 @@
 import os
 import requests
 from config import get_config
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 
 # Get the current working directory
@@ -10,7 +10,8 @@ current_directory = os.getcwd()
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 
 
-app = Flask(__name__, template_folder=parent_directory)
+app = Flask(__name__,template_folder='../templates', 
+            static_folder='../static')
 
 
 def get_api_resp(URL, header, payload=None):
@@ -19,10 +20,9 @@ def get_api_resp(URL, header, payload=None):
 
 
 @app.route('/get_equity')
-def get_equity():
-    # Technically passed by the frontend
-    client_id = "H011"
-
+def get_equity(client_id):
+    client_id = request.args.get('clientId')
+    print(f"here: {client_id}")
     # Get and set all variables
     X_API_KEY = get_config("X_API_KEY")
 

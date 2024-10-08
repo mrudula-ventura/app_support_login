@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Table</title>
+    <link rel="stylesheet" href="../static/styles/wallet.css">
+</head>
+<body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+    <div class="navbar">
+        <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    
+        <div class="loader-container">
+            <div class="loader"></div>
+            <p class="loading-text">Loading...</p>
+        </div>
+    
+        <div class="no-ipos-message" style="display: none;">This user has no Wallet data</div>
+    <div class="table-container">
+
+
+        <table id="wallet-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Client Id</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>REFERENCE NO.</th>
+                    <th>Bank Status</th>
+                    <th>Accord Status</th>
+                    <th>RS Status</th>
+                    <th>Final Status</th>
+                </tr>
+            </thead>
+            <tbody>
+              <!-- dynamic additions of rows -->
+            </tbody>
+        </table>
+        <div id="pagination"></div> <!-- Pagination controls -->
+
+    </div>
+
+    <script src="../static/scripts/wallet.js"></script>
+    <a href="login.html"><button class="lo_btn">Logout</button></a>
+    <div class="footer"> </div>
+
+</body>
+</html> 
+
+

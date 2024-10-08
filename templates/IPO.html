@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPO Table</title>
+    <link rel="stylesheet" href="../static/styles/ipo.css">
+</head>
+<body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+    <div class="navbar">
+    <button class="back-btn" onclick="goBack()">Back</button>
+    </div>
+
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">Loading...</p>
+    </div>
+
+    <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
+    
+    <div class="table-container" > <!-- Hidden initially -->
+        <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" style="display: none;" /> <!-- Hidden initially -->
+
+        <table id="ipo-table"> <!-- Hidden initially -->
+            <thead>
+                <tr>
+                    <th>IPO name</th>
+                    <th>Apply date</th>
+                    <th>Mandate sent date</th>
+                    <th>Share Per Lot</th>
+                    <th>Lot applied</th>
+                </tr>
+            </thead>
+            <tbody>
+              <!-- dynamic additions of rows -->
+            </tbody>
+        </table>
+
+        <div id="pagination"></div>
+    </div>
+
+    <script src="../static/scripts/IPO.js"></script>
+    <a href="login.html"><button class="lo_btn">Logout</button></a>
+   
+</body>
+</html>

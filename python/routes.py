@@ -1,36 +1,55 @@
-from flask import request, jsonify
-from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel
-from sqlalchemy import func, text
-from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session
+from flask import render_template, request, jsonify
+from utils import Users, UserInfo, IpoApplicationModel, ApplicantDetailsModel, IpoDetailsModel, ProfileOnboardingModel, BankDetailsModel, MutualFundPortfolio
+from sqlalchemy import func, text, or_
+from db_connection import app_support_session, sso_session, ipo_session, profile_session, cash_session, mf_session
 from main import app
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
+import json
+import os
+import requests
+from config import get_config
+
+# def getting_keys():
+pu_key, pr_key = get_keys()
+    # return pu_key, pr_key
+def get_api_resp(URL, header, payload=None):
+    req = requests.post(URL, headers=header, json=payload)
+    return req.json()
+
+# Get the current working directory
+current_directory = os.getcwd()
+# Get the parent directory
+parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data["username"]
     password = data["password"]
-    pu_key, pr_key = get_keys()
+    # pu_key, pr_key = get_keys()
     encrypted_password = encrypt(password if type(password) == str else str(password), pu_key)
 
     user = app_support_session.query(Users).filter_by(email=username, password=encrypted_password).first()
+    # active_status = app_support_session.query(Users.is_active).filter(Users.email == username).first()
+    # if active_status[0]:
+    
     if user:
-        active_status = app_support_session.query(Users.is_active).filter(Users.email == username).first()
-        if active_status[0]:
-            return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": active_status[0]}), 200
+        if user.is_active:
+            return jsonify({"message": "Login successful", "is_super_user": user.is_super_user, "is_active": True}), 200
         else:
-            return jsonify({"message": f"{username} is deactivated"}), 200
-    return jsonify({"error": "User not found"}), 400
+            return jsonify({"message": f"{username} is deactivated", "is_active": False}), 200
+    return jsonify({"message": "Invalid Credentials"}), 400
 
+# ADD USER 
 @app.route('/addUser', methods=['POST'])
 def add_user():
     try:
         data = request.json
         password = data['password']
-        pu_key, pr_key = get_keys()
+        # pu_key, pr_key = get_keys()
 
         existing_user = app_support_session.query(Users).filter_by(email=data["email"]).first()
         if existing_user:
@@ -53,7 +72,8 @@ def add_user():
     except Exception as e:
         app_support_session.rollback()  
         return jsonify({"message": "Error adding user", "error": str(e)}), 500
-    
+
+#DELETE USER 
 @app.route('/delete-user', methods=['POST'])
 def deleteuser():
     data = request.json
@@ -63,39 +83,55 @@ def deleteuser():
         app_support_session.query(Users).filter(Users.email == data["email"]).update({Users.is_active: False}, synchronize_session=False)
         app_support_session.commit()
         return jsonify({"message": "User deactivated"}), 200
-    return jsonify({"message": "Unable to delete user"}), 400
+    return jsonify({"message": "User no found"}), 400
 
-@app.route('/get-client-id', methods=['POST'])
+# CHECK MOBILE / EMAIL EXISTS IN SSO DB 
+@app.route('/get-client-id', methods = ['POST'])
+def check_if_data_exists():
+    data = request.json
+    email_mobile = data.get('emailOrPhone').lower()
+    if not email_mobile:
+        return jsonify({"message": "Email or Phone is missing"}), 400
+
+    try:
+        # pu_key, pr_key = get_keys() 
+        encrypted_email_mobile = encrypt(email_mobile, pu_key)
+    except Exception as e:
+        return jsonify({"message": "Decryption failed: Invalid ciphertext"}), 400
+
+    sso_query = sso_session.query(UserInfo.client_id).filter(
+            or_(UserInfo.mobile_no == encrypted_email_mobile,
+                UserInfo.email_id == encrypted_email_mobile
+            )
+    ).first()
+    # print(sso_query, " --------------")
+
+    if not sso_query:
+        return jsonify({
+            "message": "Email / Mobile does not exist", 
+            "clientId": None, 
+            "clientId": None
+        }), 404
+    return jsonify({"clientId": sso_query[0]})
+
+# GET CLIENT ID IF IT EXISTS
+@app.route('/submit-client-id', methods=['POST'])
 def get_client_id():
     data = request.json
     # email_or_mobile = data['emailOrMobile']
-    client_id = data['clientIdField']
-    pu_key, pr_key = get_keys()
+    client_id = data['clientId']
+    # pu_key, pr_key = get_keys()
     if client_id:
-        client_data = look_by_client_id(client_id)
-    # if email_or_mobile:
-    #     encyrypted_email = encrypt(email_or_mobile, pu_key)
-    #     client_data = look_by_email_or_mobile(encyrypted_email)
+        client_id_backend = sso_session.query(UserInfo.client_id, UserInfo.first_name, UserInfo.last_name, UserInfo.mobile_no, UserInfo.email_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
+        client_id_, f_name, l_name, mobile, email = client_id_backend
+        l_name_decrypt = decrypt(l_name, pr_key)
+        email_decrypt = decrypt(email, pr_key)
+        mobile_decrypt = decrypt(mobile, pr_key)
+        if not client_id_backend:
+            return None
+        return jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile_No.": mobile_decrypt})
 
-    if client_data:
-        return jsonify({"message": "Client found", "clientId": client_data["client_id"]}), 200
-    else:
-        return jsonify({"message": "Client ID or Email/Mobile not found."}), 404
-
-
-def look_by_client_id(client_id):
-    client_id_backend = sso_session.query(UserInfo.client_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
-    if not client_id_backend:
-        return None
-    return {"client_id": client_id[0]}
-
-# def look_by_email_or_mobile(emailOrMobile):
-#     client_email_encrypted = sso_session.query(UserInfo.client_id).filter((UserInfo.email_id) == emailOrMobile or (UserInfo.mobile_no) == emailOrMobile).first()
-#     if not client_email_encrypted:
-#         return None
-#     return {"client_id": client_email_encrypted[0]}
-
-
+# IPO DETAILS
 @app.route("/ipo", methods=['GET'])
 def ipo_data():
     client_id = request.args.get('clientId')
@@ -106,20 +142,14 @@ def ipo_data():
     application_details_table = ipo_session.query(ApplicantDetailsModel).filter(ApplicantDetailsModel.client_id == func.lower(client_id)).first()
     
     if not application_details_table:
-        return jsonify({"message": "No application found for this client ID"}), 404
+        return jsonify({"message": "No application found for this client ID", "data": False}), 404
     
     ipo_applications_table = ipo_session.query(IpoApplicationModel).filter(IpoApplicationModel.applicant_id == application_details_table.applicant_id).order_by(IpoApplicationModel.created_datetime.desc()).all()
     
     if not ipo_applications_table:
         return jsonify({
-            "message": "No IPO details found", 
-            "ipoData": {
-                "name": "None",
-                "applyDate": "None",
-                "mandateSentDate": "None",
-                "paymentStatus": "None",
-                "allocated": "None"
-            }
+            "message": "No IPO details found",
+            "data": False
         }), 404
     ipo_details_list = {i.ipo_id: i.bid_quantity for i in ipo_applications_table}
     ipo_detail = ipo_session.query(IpoDetailsModel).filter(IpoDetailsModel.ipo_id.in_(ipo_details_list.keys())).all()
@@ -138,42 +168,7 @@ def ipo_data():
                 })
     return jsonify({"message": "Data retrieved successfully", "ipoData": ipo}), 200
 
-@app.route("/profile_bank", methods = ['GET'])
-def profile_bank():
-    client_id = request.args.get('clientId')
-    if not client_id:
-        return jsonify({"message": "Client id not found in headers"})
-    
-    mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == client_id).first()
-    if not mp_query:
-        return jsonify({f"message: No record in profile for {client_id}"})
-    
-    client_detail_id = mp_query.client_detail_id_incr
-    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
-    if not client_bank_details:
-        return jsonify({f"message: No Bank details for {client_id}"})
-    bank_list = []
-    for i in client_bank_details:
-        bank_list.append({
-            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
-            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
-            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
-            "BANK NAME": "None",
-            "IS BANK CURRENTLY ACTIVE": i.is_active,
-            "IS BANK PRIMARY": i.is_primary_bank,
-            "IS BANK VERIFIED": i.is_bank_verified,
-            "BANK ACCOUNT STATUS": i.bank_account_status,
-            "BANK ADDED DATE": i.created_timestamp
-        })
-    return jsonify({
-        "message": "Bank details fetched successfully",
-        "Bank Details": bank_list
-    })
-
-# def profile_segment():
-#     segment_query = profile_session.query(SegmentModel).filter(SegmentModel.client_detail_id == )
-
-@app.route('/wallet', methods = ['GET'])
+@app.route('/wallet', methods=['GET'])
 def wallet_details():
     client_id = request.args.get('clientId')
 
@@ -259,6 +254,7 @@ def wallet_details():
         for row in result_fetch:
             wallet = {}
             for column, value in zip(columns, row):
+                # print(column, "-------------------------")
                 if column == 'Timestamp' and value  is not None:
                     if isinstance(value, str):
                         dt = datetime.datetime.strptime(value, '%a, %d %b %Y %H:%M:%S %Z')
@@ -267,6 +263,12 @@ def wallet_details():
                     else:
                         continue    
                     wallet[column] = dt.strftime('%d-%m-%Y %H:%M')
+                elif column == 'RS Status' and value is not None:
+                    try:
+                        status = json.loads(value)
+                        wallet[column] = status.get('status')
+                    except json.JSONDecodeError:
+                        wallet[column] = "NA"
                 else:
                     wallet[column] = value
             wallet_data.append(wallet)
@@ -279,3 +281,110 @@ def wallet_details():
     
     except Exception as e:
         return jsonify({"message": f"Error occurred: {str(e)}"}), 500
+ 
+@app.route('/mf', methods = ['GET'])
+def mf():
+    client_id = request.args.get('clientId')
+    # client_id = func.upper('18j018')
+    mf_query = mf_session.query(MutualFundPortfolio.summary_json).filter(MutualFundPortfolio.client_id == client_id).first()
+    
+    if not mf_query:
+        return jsonify({"message": "No MF data available for the client"})
+    
+    summary = mf_query[0]
+    result = []
+    
+    for g_total, summary_data in summary.items(): # g_tot = g_tot, summary, client_details
+        if g_total == 'summary':
+            for asset, scheme_name_and_data in summary_data.items(): # asset = liquid. etc / scheme_name_and_data = g_tot or schemes
+                    for g_tot_or_schemes, schemes_data in scheme_name_and_data.items(): # g_tot = schemes / schemes_data = mf wise data                
+                        if g_tot_or_schemes == 'schemes':
+                            for scheme_name, data in schemes_data.items(): # scheme_name = mf names / data = m's respectiv data
+                                result.append({
+                                    "Scheme_name": data.get('s_name'),
+                                    "Asset": asset,
+                                    "Curent_amount": data.get('c_amt'),
+                                    "Purchase_amount": data.get('p_amt'),
+                                    "Units": data.get('units'),
+                                    "Folio_Number": data.get('folio_no'),
+                                    "Nav": data.get('nav'),
+                                    "Online Flag": data.get('online_flag')
+                                })
+    
+    if not result:
+        return jsonify({"message": "No result"})
+    
+    return jsonify({"Data": result})
+    
+@app.route('/profile', methods = ['GET'])
+def profile():
+    client_id = request.args.get('clientId')
+    if not client_id:
+        return jsonify({"message": "Client id not found in arguments"})
+    
+    mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).first()
+    if not mp_query:
+        return jsonify({f"message: No record in profile for {client_id}"})
+    
+    client_detail_id = mp_query.client_detail_id_incr
+    client_bank_details = profile_session.query(BankDetailsModel).filter(BankDetailsModel.bank_detail_id == client_detail_id).all()
+    if not client_bank_details:
+        return jsonify({f"message: No Bank details for {client_id}"})
+    bank_list = []
+    for i in client_bank_details:
+        bank_list.append({
+            "CLIENT NAME": mp_query.first_name + mp_query.last_name,
+            "ACCOUNT NO.": i.account_no if i.account_no else "ACCOUNT NO. NOT PRESENT ",
+            "IFSC CODE": i.ifsc_code if i.ifsc_code else "IFSC CODE NOT PRESENT",
+            "BANK NAME": "None",
+            "IS BANK CURRENTLY ACTIVE": i.is_active,
+            "IS BANK PRIMARY": i.is_primary_bank,
+            "IS BANK VERIFIED": i.is_bank_verified,
+            "BANK ACCOUNT STATUS": i.bank_account_status,
+            "BANK ADDED DATE": i.created_timestamp
+        })
+    return jsonify({
+        "message": "Bank details fetched successfully",
+        "Bank Details": bank_list
+    })
+
+@app.route('/get_equity')
+def get_equity():
+    # Technically passed by the frontend
+    client_id = "H011"
+
+    # Get and set all variables
+    X_API_KEY = get_config("X_API_KEY")
+
+    HOLDING_LIST_URL = get_config("CASH_HOLDING_LIST_V1_URL")
+    HOLDING_LIST_PAYLOAD = {"sort_by": 1, "size": 0, "page": 0, "searchKey": ""}  # client id in this?
+
+    HOLDING_SUMMARY_URL = get_config("CASH_HOLDING_SUMMARY_V2_URL")
+
+    POSITION_LIST_URL = get_config("CASH_POSITION_LIST_V2_URL")
+    POSITION_LIST_PAYLOAD = {"sort_by": 8, "searchKey": ""}
+
+    POSITION_SUMMARY_URL = get_config("CASH_POSITION_SUMMARY_V2_URL")
+
+    # Set the header used for all the APIs
+    header = {
+            'x-client-id': f'{client_id}',
+            'x-api-key': f'{X_API_KEY}',
+            'Content-Type': 'application/json'
+            }
+
+    # Start getting all responses. All are post APIs
+    holdings = get_api_resp(HOLDING_LIST_URL, header, HOLDING_LIST_PAYLOAD)
+    holding_summary = get_api_resp(HOLDING_SUMMARY_URL, header)
+    print(f"Holding List: {holdings}\nHolding Summary: {holding_summary}")
+
+    positions = get_api_resp(POSITION_LIST_URL, header, POSITION_LIST_PAYLOAD)
+    position_summary = get_api_resp(POSITION_SUMMARY_URL, header)
+    print(f"Position List: {positions}\nPosition Summary: {position_summary}")
+
+    return jsonify([holdings, holding_summary, positions, position_summary])
+
+
+@app.route('/equity')
+def index():
+    return render_template('equity.html')

@@ -1,40 +1,43 @@
-let ipoData = [];
-const rowsPerPage = 10; 
+let walletData = [];
+const rowsPerPage = 12;
 let currentPage = 1;
 
-
-function displayIpoTable(filteredData = ipoData) {
-    const tableBody = document.querySelector('#ipo-table tbody');
-    const tableHead = document.querySelector('#ipo-table');
+function displayWalletTable(filteredData = walletData) {
+    const tableBody = document.querySelector('#wallet-table tbody');
+    const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
-    console.log(tableHead)
-    tableBody.innerHTML = ''; 
+    const loadingText = document.querySelector('.loading-text');
 
-    
+    // Clear the table content before updating it
+    tableBody.innerHTML = '';
+
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const paginatedIpoData = filteredData.slice(start, end); 
+    const paginatedWalletData = filteredData.slice(start, end);
 
-    paginatedIpoData.forEach(ipo => {
+    paginatedWalletData.forEach(wallet => {
         const row = document.createElement('tr');
-
-        
         row.innerHTML = `
-            <td>${ipo.name}</td>
-            <td>${ipo.applyDate}</td>
-            <td>${ipo.mandateSentDate}</td>
-            <td>${ipo.paymentStatus}</td>
-            <td>${ipo.allocated}</td>
+            <td>${wallet['Timestamp']}</td>
+            <td>${wallet['client_code']}</td>
+            <td>${wallet['amount']}</td>
+            <td>${wallet['Transaction type']}</td>
+            <td>${wallet['Reference no']}</td>
+            <td>${wallet['Bank Status']}</td>
+            <td>${wallet['accord status']}</td>
+            <td>${wallet['RS Status']}</td>
+            <td>${wallet['final Status']}</td>
         `;
-
         tableBody.appendChild(row);
     });
+
+    // Hide loader and loading text, show table when data is available
     loader.style.display = 'none';
-    tableHead.style.display = 'table';
+    loadingText.style.display = 'none';
+    tableHead.style.display = 'table';  // Show table once data is fetched
 
     updatePaginationControls(filteredData);
 }
-
 
 function updatePaginationControls(filteredData) {
     const paginationContainer = document.querySelector('#pagination');
@@ -42,18 +45,16 @@ function updatePaginationControls(filteredData) {
 
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-    
     if (currentPage > 1) {
         const prevButton = document.createElement('button');
         prevButton.textContent = 'Previous';
         prevButton.onclick = () => {
             currentPage--;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(prevButton);
     }
 
-    
     for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement('button');
         pageButton.textContent = i;
@@ -62,18 +63,17 @@ function updatePaginationControls(filteredData) {
             displayIpoTable(filteredData);
         };
         if (i === currentPage) {
-            pageButton.disabled = true; 
+            pageButton.disabled = true;
         }
         paginationContainer.appendChild(pageButton);
     }
 
-    
     if (currentPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Next';
         nextButton.onclick = () => {
             currentPage++;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         paginationContainer.appendChild(nextButton);
     }
@@ -84,10 +84,10 @@ function getClientId() {
     return params.get('clientId');
 }
 
-async function fetchIPOData() {
+async function fetchWalletData() {
     const clientId = getClientId();
 
-    const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, {
+    const response = await fetch(`http://localhost:5000/wallet?clientId=${clientId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -96,30 +96,20 @@ async function fetchIPOData() {
 
     if (response.ok) {
         const data = await response.json();
-        ipoData = data.ipoData;
-        console.log(data); 
-        displayIpoTable(); 
-    } else if(response.status==400){
-        loader.style.display = 'none'; // Hide loader
-        noIposMessage.style.display = 'block'; // Show no IPOs message
-        tableHead.style.display = 'none'; // Hide table
-
+        walletData = data.walletData;
+        console.log(data);
+        displayWalletTable();
+    } else {
+            loader.style.display = 'none';  // Ensure loader is hidden on error
+            noIposMessage.textContent = 'No wallet data available for this client ID.';
+            noIposMessage.style.display = 'block';
+            tableBody.style.display='none';
     }
-    else {
-        console.error('Error fetching IPO data:', await response.json());
-    }
-
 }
 
 
-function filterIpoTable() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = ipoData.filter(ipo => 
-        ipo.name.toLowerCase().includes(searchValue) ||
-        (ipo.applicationNo && ipo.applicationNo.toLowerCase().includes(searchValue))
-    );
-
-    currentPage = 1; 
-    displayIpoTable(filteredData); 
+function goBack() {
+    window.history.back();
 }
-window.onload = fetchIPOData;
+
+window.onload = fetchWalletData;
