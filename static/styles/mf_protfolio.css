@@ -86,7 +86,7 @@ td {
 .lo_btn {
     position: fixed;
     top: 5px;
-    left: 120px;
+    right:40px;
     background-color: #6f42c1;
     padding: 8px 10px;
     border: none;

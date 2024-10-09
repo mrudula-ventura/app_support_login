@@ -25,7 +25,7 @@ h1 {
 /* Navbar style for fixed position at the top */
 .navbar {
     width: 100%;
-    padding:17px;
+    padding:20px;
 
     background-color: rgba(12, 8, 8, 0.833);
     color: white;
@@ -260,7 +260,7 @@ table td.loss-value {
 .lo_btn {
     position: fixed;
       top: 6px;
-      left: 120px;
+      right:40px;
       background-color: #6f42c1;
       padding: 8px 10px;
     border: none;
