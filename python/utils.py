@@ -209,18 +209,6 @@ class BankDetailsModel(Base):
     is_bank_verified = Column(Boolean, nullable=False)
     bank_account_status =  Column(String(100))
 
-
-class SegmentModel(Base):
-    __tablename__ = 'segment_details'
-    __table_args__ = {"schema": 'profile'}
-    segment_detail_id_incr = Column(BigInteger, primary_key=True, autoincrement=True, nullable=False)
-    client_detail_id = Column(Integer)
-    segment_type = Column(Integer)
-    is_active = Column(Boolean)
-    created_timestamp = Column(String, nullable=False)
-    updated_timestamp = Column(String, nullable=False)
-    segment_status = Column(String(20))
-
 class MutualFundPortfolio(Base):
     __tablename__ = 'portfolio_pcook'
     __table_args__ = {"schema": 'report'}
@@ -259,3 +247,77 @@ class BranchMasterModel(Base):
     is_upi_allowed = Column(Boolean)
     swift = Column(String(100))
     created_datetime = Column(String)
+    
+class ClientNomineeDetailsModel(Base):
+    __tablename__ = 'client_nominee_details'
+    __table_args__ = {"schema": 'profile'}
+    nominee_id_incr = Column(Integer, primary_key=True, nullable=False)
+    client_detail_id = Column(Integer)
+    nominee_name = Column(String)
+    nominee_relationship = Column(String(100))
+    city = Column(String(256))
+    state = Column(String(256))
+    address1 = Column(String(256))
+    address2 = Column(String(256))
+    address3 = Column(String(256))
+    nominee_dob = Column(String(256))
+    nominee_identification_type = Column(String)
+    nominee_identification_no = Column(String(256))
+    zipcode = Column(String(256))
+    nominee_share = Column(Integer)
+    country = Column(String(50))
+    is_nominee_minor = Column(Boolean)
+    created_by = Column(String(256))
+    created_timestamp = Column(String, nullable=False)
+    updated_by = Column(String(256))
+    updated_timestamp = Column(String, nullable=False)
+    
+class ClientAddressDetails(Base):
+    __tablename__ = 'client_address_details'
+    __table_args__ = {"schema": 'profile'}
+    address_id_incr = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    client_detail_id = Column(Integer)
+    address_type = Column(String, nullable=False)
+    address_line1 = Column(String(300))
+    address_line2 = Column(String(300))
+    address_line3 = Column(String(300))
+    address_source = Column(String, nullable=False)
+    address_proof = Column(String, nullable=False)
+    zipcode = Column(String(256))
+    city = Column(String(256))
+    state = Column(String(256))
+    country = Column(String(50))
+    created_by = Column(String(50))
+    created_timestamp = Column(String, nullable=False)
+    updated_by = Column(String(50))
+    updated_timestamp = Column(String, nullable=False)
+    
+class SegmentModel(Base):
+    __tablename__ = 'segment_details'
+    __table_args__ = {"schema": 'profile'}
+    segment_detail_id_incr = Column(BigInteger, primary_key=True, autoincrement=True, nullable=False)
+    client_detail_id = Column(Integer)
+    segment_type = Column(Integer)
+    is_active = Column(Boolean)
+    created_timestamp = Column(String, nullable=False)
+    updated_timestamp = Column(String, nullable=False)
+    segment_status = Column(String(20))
+        
+class SegmentMasterModel(Base):
+    __tablename__ = 'segment_master'
+    __table_args__ = {"schema": 'profile'}
+    segment_id_incr = Column(BigInteger, primary_key=True, nullable=False)
+    segment = Column(String(100))
+    doc_required = Column(Boolean)
+    logo_url = Column(String(250))
+    section = Column(String(30))
+    auto_enable = Column(Boolean)
+
+class ClientDematDetailsModel(Base):
+    __tablename__ = "client_demat_details"
+    __table_args__ = {"schema": "profile"}
+    client_demat_details_id = Column(Integer, primary_key=True, nullable=False)
+    client_detail_id = Column(Integer, nullable=False)
+    demat_no = Column(String(16))
+    depository = Column(String(10))
+    created_dttm = Column(String, nullable=False)

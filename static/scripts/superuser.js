@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // function isValidEmail(email) {
-    //     const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // Adjust regex as needed
-    //     return regex.test(email);
-    // }
+    function isValidEmail(email) {
+        return email.includes('@');
+    }
+    
 
     function isValidPhoneNumber(phone) {
         const regex = /^\d{10}$/; 
