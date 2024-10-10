@@ -124,4 +124,9 @@
         }
     }
 
+
+    function goBack() {
+        window.history.back();
+    }
+
     window.onload = loadData;
