@@ -31,6 +31,7 @@ def profile_details():
     bank_list = []
     nominees_list = []
     not_list = []
+    nse_fno = []
     client_detail_id = mp_query.client_detail_id_incr
     
     nominee_query = profile_session.query(ClientNomineeDetailsModel.nominee_name, ClientNomineeDetailsModel.nominee_relationship, ClientNomineeDetailsModel.nominee_share, ClientNomineeDetailsModel.is_nominee_minor, ClientNomineeDetailsModel.nominee_identification_type, ClientNomineeDetailsModel.created_timestamp).select_from(ProfileOnboardingModel).join(ClientNomineeDetailsModel, ProfileOnboardingModel.client_detail_id_incr == ClientNomineeDetailsModel.client_detail_id).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).all()
@@ -54,7 +55,7 @@ def profile_details():
     for bank in bank_details:
         decrypted_account_no = decrypt(bank.account_no, pr_key)
         bank_list.append({
-            "ACCOUNT_NO.": decrypted_account_no or "ACCOUNT NO. NOT PRESENT",
+            "ACCOUNT_NO": decrypted_account_no or "ACCOUNT NO. NOT PRESENT",
             "IFSC_CODE": bank.ifsc_code or "IFSC CODE NOT PRESENT",
             "BANK_NAME": bank.bank_name or "BANK NAME NOT FOUND",
             "IS_BANK_CURRENTLY_ACTIVE": bank.is_active,
@@ -77,13 +78,10 @@ def profile_details():
         decrypt_add3 = decrypt(add3, pr_key)
     
     address_list.append({
-        "add1": decrypt_add1 if decrypt_add1 else None,
-        "add2": decrypt_add2 if decrypt_add2 else None,
-        "add3": decrypt_add3 if decrypt_add3 else None, 
+        "address": decrypt_add1 if decrypt_add1 else "" + decrypt_add2 if decrypt_add2 else "" + decrypt_add3 if decrypt_add3 else "" + country if country else None,
         "type": a_type if a_type else None,
         "source":source if source else None,
         "proof": proof if proof else None,
-        "country": country if country else None,
         "created_by": created_by if created_by else None,
         "time": a_time.strftime('%d-%B-%Y %H:%M') if a_time else None
     })
@@ -101,7 +99,7 @@ def profile_details():
             "updated_time": updated_time.strftime('%d-%B-%Y %H:%M') if updated_time else None
         })
     nse_fno_query = sso_session.query(UserInfo.nsefno).filter(UserInfo.client_id == func.lower(client_id)).first()
-    segment_details.append({"nsefno": nse_fno_query[0]})
+    nse_fno.append({"nsefno": nse_fno_query[0]})
     demat_list = []
     demat_query = profile_session.query(ClientDematDetailsModel).select_from(ProfileOnboardingModel).join(ClientDematDetailsModel, ProfileOnboardingModel.client_detail_id_incr == ClientDematDetailsModel.client_detail_id).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).first()
     if not demat_query:
@@ -112,4 +110,4 @@ def profile_details():
         "created_time": demat_query.created_dttm.strftime('%d-%B-%Y %H:%M') if demat_query.created_dttm else None
     })
     # print(f"message: Bank details fetched successfully,Client_Details: {client_details},Bank_Details: {bank_list}")
-    return jsonify({"user": client_details, "accounts": bank_list, "nominee": nominees_list, "address": address_list, "segment": segment_details, "demat": demat_list, "Unavailable_data": not_list})
+    return jsonify({"user": client_details, "accounts": bank_list, "nominee": nominees_list, "address": address_list, "segment": segment_details,"nse_fno": nse_fno, "demat": demat_list, "Unavailable_data": not_list})
