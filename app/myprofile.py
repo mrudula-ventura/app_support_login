@@ -11,7 +11,7 @@ def profile_details():
 
     if not client_id:
         return jsonify({"message": "Client id not found in arguments"})
-    
+
     # Query the profile details for the client
     mp_query = profile_session.query(ProfileOnboardingModel).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).first()
     if not mp_query:
@@ -27,13 +27,13 @@ def profile_details():
         "Mobile_NO.": decrypted_mobile,
         "Email": decrypted_email
     }
-    
+
     bank_list = []
     nominees_list = []
     not_list = []
     nse_fno = []
     client_detail_id = mp_query.client_detail_id_incr
-    
+
     nominee_query = profile_session.query(ClientNomineeDetailsModel.nominee_name, ClientNomineeDetailsModel.nominee_relationship, ClientNomineeDetailsModel.nominee_share, ClientNomineeDetailsModel.is_nominee_minor, ClientNomineeDetailsModel.nominee_identification_type, ClientNomineeDetailsModel.created_timestamp).select_from(ProfileOnboardingModel).join(ClientNomineeDetailsModel, ProfileOnboardingModel.client_detail_id_incr == ClientNomineeDetailsModel.client_detail_id).filter(ProfileOnboardingModel.client_id == func.lower(client_id)).all()
     if not nominee_query:
         not_list.append({"nominee": "No nominees available", "data": False})
@@ -76,7 +76,7 @@ def profile_details():
         decrypt_add2 = decrypt(add2, pr_key)
     if add3 is not None:
         decrypt_add3 = decrypt(add3, pr_key)
-    
+
     address_list.append({
         "address": decrypt_add1 if decrypt_add1 else "" + decrypt_add2 if decrypt_add2 else "" + decrypt_add3 if decrypt_add3 else "" + country if country else None,
         "type": a_type if a_type else None,

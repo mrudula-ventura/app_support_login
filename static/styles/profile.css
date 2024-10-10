@@ -3,7 +3,7 @@
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
   color: white;
-  padding: 10px;
+  padding: 20px;
   position: fixed;
   top: 0;
   left: 0;
@@ -12,11 +12,13 @@
   font-weight: bold;
   z-index: 10;
 }
+
+
 /* Logout button */
 .lo_btn {
   position: fixed;
     top: 6px;
-    right:40px;
+    right: 40px;
     background-color: #6f42c1;
     padding: 8px 10px;
   border: none;
@@ -29,7 +31,6 @@
 .lo_btn:hover {
   background-color: #5a3397;
 }
-
 
 /* Back button */
 .back-btn {
@@ -46,11 +47,17 @@
 }
 
 .back-btn:hover {
-  background-color: #5a3397;
+ 
+background-color: #5a3397;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 #userInfo {
-  top:25px;
   margin-bottom: 20px;
   background-color: #eaeaea;
   padding: 15px;
@@ -59,11 +66,320 @@
 }
 
 #userInfo h2 {
-  top: 25px;
   margin: 0;
 }
 
 #userInfo p {
   margin: 5px 0;
-  top:25px;
 }
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+/* Container for all cards */
+.bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.bank-card, .nominee-card, .segment-card, .demat-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 18%;  /* Adjust as needed */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+/* Specific styles for status, badges, and other elements */
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+.badge-verified {
+  background-color: green;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.badge-not-verified {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1200px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 18%; /* Ensure 5 cards still fit on large screens */
+  }
+}
+
+@media (max-width: 1024px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 30%; /* On medium screens, 3 cards per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .bank-card , .nominee-card, .segment-card, .demat-card{
+    width: 45%; /* On smaller screens, 2 cards per row */
+  }
+}
+
+@media (max-width: 600px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 100%; /* On mobile, full width for cards */
+  }
+}
+
+
+.bank-card, .nominee-card, .segment-card, .demat-card h2 {
+  margin-top: 0;
+  text-align: center;
+ 
+}
+
+.bank-card, .nominee-card, .segment-card, .demat-card p {
+  margin: 10px 0;
+  text-align: left;
+}
+
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+.badge {
+  padding: 5px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-verified {
+  background-color: green;
+  color: white;
+}
+
+.badge-not-verified {
+  background-color: red;
+  color: white;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+  .bank-card {
+      width: 100%; /* Cards will take full width on small screens */
+  }
+}
+
+
+
+
+/* Navbar style for fixed position at the top */
+.navbar {
+  width: 100%;
+  background-color: rgba(12, 8, 8, 0.833);
+  color: white;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+
+/* Logout button */
+.lo_btn {
+  position: fixed;
+    top: 6px;
+    right: 40px;
+    background-color: #6f42c1;
+    padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+.lo_btn:hover {
+  background-color: #5a3397;
+}
+
+/* Back button */
+.back-btn {
+  position: fixed;
+  top: 5px;
+  left: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+.back-btn:hover {
+ 
+background-color: #5a3397;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#userInfo {
+  margin-bottom: 20px;
+  background-color: #eaeaea;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#userInfo h2 {
+  margin: 0;
+}
+
+#userInfo p {
+  margin: 5px 0;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+/* Container for all cards */
+.bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bank-card, .nominee-card, .segment-card, .demat-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 18%;  /* Adjust as needed */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Specific styles for status, badges, and other elements */
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+.badge-verified {
+  background-color: green;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.badge-not-verified {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1200px) {
+  .bank-card {
+    width: 18%; /* Ensure 5 cards still fit on large screens */
+  }
+}
+
+@media (max-width: 1024px) {
+  .bank-card {
+    width: 30%; /* On medium screens, 3 cards per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .bank-card {
+    width: 45%; /* On smaller screens, 2 cards per row */
+  }
+}
+
+@media (max-width: 600px) {
+  .bank-card {
+    width: 100%; /* On mobile, full width for cards */
+  }
+}
+
+
+.bank-card h2 {
+  margin-top: 0;
+}
+
+.bank-card p {
+  margin: 10px 0;
+}
+
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+.badge {
+  padding: 5px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-verified {
+  background-color: green;
+  color: white;
+}
+
+.badge-not-verified {
+  background-color: red;
+  color: white;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+  .bank-card {
+      width: 100%; /* Cards will take full width on small screens */
+  }
+}
+
+
+
+
