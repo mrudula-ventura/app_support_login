@@ -18,11 +18,15 @@ function fetchClientDetails(clientId) {
     )
         .then(response => response.json())
         .then(data => {
-            // Display the fetched data on the page
-            document.getElementById('client-id-display').innerText = data.client_id;
-            document.getElementById('client-full-name').innerText = data.Full_Name;
-            document.getElementById('client-email').innerText = data.Email;
-            document.getElementById('client-mobile').innerText = data["Mobile_No."];
+    // Display the fetched data on the page
+
+    document.getElementById('client-id-display').innerText = data.client_id;
+    document.getElementById('client-full-name').innerText = data.Full_Name;
+    document.getElementById('client-email').innerText = data.Email;
+    document.getElementById('client-mobile').innerText = data["Mobile_No."];
+
+    // Store the data in localStorage for use on another page
+    localStorage.setItem('clientData', JSON.stringify(data));
         })
         .catch(error => console.error('Error fetching client details:', error));
 }

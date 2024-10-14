@@ -1,51 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Bank Accounts</title>
     <link rel="stylesheet" href="../static/styles/profile.css">
+    <title>Client Details</title>
+    <style>
+        /* User info container - always visible */
+        .user-info-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        /* Button styles */
+        .button-container {
+            position: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            margin-right: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Cards container - sections hidden by default */
+        .cards-container > div {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        /* Bank, Nominee, Segment, Demat cards styling */
+        .bank-card, .nominee-card, .segment-card, .demat-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Loader styling */
+        /* #loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        } */
+
+        /* Fullscreen message for "No Data Available" */
+        /* .fullscreen-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 24px;
+        } */
+
+        .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
+    display: none;
+}
+.active {
+    display: block;
+}
+
+    </style>
 </head>
-
-<body
-    style="background-image: url('../static/styles/lbg.webp');background-repeat: no-repeat;background-size: cover;background-attachment: fixed;background-position: center;">
-
+<body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
     <div class="navbar">
-
-        <div class="navbar-title"></div>
-        <button class="back-btn" onclick="goBack()">Back</button>
+        <div class="user-info-container_e">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
+        <div class="back-btn-container">
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
     </div>
 
+        <br><br><br>
+       
+    <!-- User Information (always visible) -->
+    <div id="userInfo" class="user-info-container">
 
-    
-    <div id="loader" class="loader-container">
-        <div class="loader"></div>
-        <div class="loader-text">Loading...</div>
     </div>
+
+    <!-- Buttons to toggle sections -->
+    <button id="bankButton">Bank Accounts</button>
+    <button id="nomineeButton">Nominees</button>
+    <button id="segmentButton">Segments</button>
+    <button id="dematButton">Demat Accounts</button>
     
-    <br>
-    <br>
-    <br>
 
-    <div id="userInfo"></div>
-    <h1>Bank Accounts</h1>
-    <div id="bankCards" class="bank-cards-container"></div>
+    <!-- Cards Container -->
+    <div class="cards-container">
+        <div id="bankCards" class="bank-cards-container"></div>
+        <div id="nomineeCards" class="nominee-cards-container"></div>
+        <div id="segmentCards" class="segment-cards-container"></div>
+        <div id="dematCards" class="demat-cards-container"></div>
+    </div>
 
-    <h1>Nominees</h1>
-    <div id="nomineeCards" class="nominee-cards-container"></div>
-
-    <h1>Segments</h1>
-    <div id="segmentCards" class="segment-cards-container"></div>
-
-    <h1>Demat Accounts</h1>
-    <div id="dematCards" class="demat-cards-container"></div>
-
-
-
-    <script src="../static/scripts/profile.js"></script>
+    <!-- Loader -->
+    <div id="loader">Loading...</div>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
 
+    <script src="../static/scripts/profile.js"></script>
 </body>
-
 </html>

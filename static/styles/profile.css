@@ -1,3 +1,8 @@
+body {
+  font-family: Arial, sans-serif;
+
+}
+
 /* Style the message when no data is available */
 .no-data-message {
   color: white;
@@ -12,23 +17,8 @@
   display: none !important;
 }
 
-/* Center headlines and style them */
-.centered-headline {
-  color: white;
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 22px;
-  font-weight: bold;
-}
 
-/* Ensure the message takes the full screen when displayed */
-.fullscreen-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85); /* Darken background to emphasize the message */
-}
+
 
 /* Adjust other elements' styles to prevent overflow when hidden */
 .container, .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
@@ -239,15 +229,7 @@ h1 {
 }
 
 /* Fullscreen message container without background color */
-.fullscreen-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full height of the viewport */
-  color: rgb(20, 11, 11);
-  text-align: center;
-  background: none; /* No background color */
-}
+/*  */
 
 
 
@@ -269,3 +251,28 @@ h1 {
 .active {
   display: block; /* Active section */
 }
+
+/* Style for the user info container */
+.user-info-container_e {
+  display: flex;
+  align-items: center; /* Vertically centers the items */
+  justify-content: flex-end; /* Aligns content to the right */
+  position: absolute;
+  right: 180px; /* Adjusts the distance from the right edge */
+  top: 50%;
+  transform: translateY(-50%); /* Vertically centers the container */
+  color: white;
+}
+
+.user-info-container_e h5 {
+  margin: 0 25px; /* Adds sufficient space between labels */
+  white-space: nowrap; /* Prevents text from wrapping */
+  font-size: 14px; /* Adjusts font size to fit more content */
+}
+
+.user-info-container_e span {
+  font-weight: normal; /* Makes the span text normal weight */
+  margin-left: 10px; /* Adds a little space between label and information */
+}
+
+

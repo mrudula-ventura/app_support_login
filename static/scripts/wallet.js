@@ -29,7 +29,7 @@ function displayWalletTable(filteredData = walletData) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${wallet['Timestamp']}</td>
-            <td>${wallet['client_code']}</td>
+           
             <td>${wallet['amount']}</td>
             <td>${wallet['Transaction type']}</td>
             <td>${wallet['Reference no']}</td>
@@ -126,6 +126,26 @@ async function fetchWalletData() {
     document.querySelector('.loader').style.display = 'none';
     document.querySelector('.loading-text').style.display = 'none';
 }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Retrieve the data from localStorage
+    const storedData = localStorage.getItem('clientData');
+    
+    if (storedData) {
+        const clientData = JSON.parse(storedData);
+        
+        // Display the data on this page
+        document.getElementById('client-id-display').innerText = clientData.client_id;
+        document.getElementById('client-full-name').innerText = clientData.Full_Name;
+        document.getElementById('client-email').innerText = clientData.Email;
+        document.getElementById('client-mobile').innerText = clientData["Mobile_No."];
+    } else {
+        console.error('No data found in localStorage.');
+    }
+});
+
 
 function goBack() {
     window.history.back();
