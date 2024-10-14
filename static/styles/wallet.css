@@ -39,7 +39,6 @@ body {
 
 table {
   width: 100%;
-  height: 100%;
   border-collapse: collapse;
   margin-top: 50px;
 }
@@ -175,7 +174,7 @@ td {
 }
 
 /* No IPO message */
-.no-ipos-message {
+.noWalletMessage {
   display: none;
   font-size: 25px;
   color: #48128f;

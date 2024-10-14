@@ -7,6 +7,7 @@ function displayWalletTable(filteredData = walletData) {
     const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
     const loadingText = document.querySelector('.loading-text');
+    const noWalletMessage = document.querySelector('.noWalletMessage');
 
     // Clear the table content before updating it
     tableBody.innerHTML = '';
@@ -14,6 +15,15 @@ function displayWalletTable(filteredData = walletData) {
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedWalletData = filteredData.slice(start, end);
+
+    if (paginatedWalletData.length === 0) {
+        // If no data, show the "No Wallet Data" message and hide the table
+        noWalletMessage.style.display = 'block';
+        tableHead.style.display = 'none';
+        loader.style.display = 'none';
+        loadingText.style.display = 'none';
+        return;
+    }
 
     paginatedWalletData.forEach(wallet => {
         const row = document.createElement('tr');
@@ -60,7 +70,7 @@ function updatePaginationControls(filteredData) {
         pageButton.textContent = i;
         pageButton.onclick = () => {
             currentPage = i;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         if (i === currentPage) {
             pageButton.disabled = true;
@@ -97,16 +107,25 @@ async function fetchWalletData() {
     if (response.ok) {
         const data = await response.json();
         walletData = data.walletData;
-        console.log(data);
-        displayWalletTable();
-    } else {
-            loader.style.display = 'none';  // Ensure loader is hidden on error
-            noIposMessage.textContent = 'No wallet data available for this client ID.';
-            noIposMessage.style.display = 'block';
-            tableBody.style.display='none';
-    }
-}
 
+        if (walletData.length === 0) {
+            // No data found, display the "No Wallet Data" message
+            const noWalletMessage = document.querySelector('.noWalletMessage');
+            noWalletMessage.style.display = 'block';
+            document.querySelector('#wallet-table').style.display = 'none';
+        } else {
+            displayWalletTable();
+        }
+    } else {
+        const noWalletMessage = document.querySelector('.noWalletMessage');
+        noWalletMessage.style.display = 'block';
+        document.querySelector('#wallet-table').style.display = 'none';
+    }
+
+    // Hide loader once data is fetched or on error
+    document.querySelector('.loader').style.display = 'none';
+    document.querySelector('.loading-text').style.display = 'none';
+}
 
 function goBack() {
     window.history.back();

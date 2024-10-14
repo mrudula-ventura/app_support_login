@@ -2,16 +2,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const tableBody = document.querySelector('#wallet-table tbody');
     // const loader = document.createElement('div');
     const loader = document.querySelector('.loader-container');
-
+    const  noMfMessage=document.querySelector('.noMfMessage')
     // Elements for displaying summary
     const currentAmountElem = document.getElementById('crnt_amnt_value');
     const purchaseAmountElem = document.getElementById('prchs_amnt_value');
     const xirrElem = document.getElementById('xirr_value');
+
+
+
     
     function getClientId() {
         const params = new URLSearchParams(window.location.search);
         return params.get('clientId');
     }
+
+
+
+    
     // Function to fetch MF data
     async function fetchMFData() {
         const clientId = getClientId();
@@ -28,9 +35,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // If no data, show a message
                 if (data.message) {
-                    // alert(data.message);
+                    loader.style.display = 'none';
+                    noMfMessage.style.display ='block';
+                    document.querySelector('.table-container').style.display = 'none';
+                    
                     console.log(data.message)
-                    return;
+                    return ;
                 }
 
                 // Remove loader and display the table
@@ -80,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error fetching MF data:', error);
-            noIposMessage.style.display = 'block'; // Show no IPO message if no data exists
+           
             tableContainer.style.display = 'none'; // Hide table and search input
             alert('Error fetching data.');
         }

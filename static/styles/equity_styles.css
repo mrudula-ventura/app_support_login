@@ -92,10 +92,10 @@ h1 {
 /* Styles for the summary card */
 .summary-card {
     padding: 20px;
-    border: 1px solid #f1e8e8;
+    border: 1px solid #f1e8e8b3;
     font-size: large;
     border-radius: 10px;
-    background-color: rgba(196, 151, 132, 0.747);
+    background-color: rgba(255, 255, 255, 0.815);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
 }
@@ -132,7 +132,7 @@ th {
     border-bottom: 2px solid #ccc;
 }
 td {
-    background-color: #fff;
+    background-color: #ccc;
 }
 /* Colors for Profit and Loss */
 .profit {
@@ -179,7 +179,7 @@ button:hover {
 }
 /* Table-Specific Styles */
 table th {
-    background-color: #333;
+    background-color:#007BFF;
     color: #fff;
     text-transform: uppercase;
 }

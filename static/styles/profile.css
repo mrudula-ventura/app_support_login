@@ -1,4 +1,43 @@
-/* Navbar style for fixed position at the top */
+/* Style the message when no data is available */
+.no-data-message {
+  color: white;
+  text-align: center;
+  font-size: 24px;
+  margin-top: 100px;
+  width: 100%;
+}
+
+/* Hide all elements when message is displayed */
+.hide-all {
+  display: none !important;
+}
+
+/* Center headlines and style them */
+.centered-headline {
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Ensure the message takes the full screen when displayed */
+.fullscreen-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85); /* Darken background to emphasize the message */
+}
+
+/* Adjust other elements' styles to prevent overflow when hidden */
+.container, .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 1200px;
+}
+
+/* Other existing styles */
 .navbar {
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
@@ -13,14 +52,13 @@
   z-index: 10;
 }
 
-
 /* Logout button */
 .lo_btn {
   position: fixed;
-    top: 6px;
-    right: 40px;
-    background-color: #6f42c1;
-    padding: 8px 10px;
+  top: 6px;
+  right: 40px;
+  background-color: #6f42c1;
+  padding: 8px 10px;
   border: none;
   border-radius: 5px;
   color: white;
@@ -47,253 +85,38 @@
 }
 
 .back-btn:hover {
- 
-background-color: #5a3397;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-#userInfo {
-  margin-bottom: 20px;
-  background-color: #eaeaea;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#userInfo h2 {
-  margin: 0;
-}
-
-#userInfo p {
-  margin: 5px 0;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-
-/* Container for all cards */
-.bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-
-.bank-card, .nominee-card, .segment-card, .demat-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  width: 18%;  /* Adjust as needed */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
- 
-}
-
-/* Specific styles for status, badges, and other elements */
-.status-active {
-  color: green;
-}
-
-.status-inactive {
-  color: red;
-}
-
-.badge-verified {
-  background-color: green;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-.badge-not-verified {
-  background-color: red;
-  color: white;
-  padding: 5px;
-  border-radius: 4px;
-}
-
-@media (max-width: 1200px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-    width: 18%; /* Ensure 5 cards still fit on large screens */
-  }
-}
-
-@media (max-width: 1024px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-    width: 30%; /* On medium screens, 3 cards per row */
-  }
-}
-
-@media (max-width: 768px) {
-  .bank-card , .nominee-card, .segment-card, .demat-card{
-    width: 45%; /* On smaller screens, 2 cards per row */
-  }
-}
-
-@media (max-width: 600px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-    width: 100%; /* On mobile, full width for cards */
-  }
-}
-
-
-.bank-card, .nominee-card, .segment-card, .demat-card h2 {
-  margin-top: 0;
-  text-align: center;
- 
-}
-
-.bank-card, .nominee-card, .segment-card, .demat-card p {
-  margin: 10px 0;
-  text-align: left;
-}
-
-.status-active {
-  color: green;
-}
-
-.status-inactive {
-  color: red;
-}
-
-.badge {
-  padding: 5px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.badge-verified {
-  background-color: green;
-  color: white;
-}
-
-.badge-not-verified {
-  background-color: red;
-  color: white;
-}
-
-/* Responsive layout for smaller screens */
-@media (max-width: 768px) {
-  .bank-card {
-      width: 100%; /* Cards will take full width on small screens */
-  }
-}
-
-
-
-
-/* Navbar style for fixed position at the top */
-.navbar {
-  width: 100%;
-  background-color: rgba(12, 8, 8, 0.833);
-  color: white;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  z-index: 10;
-}
-
-
-/* Logout button */
-.lo_btn {
-  position: fixed;
-    top: 6px;
-    right: 40px;
-    background-color: #6f42c1;
-    padding: 8px 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  z-index: 2000;
-}
-
-.lo_btn:hover {
   background-color: #5a3397;
 }
 
-/* Back button */
-.back-btn {
-  position: fixed;
-  top: 5px;
-  left: 40px;
-  background-color: #6f42c1;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  z-index: 2000;
-}
-
-.back-btn:hover {
- 
-background-color: #5a3397;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-#userInfo {
-  margin-bottom: 20px;
-  background-color: #eaeaea;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#userInfo h2 {
-  margin: 0;
-}
-
-#userInfo p {
-  margin: 5px 0;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-
-/* Container for all cards */
+/* Cards container */
 .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
+/* Card styles */
 .bank-card, .nominee-card, .segment-card, .demat-card {
+  text-align: left;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  width: 18%;  /* Adjust as needed */
+  width: 18%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
 }
 
-/* Specific styles for status, badges, and other elements */
+h2 {
+  text-align: center;
+  color: rgb(18, 17, 17); /* Keep the color black as you desire */
+  font-weight: bold;
+}
+
+
+/* Status colors */
 .status-active {
   color: green;
 }
@@ -302,6 +125,7 @@ h1 {
   color: red;
 }
 
+/* Verified badges */
 .badge-verified {
   background-color: green;
   color: white;
@@ -316,70 +140,132 @@ h1 {
   border-radius: 4px;
 }
 
-@media (max-width: 1200px) {
-  .bank-card {
-    width: 18%; /* Ensure 5 cards still fit on large screens */
-  }
-}
-
+/* Responsive Layout */
 @media (max-width: 1024px) {
-  .bank-card {
-    width: 30%; /* On medium screens, 3 cards per row */
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+      width: 30%;
   }
 }
 
 @media (max-width: 768px) {
-  .bank-card {
-    width: 45%; /* On smaller screens, 2 cards per row */
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+      width: 45%;
   }
 }
 
 @media (max-width: 600px) {
-  .bank-card {
-    width: 100%; /* On mobile, full width for cards */
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+      width: 100%;
   }
 }
 
+/* Loader styles */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
 
-.bank-card h2 {
+.loader {
+  width: 80px;
+  height: 80px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  background: #25b09b;
+  --_m: 
+      conic-gradient(#0000 10%, #000),
+      linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+
+@keyframes l3 {
+  to {
+      transform: rotate(1turn);
+  }
+}
+
+.loader-text {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#userInfo {
+  margin-bottom: 20px;
+  background-color: #eaeaea;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+
+}
+
+#userInfo h2 {
+  margin: 0;
+}
+
+#userInfo p {
+  margin: 5px 0;
+  text-align: center;
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #050505;
+}
+
+/* Style the message when no data is available */
+.no-data-message {
+  color: rgb(17, 11, 11);
+  text-align: center;
+  font-size: 24px;
   margin-top: 0;
 }
 
-.bank-card p {
+/* Fullscreen message container without background color */
+.fullscreen-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height of the viewport */
+  color: rgb(20, 11, 11);
+  text-align: center;
+  background: none; /* No background color */
+}
+
+
+
+
+.cards-container > div {
+  display: none; /* Initially hide all sections */
+}
+
+.button-container {
+  margin-bottom: 20px;
+}
+
+.bank-card, .nominee-card, .segment-card, .demat-card {
+  border: 1px solid #ccc;
+  padding: 10px;
   margin: 10px 0;
 }
 
-.status-active {
-  color: green;
+.active {
+  display: block; /* Active section */
 }
-
-.status-inactive {
-  color: red;
-}
-
-.badge {
-  padding: 5px;
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.badge-verified {
-  background-color: green;
-  color: white;
-}
-
-.badge-not-verified {
-  background-color: red;
-  color: white;
-}
-
-/* Responsive layout for smaller screens */
-@media (max-width: 768px) {
-  .bank-card {
-      width: 100%; /* Cards will take full width on small screens */
-  }
-}
-
-
-
-

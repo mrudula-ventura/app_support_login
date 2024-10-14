@@ -185,7 +185,7 @@ td {
 }
 
 /* No IPO message */
-.no-ipos-message {
+.noMfMessage {
     display: none;
     font-size: 25px;
     color: #48128f;
