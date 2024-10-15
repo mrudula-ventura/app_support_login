@@ -31,7 +31,7 @@
     <p class="loading-text">Loading...</p>
     </div>
 
-    <input type="text" id="searchInput" placeholder="Search by Schemes" oninput="filterIpoTable()" >
+    <input type="text" id="searchInput" placeholder="Search Scheme" oninput="filterIpoTable()" >
 
     <div class="noMfMessage" style="display: none;">This user has no MF data.</div>
 
@@ -57,6 +57,7 @@
               <!-- dynamic additions of rows -->
             </tbody>
         </table>
+        <div id="pagination"></div>
     </div>
     <div class="noMatchesMessage" style="display: none;" color="red">No schemes found for your search</div>
 

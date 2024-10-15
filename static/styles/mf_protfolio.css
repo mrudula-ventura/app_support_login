@@ -156,32 +156,35 @@ body {
   .back-btn:hover {
     background-color: #5a3397;
   }
-.crnt_amnt_value_h {
-    position: fixed;
-    font-size: 10px;
-    top:50px;
-    font-size: 18px;
-    font-weight: bold;
-    right: 1000px;
+/* Style for the summary card */
+#position-summary {
+  display: flex; 
+  justify-content: space-around; 
+  align-items: center; 
+  background-color: #f9f9f9ca;
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  padding: 10px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  width: 100%; /* Full width of the container */
+  box-sizing: border-box; 
+  min-height: 20px; 
 }
 
-.prchs_amnt_value_h {
-    position: fixed;
-    font-size: 10px;
-    top:50px;
-    font-size: 18px;
-    font-weight: bold;
-    right: 700px;
+/* Common styles for all h3 fields */
+#position-summary h3 {
+  font-size: 18px; 
+  font-weight: bold; 
+  text-align: center; 
+  margin: 0; 
 }
 
-
+/* Individual field styles (optional) */
+.crnt_amnt_value_h, 
+.prchs_amnt_value_h, 
 .xirr_value_h {
-    position: fixed;
-    font-size: 10px;
-    top:50px;
-    font-size: 18px;
-    font-weight: bold;
-    right: 500px;
+  flex: 1; /* Ensure each field takes equal space */
+  padding: 10px; /* Add padding between fields */
 }
 
 /* No IPO message */
@@ -236,30 +239,4 @@ body {
   }
   
 
-  /* Styles for the summary card */
-.summary-card {
-    padding: 20px;
-    border: 1px solid #f1e8e8b3;
-    font-size: large;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.815);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-}
 
-/* Styles for the summary row */
-.summary-row {
-    display: flex;
-    justify-content: space-between; /* Distributes space between columns */
-    width: 100%; /* Ensures the row uses full width */
-}
-/* Styles for each summary item */
-.summary-item {
-    flex: 1; /* Each item takes equal space */
-    text-align: center; /* Center align text */
-    padding: 10px; /* Padding for each item */
-}
-/* Value styles */
-.value {
-    font-weight: bold; /* Make value text bold */
-}

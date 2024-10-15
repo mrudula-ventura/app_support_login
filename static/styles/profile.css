@@ -1,8 +1,3 @@
-body {
-  font-family: Arial, sans-serif;
-
-}
-
 /* Style the message when no data is available */
 .no-data-message {
   color: white;
@@ -17,15 +12,17 @@ body {
   display: none !important;
 }
 
-
-
-
-/* Adjust other elements' styles to prevent overflow when hidden */
-.container, .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 1200px;
+/* Center headlines and style them */
+.centered-headline {
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
 }
+
+
+
 
 /* Other existing styles */
 .navbar {
@@ -78,25 +75,73 @@ body {
   background-color: #5a3397;
 }
 
-/* Cards container */
+/* Container for all cards */
 .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
   display: flex;
+  flex-direction:column;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* Card styles */
+
 .bank-card, .nominee-card, .segment-card, .demat-card {
-  text-align: left;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  width: 18%;
+  width: 18%;  /* Adjust as needed */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
+ 
+}
+
+/* Specific styles for status, badges, and other elements */
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+.badge-verified {
+  background-color: green;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.badge-not-verified {
+  background-color: red;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1200px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 18%; /* Ensure 5 cards still fit on large screens */
+  }
+}
+
+@media (max-width: 1024px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 30%; /* On medium screens, 3 cards per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .bank-card , .nominee-card, .segment-card, .demat-card{
+    width: 45%; /* On smaller screens, 2 cards per row */
+  }
+}
+
+@media (max-width: 600px) {
+  .bank-card, .nominee-card, .segment-card, .demat-card {
+    width: 100%; /* On mobile, full width for cards */
+  }
 }
 
 h2 {
@@ -130,24 +175,7 @@ h2 {
   border-radius: 4px;
 }
 
-/* Responsive Layout */
-@media (max-width: 1024px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-      width: 30%;
-  }
-}
 
-@media (max-width: 768px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-      width: 45%;
-  }
-}
-
-@media (max-width: 600px) {
-  .bank-card, .nominee-card, .segment-card, .demat-card {
-      width: 100%;
-  }
-}
 
 /* Loader styles */
 .loader-container {
@@ -228,32 +256,54 @@ h1 {
   margin-top: 0;
 }
 
-/* Fullscreen message container without background color */
-/*  */
-
-
-
-
 .cards-container > div {
   display: none; /* Initially hide all sections */
 }
 
 .button-container {
   margin-bottom: 20px;
+  text-align: center;
 }
 
-.bank-card, .nominee-card, .segment-card, .demat-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
+
+
+
+
+
+/* Style for the buttons */
+.tab-btn {
+  background-color: #6f42c1;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease; /* Smooth color transition */
 }
 
-.active {
-  display: block; /* Active section */
+.tab-btn:hover {
+  background-color: #5a3397; /* Hover state */
 }
+
+/* Active button color */
+.tab-btn.active {
+  background-color: #39245c; /* Color change for active button */
+}
+
+/* Hidden sections are only hidden; their position is retained */
+.hidden {
+  display: none;
+}
+
+/* Ensure the sections maintain layout without affecting the button positions */
+.active-section {
+  display: block;
+}
+
 
 /* Style for the user info container */
-.user-info-container_e {
+.user-info-container {
   display: flex;
   align-items: center; /* Vertically centers the items */
   justify-content: flex-end; /* Aligns content to the right */
@@ -261,16 +311,17 @@ h1 {
   right: 180px; /* Adjusts the distance from the right edge */
   top: 50%;
   transform: translateY(-50%); /* Vertically centers the container */
+  font-family: Arial, sans-serif;
   color: white;
 }
 
-.user-info-container_e h5 {
+.user-info-container h5 {
   margin: 0 25px; /* Adds sufficient space between labels */
   white-space: nowrap; /* Prevents text from wrapping */
   font-size: 14px; /* Adjusts font size to fit more content */
 }
 
-.user-info-container_e span {
+.user-info-container span {
   font-weight: normal; /* Makes the span text normal weight */
   margin-left: 10px; /* Adds a little space between label and information */
 }
