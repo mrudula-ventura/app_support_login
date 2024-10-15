@@ -2,6 +2,24 @@ let ipoData = [];
 const rowsPerPage = 15; 
 let currentPage = 1;
 
+
+// Function to load client data from localStorage
+function loadClientData() {
+    const clientData = JSON.parse(localStorage.getItem('clientData'));
+    if (clientData) {
+        document.getElementById('client-id-display').innerText = clientData.clientId;
+        document.getElementById('client-full-name').innerText = clientData.fullName;
+        document.getElementById('client-email').innerText = clientData.email;
+        document.getElementById('client-mobile').innerText = clientData.mobile;
+    } else {
+        console.error('No client data found');
+    }
+}
+
+// On page load, display the client data
+window.onload = loadClientData;
+
+
 // Function to display the IPO table
 function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
@@ -130,7 +148,8 @@ async function fetchIPOData() {
             loader.style.display = 'none';  // Ensure loader is hidden on error
             noIposMessage.textContent = 'No IPOs available for this client ID.';
             noIposMessage.style.display = 'block';
-            tableBody.style.display='none';
+            searchInput.style.display='none';
+            document.querySelector('.table-container').style.display = 'none';
         }
     } catch (error) {
         loader.style.display = 'none';  // Hide loader on error
@@ -147,13 +166,59 @@ function filterIpoTable() {
         (ipo.applicationNo && ipo.applicationNo.toLowerCase().includes(searchValue))
     );
 
-    currentPage = 1; 
-    displayIpoTable(filteredData); 
+    currentPage = 1;
+
+    // Always keep the search bar visible
+    const searchInput = document.getElementById('searchInput');
+    searchInput.style.display = 'block';
+
+    if (filteredData.length === 0) {
+      
+
+        const noIposMessage = document.querySelector('.no-ipos-message');
+        noIposMessage.textContent = 'No IPOs match your search.';
+        noIposMessage.style.display = 'block';
+        
+        
+        const tableContainer = document.querySelector('.table-container');
+        tableContainer.style.display = 'none';  // Hide the table if no matches
+    } else {
+       
+        const noIposMessage = document.querySelector('.no-ipos-message');
+        noIposMessage.style.display = 'none';
+        
+        displayIpoTable(filteredData); // Display filtered IPO data
+    }
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Retrieve the data from localStorage
+    const storedData = localStorage.getItem('clientData');
+    
+    if (storedData) {
+        const clientData = JSON.parse(storedData);
+        
+        // Display the data on this page
+        document.getElementById('client-id-display').innerText = clientData.client_id;
+        document.getElementById('client-full-name').innerText = clientData.Full_Name;
+        document.getElementById('client-email').innerText = clientData.Email;
+        document.getElementById('client-mobile').innerText = clientData["Mobile_No."];
+    } else {
+        console.error('No data found in localStorage.');
+    }
+});
+
+
+
+
+
+
 
 function goBack() {
     window.history.back();
 }
+
 
 // Load IPO data when the page is loaded
 window.onload = fetchIPOData;

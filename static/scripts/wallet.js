@@ -7,6 +7,7 @@ function displayWalletTable(filteredData = walletData) {
     const tableHead = document.querySelector('#wallet-table');
     const loader = document.querySelector('.loader');
     const loadingText = document.querySelector('.loading-text');
+    const noWalletMessage = document.querySelector('.noWalletMessage');
 
     // Clear the table content before updating it
     tableBody.innerHTML = '';
@@ -15,11 +16,20 @@ function displayWalletTable(filteredData = walletData) {
     const end = start + rowsPerPage;
     const paginatedWalletData = filteredData.slice(start, end);
 
+    if (paginatedWalletData.length === 0) {
+        // If no data, show the "No Wallet Data" message and hide the table
+        noWalletMessage.style.display = 'block';
+        tableHead.style.display = 'none';
+        loader.style.display = 'none';
+        loadingText.style.display = 'none';
+        return;
+    }
+
     paginatedWalletData.forEach(wallet => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${wallet['Timestamp']}</td>
-            <td>${wallet['client_code']}</td>
+           
             <td>${wallet['amount']}</td>
             <td>${wallet['Transaction type']}</td>
             <td>${wallet['Reference no']}</td>
@@ -60,7 +70,7 @@ function updatePaginationControls(filteredData) {
         pageButton.textContent = i;
         pageButton.onclick = () => {
             currentPage = i;
-            displayIpoTable(filteredData);
+            displayWalletTable(filteredData);
         };
         if (i === currentPage) {
             pageButton.disabled = true;
@@ -97,15 +107,44 @@ async function fetchWalletData() {
     if (response.ok) {
         const data = await response.json();
         walletData = data.walletData;
-        console.log(data);
-        displayWalletTable();
+
+        if (walletData.length === 0) {
+            // No data found, display the "No Wallet Data" message
+            const noWalletMessage = document.querySelector('.noWalletMessage');
+            noWalletMessage.style.display = 'block';
+            document.querySelector('#wallet-table').style.display = 'none';
+        } else {
+            displayWalletTable();
+        }
     } else {
-            loader.style.display = 'none';  // Ensure loader is hidden on error
-            noIposMessage.textContent = 'No wallet data available for this client ID.';
-            noIposMessage.style.display = 'block';
-            tableBody.style.display='none';
+        const noWalletMessage = document.querySelector('.noWalletMessage');
+        noWalletMessage.style.display = 'block';
+        document.querySelector('#wallet-table').style.display = 'none';
     }
+
+    // Hide loader once data is fetched or on error
+    document.querySelector('.loader').style.display = 'none';
+    document.querySelector('.loading-text').style.display = 'none';
 }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Retrieve the data from localStorage
+    const storedData = localStorage.getItem('clientData');
+    
+    if (storedData) {
+        const clientData = JSON.parse(storedData);
+        
+        // Display the data on this page
+        document.getElementById('client-id-display').innerText = clientData.client_id;
+        document.getElementById('client-full-name').innerText = clientData.Full_Name;
+        document.getElementById('client-email').innerText = clientData.Email;
+        document.getElementById('client-mobile').innerText = clientData["Mobile_No."];
+    } else {
+        console.error('No data found in localStorage.');
+    }
+});
 
 
 function goBack() {

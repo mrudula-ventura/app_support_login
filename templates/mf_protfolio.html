@@ -8,21 +8,34 @@
 </head>
 <body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
     <div class="navbar">
+        <div class="user-info-container">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
    <button class="back-btn" onclick="goBack()">Back</button>
 
-   <h3 class="crnt_amnt_value_h"> <span id="crnt_amnt_value"></span></h3>
-   <h3 class="prchs_amnt_value_h"> <span id="prchs_amnt_value"></span></h3>
-   <h3 class="xirr_value_h"> <span id="xirr_value"></span></h3>
+  
 
    </div>
+<br><br><br>
+  
+   
+    <div id="position-summary" class="summary-card"> <h3 class="crnt_amnt_value_h"> <span id="crnt_amnt_value"></span></h3>
+        <h3 class="prchs_amnt_value_h"> <span id="prchs_amnt_value"></span></h3>
+        <h3 class="xirr_value_h"> <span id="xirr_value"></span></h3></div>
    
    <div class="loader-container">
     <div class="loader"></div>
     <p class="loading-text">Loading...</p>
     </div>
 
+    <input type="text" id="searchInput" placeholder="Search Scheme" oninput="filterIpoTable()" >
 
-    <div class="no-ipos-message" style="display: none;">This user has no MF data.</div>
+    <div class="noMfMessage" style="display: none;">This user has no MF data.</div>
+
+   
     <!-- <div class="loader"></div> -->
     <div class="table-container">
 
@@ -44,7 +57,9 @@
               <!-- dynamic additions of rows -->
             </tbody>
         </table>
+        <div id="pagination"></div>
     </div>
+    <div class="noMatchesMessage" style="display: none;" color="red">No schemes found for your search</div>
 
     <script src="../static/scripts/mf_portfolio.js"></script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>

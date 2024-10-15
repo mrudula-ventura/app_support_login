@@ -11,15 +11,29 @@
     <button class="back-btn" onclick="goBack()">Back</button>
     </div>
 
+    <div class="navbar">
+        <div class="user-info-container">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
+        <div class="back-btn-container">
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
     <div class="loader-container">
         <div class="loader"></div>
         <p class="loading-text">Loading...</p>
     </div>
+    
+    <input type="text" id="searchInput" placeholder="Search IPO" oninput="filterIpoTable()" >
 
     <div class="no-ipos-message" style="display: none;">This user has no IPOs.</div>
     
     <div class="table-container" > <!-- Hidden initially -->
-        <input type="text" id="searchInput" placeholder="Search IPO..." oninput="filterIpoTable()" style="display: none;" /> <!-- Hidden initially -->
+       
 
         <table id="ipo-table"> <!-- Hidden initially -->
             <thead>
