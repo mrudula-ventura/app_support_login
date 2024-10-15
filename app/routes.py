@@ -8,6 +8,8 @@ from mutual_fund import mf_details
 from login import login_details
 from manager_user import add_user_details, delete_user_details
 from client_details import get_client_id_from_mobile_email, get_client_id_details
+from cob import cob_details
+from sso import sso_details
 
 # Login Email Password
 @app.route('/login', methods=['POST'])
@@ -63,3 +65,12 @@ def get_equity():
 @app.route('/equity')
 def index():
     return render_template('equity.html')
+
+# COB
+# @app.route('/cob', methods = ['GET'])
+# def cob():
+#     return cob_details()
+
+@app.route('/sso', methods = ['GET'])
+def sso():
+    return sso_details()

@@ -1,23 +1,20 @@
-from sqlalchemy import Column, String, Integer, DateTime, VARCHAR, Boolean, BigInteger, TIMESTAMP, Float, JSON, Numeric
+from sqlalchemy import Column, String, Integer, DateTime, VARCHAR, Boolean, BigInteger, TIMESTAMP, Float, JSON, Numeric, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
 import pytz
 
 Base = declarative_base()
-
-# Setting up the IST timezone
 IST = pytz.timezone('Asia/Kolkata')
 
 class ServiceStatus(Base):
     __tablename__ = 'service_status'
-    __table_args__ = {'schema': 'public'}  # Specify the 'public' schema
-
+    __table_args__ = {'schema': 'public'} 
     id = Column(Integer, primary_key=True, autoincrement=True)
     service_name = Column(String(255), nullable=False)
     status = Column(String(50), nullable=False)
     remark = Column(String(255), nullable=True)
-    service_tiggered_by = Column(String(255), nullable=True)  # Match the DB column name with the typo
+    service_tiggered_by = Column(String(255), nullable=True) 
     unique_id = Column(String(255), unique=True, nullable=False)
     updatedAt = Column(DateTime(timezone=True), default=lambda: datetime.now(IST), onupdate=lambda: datetime.now(IST))
 
@@ -80,6 +77,10 @@ class UserInfo(Base):
     sso_migrated = Column(Boolean, nullable=False)
     created_dttm = Column(DateTime, nullable=False)
     updated_dttm = Column(DateTime, nullable=False)
+    is_active = Column(Boolean)
+    google_auth_enabled = Column(Boolean)
+    is_bau = Column(Boolean)
+    is_exclusive = Column(Boolean)
     
 class ApplicantDetailsModel(Base):
     __tablename__ = 'applicant_details'
@@ -341,3 +342,68 @@ class ClientDematDetailsModel(Base):
     demat_no = Column(String(16))
     depository = Column(String(10))
     created_dttm = Column(String, nullable=False)
+    
+class ClientOnboardingDetailsModel(Base):
+    __tablename__ = 'client_onboarding_details'
+    __table_args__ = {"schema": 'onboarding'}
+    client_detail_id_incr = Column(Integer, primary_key=True, nullable=False)
+    client_id = Column(String(10))
+    session_details_id = Column(Integer, nullable=False)
+    salutation = Column(String)
+    first_name = Column(String(50))
+    middle_name = Column(String(50))
+    last_name = Column(String(50))
+    phone_no = Column(String(256))
+    email_id = Column(String(256))
+    dob = Column(String(256))
+    gender = Column(String)
+    pan_no = Column(String(256))
+    pan_father_name = Column(String(100))
+    marital_status = Column(String)
+    income_range = Column(Integer)
+    occupation = Column(Integer)
+    residential_status = Column(String)
+    residency_country = Column(String(50))
+    tax_residency_country = Column(String(50))
+    political_exposed_status = Column(String)
+    is_client_minor = Column(Boolean)
+    account_type = Column(String)
+    client_mgmt_id = Column(Integer)
+    is_existing_client = Column(Boolean)
+    is_whatsapp_enabled = Column(Boolean)
+    is_aadhar_linked_pan = Column(Boolean)
+    is_fatca_verified = Column(Boolean)
+    is_kyc_compliant = Column(Boolean)
+    is_kra_verified = Column(Boolean)
+    is_bank_verified = Column(Boolean)
+    pan_login_attempt = Column(Integer)
+    created_by = Column(String(50))
+    created_timestamp = Column(String, nullable=False)
+    updated_by = Column(String(50))
+    updated_timestamp = Column(String, nullable=False)
+    trading_experience_id = Column(Integer)
+    pennydrop_attempt = Column(Integer)
+    form_no = Column(String(10))
+    platform = Column(Enum)
+    ocr_push_status = Column(VARCHAR)
+    
+class UserPlatform(Base):
+    __table_args__ = {"schema": 'login_v4'}
+    __tablename__ = 'user_platform_access'
+    user_access_id_incr = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer)
+    platform_app_master_id = Column(Integer)
+    is_active = Column(Boolean)
+    updated_by = Column(TIMESTAMP)
+    created_dttm = Column(TIMESTAMP)
+    
+class UserPlatformMaster(Base):
+    __table_args__ = {"schema": 'login_v4'}
+    __tablename__ = 'platform_app_master'
+    user_access_id_incr = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer)
+    platform_app_master_id = Column(Integer)
+    is_active = Column(Boolean)
+    updated_by = Column(TIMESTAMP)
+    created_dttm = Column(TIMESTAMP)
+    platform = Column(VARCHAR)

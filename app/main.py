@@ -3,9 +3,7 @@ from flask_cors import CORS
 import os
 import requests
 
-# Get the current working directory
 current_directory = os.getcwd()
-# Get the parent directory
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 
 app = Flask(__name__, template_folder=parent_directory)
