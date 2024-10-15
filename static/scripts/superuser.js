@@ -86,16 +86,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({ clientId }),
                 });
 
-                if (response.ok) {
-                    const result = await response.json();  // Parse the response data as JSON
-                    console.log(result);
-                    // console.log(result.message);  // Log the message from the response
+                
+
+
+                const result = await response.json();
+
+                if (response.ok && response.status === 200) {
+                    console.log(result);  
                     window.location.href = `client_page.html?clientId=${clientId}`;
-                    // console.log("Done");
-                } else {
+                } else if (response.status === 400) {
                     console.error("Client ID submission failed.");
                     alert("Client ID not found.");
+                } else {
+                    console.error("Client id submission failed.", response.status);
+                    alert('Client id submission failed. Please try again.');
                 }
+
             } catch (error) {
                 console.error("Error submitting Client ID:", error);
                 alert('Error submitting Client ID to the server');

@@ -275,27 +275,26 @@ table td.loss-value {
   }
 
 
-  /* Style for the user info container */
+ /* Style for the user info container */
 .user-info-container {
     display: flex;
-    align-items: center; /* Vertically centers the items */
-    justify-content: flex-end; /* Aligns content to the right */
-    position: absolute;
-    right: 180px; /* Adjusts the distance from the right edge */
+    align-items: center; 
+    justify-content: center; 
+    position: relative;
     top: 50%;
     transform: translateY(-50%); /* Vertically centers the container */
     color: white;
   }
   
   .user-info-container h5 {
-    margin: 0 25px; /* Adds sufficient space between labels */
-    white-space: nowrap; /* Prevents text from wrapping */
-    font-size: 14px; /* Adjusts font size to fit more content */
+    margin: 0 25px; 
+    white-space: nowrap; 
+    font-size: 14px; 
   }
   
   .user-info-container span {
-    font-weight: normal; /* Makes the span text normal weight */
-    margin-left: 10px; /* Adds a little space between label and information */
+    font-weight: normal; 
+    margin-left: 10px; 
   }
   
 

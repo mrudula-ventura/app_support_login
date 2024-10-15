@@ -49,26 +49,5 @@
     <script src="../static/scripts/client_page.js">    </script>
     <a href="login.html"><button class="lo_btn">Logout</button></a>
    
-    <script>
-      // Function to get the client ID from the URL
-      function getClientId() {
-          const params = new URLSearchParams(window.location.search);
-          // const clientId = params.get('clientId');
-          // document.getElementById('client-id-display').textContent = clientId;
-          // console.log(clientId);
-          return params.get('clientId');
-      }
-  
-      // Function to open a new page and pass the client ID
-      function openPage(page) {
-          const clientId = getClientId();
-          if (clientId) {
-              window.location.href = `${page}?clientId=${clientId}`;
-          } else {
-              window.location.href = `${page}`;
-          }
-      }
-  </script>
-
 </body>
 </html>

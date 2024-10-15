@@ -30,15 +30,15 @@ body {
 /* Button container with grid layout */
 .btn-container {
 display: grid;
-grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
+grid-template-columns: repeat(3, 1fr); 
 gap: 20px; /* Space between the buttons */
-justify-items: center; /* Center the buttons horizontally */
-align-items: center; /* Center the buttons vertically */
-width: 90%; /* Set width for the container */
+justify-items: center; 
+align-items: center; 
+width: 90%; 
 max-width: 1200px; /* Avoid overly large container on big screens */
-margin: 0 auto; /* Center the entire container */
+margin: 0 auto; 
 position: absolute;
-top: 150px; /* Adjust the vertical position */
+top: 150px; 
 text-align: center;
 }
 
@@ -67,8 +67,8 @@ background-position: right center;
 /* Responsive design: stack buttons vertically on smaller screens */
 @media (max-width: 600px) {
 .btn-container {
-    grid-template-columns: 1fr; /* Stack buttons in a single column */
-    gap: 15px; /* Adjust gap for smaller screens */
+    grid-template-columns: 1fr; 
+    gap: 15px;
 }
 
 .btn {
@@ -81,24 +81,23 @@ background-position: right center;
 /* Style for the user info container */
 .user-info-container {
   display: flex;
-  align-items: center; /* Vertically centers the items */
-  justify-content: flex-end; /* Aligns content to the right */
-  position: absolute;
-  right: 180px; /* Adjusts the distance from the right edge */
+  align-items: center; 
+  justify-content: center; 
+  position: relative;
   top: 50%;
   transform: translateY(-50%); /* Vertically centers the container */
   color: white;
 }
 
 .user-info-container h5 {
-  margin: 0 25px; /* Adds sufficient space between labels */
-  white-space: nowrap; /* Prevents text from wrapping */
-  font-size: 14px; /* Adjusts font size to fit more content */
+  margin: 0 25px; 
+  white-space: nowrap; 
+  font-size: 14px; 
 }
 
 .user-info-container span {
-  font-weight: normal; /* Makes the span text normal weight */
-  margin-left: 10px; /* Adds a little space between label and information */
+  font-weight: normal; 
+  margin-left: 10px; 
 }
 
 
@@ -122,16 +121,6 @@ background-position: right center;
 }
 
 
-
-@media (max-width: 600px) {
-  .container {
-      width: 90%;
-  }
-}
-
-
-
-
 /*logout button*/
 .lo_btn{
   position: fixed;
@@ -153,16 +142,4 @@ background-position: right center;
 
 
 
-.back-btn{
-  position: fixed;
-  top: 10px;
-  left: 40px;
-  background-color: #6f42c1;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  z-index:2000;
-}
 

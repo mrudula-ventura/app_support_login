@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentAmountElem = document.getElementById('crnt_amnt_value');
     const purchaseAmountElem = document.getElementById('prchs_amnt_value');
     const xirrElem = document.getElementById('xirr_value');
-    const searchInput = document.getElementById('searchInput');
-    const noMatchesMessage = document.querySelector('.noMatchesMessage');
-    const tableContainer = document.querySelector('.table-container');
-
-    let mfData = [];
-    const rowsPerPage = 15; 
-    let currentPage = 1; 
+    const searchInput = document.getElementById('searchInput'); // Get the search bar element
+    const noMatchesMessage = document.querySelector('.noMatchesMessage'); // Get the no matches message element
+    const tableContainer = document.querySelector('.table-container'); // Get the table container element
+    
+    let mfData = []; // Store the fetched data globally for filtering later
 
     function getClientId() {
         const params = new URLSearchParams(window.location.search);
@@ -21,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchMFData() {
         const clientId = getClientId();
         try {
-            const response = await fetch(`http://localhost:5000/mf?clientId=${clientId}`, {
+            const response = await fetch(`http://localhost:5000/mf?clientId=${clientId}`, { 
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,11 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.ok) {
                 const data = await response.json();
 
+                // If no data, show a message
                 if (data.message) {
                     loader.style.display = 'none';
                     noMfMessage.style.display = 'block';
                     tableContainer.style.display = 'none';
-                    searchInput.style.display = 'none';
+                    searchInput.style.display='none';
                     console.log(data.message);
                     return;
                 }
@@ -43,31 +42,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 loader.style.display = 'none';
                 tableContainer.style.display = 'block';
 
-                mfData = data.Data; // Store fetched data for pagination
-                populateTable(); // Populate the table with the data
+                // Store the fetched data in a global variable to filter later
+                mfData = data.Data;
 
-                currentAmountElem.innerText = `Current Amount: ₹${mfData[0].C_amnt || 0}`;
-                purchaseAmountElem.innerText = `Purchase Amount: ₹${mfData[0].P_amt || 0}`;
-                xirrElem.innerHTML = `XIRR : ${mfData[0].XIRR}%`;
+                let totalCurrentAmount = mfData[0].C_amnt || 0;
+                let totalPurchaseAmount = mfData[0].P_amt || 0;
+                let xirrelem = mfData[0].XIRR;
+
+                populateTable(mfData.slice(1)); // Populate the table with the data
+
+                // Update the summary amounts
+                currentAmountElem.innerText = `Current Amount: ₹${totalCurrentAmount}`;
+                purchaseAmountElem.innerText = `Purchase Amount: ₹${totalPurchaseAmount}`;
+                xirrElem.innerHTML = `XIRR : ${xirrelem}%`;
 
             } else {
                 throw new Error('Failed to fetch data');
             }
         } catch (error) {
             console.error('Error fetching MF data:', error);
-            tableContainer.style.display = 'none';
+            tableContainer.style.display = 'none'; // Hide table and search input
             alert('Error fetching data.');
         }
     }
 
-    // Function to populate the table with data based on current page
-    function populateTable() {
+    // Function to populate the table
+    function populateTable(data) {
         tableBody.innerHTML = ''; // Clear the table before adding rows
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const paginatedData = mfData.slice(start, end); // Get the current page data
-
-        paginatedData.forEach(mf => {
+        data.forEach(mf => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${mf.Scheme_name}</td>
@@ -81,77 +83,34 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
             tableBody.appendChild(row);
         });
-
-        updatePaginationControls(); // Update pagination controls after populating the table
-    }
-
-    // Function to update pagination controls
-    function updatePaginationControls() {
-        const paginationContainer = document.querySelector('#pagination');
-        paginationContainer.innerHTML = ''; // Clear existing pagination
-
-        const totalPages = Math.ceil(mfData.length / rowsPerPage);
-
-        if (currentPage > 1) {
-            const prevButton = document.createElement('button');
-            prevButton.textContent = 'Previous';
-            prevButton.onclick = () => {
-                currentPage--;
-                populateTable();
-            };
-            paginationContainer.appendChild(prevButton);
-        }
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.onclick = () => {
-                currentPage = i;
-                populateTable();
-            };
-            if (i === currentPage) {
-                pageButton.disabled = true; // Disable the current page button
-            }
-            paginationContainer.appendChild(pageButton);
-        }
-
-        if (currentPage < totalPages) {
-            const nextButton = document.createElement('button');
-            nextButton.textContent = 'Next';
-            nextButton.onclick = () => {
-                currentPage++;
-                populateTable();
-            };
-            paginationContainer.appendChild(nextButton);
-        }
     }
 
     // Function to filter the table based on the search input
     function filterIpoTable() {
-        const filter = searchInput.value.toLowerCase();
-        const filteredData = mfData.filter(mf =>
+        const filter = searchInput.value.toLowerCase(); // Get the value of the search input
+        const filteredData = mfData.slice(1).filter(mf => 
             mf.Scheme_name.toLowerCase().includes(filter)
         );
 
         if (filteredData.length === 0) {
+            // No matches found, hide the table and show the no matches message
+            
             tableContainer.style.display = 'none';
             noMatchesMessage.style.display = 'block';
         } else {
+            // Matches found, show the table and hide the no matches message
             tableContainer.style.display = 'block';
             noMatchesMessage.style.display = 'none';
-            currentPage = 1; // Reset to the first page when filtering
-            mfData = filteredData; // Update mfData with filtered data
-            populateTable(); // Repopulate the table with the filtered data
+            populateTable(filteredData); // Repopulate the table with the filtered data
         }
     }
 
     // Attach the filter function to the search input's oninput event
     searchInput.addEventListener('input', filterIpoTable);
 
-   
+    // Fetch data when the page is loaded
     fetchMFData();
 });
-
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -171,5 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// On page load, display the client data
-window.onload = loadClientData;
+
+
+// Function to go back
+function goBack() {
+    window.history.back();
+}
