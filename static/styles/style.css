@@ -346,6 +346,9 @@ td {
   z-index:2000;
 }
 
+.back-btn:hover {
+  background-color: #5a3397;
+}
 #searchInput {
   width: 100%;
   padding: 12px 15px;

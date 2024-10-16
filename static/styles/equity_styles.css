@@ -22,23 +22,21 @@ h1 {
     margin-top: 20px;
 }
 
-/* Navbar style for fixed position at the top */
+/*navbar style*/
 .navbar {
     width: 100%;
-    padding:20px;
-
     background-color: rgba(12, 8, 8, 0.833);
     color: white;
-    
+    padding: 3px;
     position: fixed;
     top: 0;
     left: 0;
-    text-align: center;
-    font-size: 17px;
-    font-weight: bold;
-    z-index: 10;
-}
-
+    height: 7%;
+    text-align:center;
+    font-size:20px;
+    font-weight: inherit;
+    z-index: 4;
+  }
 /* New Button Container Styles */
 .button-container {
     display: flex;
@@ -275,7 +273,8 @@ table td.loss-value {
   }
 
 
- /* Style for the user info container */
+
+/* Style for the user info container */
 .user-info-container {
     display: flex;
     align-items: center; 
@@ -296,6 +295,8 @@ table td.loss-value {
     font-weight: normal; 
     margin-left: 10px; 
   }
+  
+  
   
 
   /* Logout button */

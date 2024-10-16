@@ -29,7 +29,7 @@ body {
   
   /* container for superusre page */
   .container {
-    background: rgba(175, 178, 181, 0.495);
+    background: rgba(202, 189, 189, 0.822);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -38,6 +38,13 @@ body {
     position: absolute;
     top: 70px; 
   }
+  
+  @media (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+  }
+
   
   /* Input group styling */
   .input-group {
@@ -61,8 +68,7 @@ body {
   }
   
   /* Button styles */
-  .btn, 
-  .get-details {
+  .btn {
     display: block;
     width: 70%;
     padding: 10px;
@@ -76,122 +82,24 @@ body {
     margin: auto;
   }
   
-  .btn-purple {
-    width: 40%;
-    background-color: #6f42c1;
-    color: white;
-    margin: auto;
-  }
-  
-  .btn:hover, 
-  .btn-purple:hover {
+
+  .btn {
     background-color: #218838;
   }
   
-  .btn-purple:hover {
-    background-color: #5a3397;
-  }
-  
-  
-  
-  
-  @media (max-width: 600px) {
-    .container {
-        width: 90%;
-    }
-  }
-  
-  .login-container {
-    width: 300px;
-    padding: 20px;
-    margin: 100px auto;
-    background: rgba(189, 170, 170, 0.614);
-    border-radius: 8px;
-    text-align: center;
-  }
-  
-  .company-logo {
+.company-logo {
     width: 50px;
     height: 50px; 
     margin-bottom: 20px;
   }
   
-  body {
-    font-family: Arial, sans-serif;
-  }
-  
-
-  
-
-
-  
-  .add-users-btn {
-    position: fixed;
-    top: 7px;
-    right: 10px;
-    background-color: #6f42c1;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  .add-users-btn:hover {
-    background-color: #5a3397;
-  }
-  
-  
-  .dropdown {
-    display: none; 
-    position:fixed;
-    top: 50px; 
-    right: 10px;
-    background-color: #ffffff; 
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .dropdown a {
-    display: block;
-    padding: 10px;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .dropdown a:hover {
-    background-color: #8e7e7eb7;
-  }
-  
-  .add-users-btn {
-    position: fixed;
-    top: 10px;
-    right: 120px;
-    background-color: #6f42c1;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    z-index: 1000;
-  }
-  
-  .add-users-btn:hover {
-    background-color: #5a3397;
-  }
-  
-  
-  
   /*logout button*/
   .lo_btn{
     position: fixed;
     top: 10px;
-    right: 40px;
+    right:40px;
     background-color: #6f42c1;
-    padding: 10px 15px;
+    padding: 8px 10px;
     border: none;
     border-radius: 5px;
     color: white;
@@ -218,3 +126,6 @@ body {
     z-index:2000;
   }
   
+  .back-btn:hover {
+    background-color: #5a3397;
+  }

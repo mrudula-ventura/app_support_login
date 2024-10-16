@@ -31,10 +31,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show sections only when data is fetched
     function showAllSections() {
-        const elementsToShow = document.querySelectorAll('h2, h1, .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container, #userInfo, .button-container');
+        const buttons=document.querySelector('.button-container')
+        const elementsToShow = document.querySelectorAll('h2, h1, .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container, #userInfo');
+        buttons.style.display='block';
         elementsToShow.forEach(element => {
-            element.style.display = 'block';  // Show all sections
+            element.style.display = 'grid';  
+            
         });
+
     }
 
 
@@ -183,7 +187,7 @@ function showMessage(message) {
         `;
     }
 
-    // Other functions like displayBankAccounts, displayNominees, displaySegments, displayDemats...
+  
 
     // Function to fetch user and bank account data using GET request
     async function fetchUserData() {
@@ -245,17 +249,17 @@ function showSection(section) {
 
     // Show the selected section
     if (section === 'bank') {
-        document.getElementById('bankHeading').style.display = 'block';
-        document.getElementById('bankCards').style.display = 'block';
+        document.getElementById('bankHeading').style.display = 'grid';
+        document.getElementById('bankCards').style.display = 'grid';
     } else if (section === 'nominee') {
-        document.getElementById('nomineeHeading').style.display = 'block';
-        document.getElementById('nomineeCards').style.display = 'block';
+        document.getElementById('nomineeHeading').style.display = 'grid';
+        document.getElementById('nomineeCards').style.display = 'grid';
     } else if (section === 'segment') {
-        document.getElementById('segmentHeading').style.display = 'block';
-        document.getElementById('segmentCards').style.display = 'block';
+        document.getElementById('segmentHeading').style.display = 'grid';
+        document.getElementById('segmentCards').style.display = 'grid';
     } else if (section === 'demat') {
-        document.getElementById('dematHeading').style.display = 'block';
-        document.getElementById('dematCards').style.display = 'block';
+        document.getElementById('dematHeading').style.display = 'grid';
+        document.getElementById('dematCards').style.display = 'grid';
     }
 
     // Update button active state

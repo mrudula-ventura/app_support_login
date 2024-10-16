@@ -8,9 +8,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput'); // Get the search bar element
     const noMatchesMessage = document.querySelector('.noMatchesMessage'); // Get the no matches message element
     const tableContainer = document.querySelector('.table-container'); // Get the table container element
+    const paginationContainer = document.querySelector('#pagination'); // Pagination container
     
-    let mfData = []; // Store the fetched data globally for filtering later
-
+    let mfData = [];
+    const rowsPerPage = 15; // Number of rows per page
+    let currentPage = 1; // Initial page
+    
     function getClientId() {
         const params = new URLSearchParams(window.location.search);
         return params.get('clientId');
@@ -68,8 +71,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to populate the table
     function populateTable(data) {
+        tableBody.innerHTML = ''; // Clear the table
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = data.slice(start, end); 
         tableBody.innerHTML = ''; // Clear the table before adding rows
-        data.forEach(mf => {
+      
+        paginatedData.forEach(mf => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${mf.Scheme_name}</td>
@@ -83,6 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
             tableBody.appendChild(row);
         });
+
+        updatePaginationControls(data);
     }
 
     // Function to filter the table based on the search input
@@ -108,7 +118,65 @@ document.addEventListener('DOMContentLoaded', function () {
     // Attach the filter function to the search input's oninput event
     searchInput.addEventListener('input', filterIpoTable);
 
-    // Fetch data when the page is loaded
+   
+    function updatePaginationControls(data) {
+        paginationContainer.innerHTML = ''; // Clear pagination controls
+
+        const totalPages = Math.ceil(data.length / rowsPerPage);
+        if (currentPage > 1) {
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Previous';
+            prevButton.onclick = () => {
+                currentPage--;
+                populateTable(data);
+            };
+            paginationContainer.appendChild(prevButton);
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.onclick = () => {
+                currentPage = i;
+                populateTable(data);
+            };
+            if (i === currentPage) {
+                pageButton.disabled = true; 
+            }
+            paginationContainer.appendChild(pageButton);
+        }
+
+        if (currentPage < totalPages) {
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Next';
+            nextButton.onclick = () => {
+                currentPage++;
+                populateTable(data);
+            };
+            paginationContainer.appendChild(nextButton);
+        }
+    }
+
+    function filterTable() {
+        const filter = searchInput.value.toLowerCase();
+        const filteredData = mfData.slice(1).filter(mf => 
+            mf.Scheme_name.toLowerCase().includes(filter)
+        );
+
+        currentPage = 1;
+
+        if (filteredData.length === 0) {
+            tableContainer.style.display = 'none';
+            noMatchesMessage.style.display = 'block';
+        } else {
+            tableContainer.style.display = 'block';
+            noMatchesMessage.style.display = 'none';
+            populateTable(filteredData);
+        }
+    }
+
+    searchInput.addEventListener('input', filterTable);
+
     fetchMFData();
 });
 

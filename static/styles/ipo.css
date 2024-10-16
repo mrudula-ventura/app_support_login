@@ -8,19 +8,20 @@ body {
   background-color: #f5f5f5;
 }
 
-/* Navbar style for fixed position at the top */
+/*navbar style*/
 .navbar {
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
   color: white;
-  padding: 20px;
+  padding: 3px;
   position: fixed;
   top: 0;
   left: 0;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  z-index: 10;
+  height: 7%;
+  text-align:center;
+  font-size:20px;
+  font-weight: inherit;
+  z-index: 4;
 }
 
 /* Search bar */

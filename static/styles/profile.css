@@ -1,3 +1,10 @@
+/* General body styles for all pages */
+body {
+  font-family: Arial, sans-serif;
+
+}
+
+
 /* Style the message when no data is available */
 .no-data-message {
   color: white;
@@ -8,9 +15,9 @@
 }
 
 /* Hide all elements when message is displayed */
-.hide-all {
-  display: none !important;
-}
+/* .hide-all {
+  display: none ;
+} */
 
 /* Center headlines and style them */
 .centered-headline {
@@ -23,20 +30,20 @@
 
 
 
-
-/* Other existing styles */
+/*navbar style*/
 .navbar {
   width: 100%;
   background-color: rgba(12, 8, 8, 0.833);
   color: white;
-  padding: 20px;
+  padding: 3px;
   position: fixed;
   top: 0;
   left: 0;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  z-index: 10;
+  height: 7%;
+  text-align:center;
+  font-size:20px;
+  font-weight: inherit;
+  z-index: 4;
 }
 
 /* Logout button */
@@ -77,8 +84,8 @@
 
 /* Container for all cards */
 .bank-cards-container, .nominee-cards-container, .segment-cards-container, .demat-cards-container {
-  display: flex;
-  flex-direction:column;
+  display: grid  ;
+  grid-template-columns: repeat(5,1fr);
   flex-wrap: wrap;
   gap: 8px;
 }
@@ -86,14 +93,15 @@
 
 .bank-card, .nominee-card, .segment-card, .demat-card {
   background-color: #f9f9f9;
+  margin: 0;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  width: 18%;  /* Adjust as needed */
+  width: 17%;  /* Adjust as needed */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
+
+  min-width: 250px;
  
 }
 
@@ -256,9 +264,10 @@ h1 {
   margin-top: 0;
 }
 
-.cards-container > div {
-  display: none; /* Initially hide all sections */
-}
+/* .cards-container > div { */
+  /* display: none; Initially hide all sections */
+/* }   */
+
 
 .button-container {
   margin-bottom: 20px;
@@ -274,7 +283,7 @@ h1 {
 .tab-btn {
   background-color: #6f42c1;
   color: white;
-  padding: 10px 20px;
+  padding: 10px 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -291,10 +300,6 @@ h1 {
   background-color: #39245c; /* Color change for active button */
 }
 
-/* Hidden sections are only hidden; their position is retained */
-.hidden {
-  display: none;
-}
 
 /* Ensure the sections maintain layout without affecting the button positions */
 .active-section {
@@ -305,25 +310,23 @@ h1 {
 /* Style for the user info container */
 .user-info-container {
   display: flex;
-  align-items: center; /* Vertically centers the items */
-  justify-content: flex-end; /* Aligns content to the right */
-  position: absolute;
-  right: 180px; /* Adjusts the distance from the right edge */
+  align-items: center; 
+  justify-content: center; 
+  position: relative;
   top: 50%;
   transform: translateY(-50%); /* Vertically centers the container */
-  font-family: Arial, sans-serif;
   color: white;
 }
 
 .user-info-container h5 {
-  margin: 0 25px; /* Adds sufficient space between labels */
-  white-space: nowrap; /* Prevents text from wrapping */
-  font-size: 14px; /* Adjusts font size to fit more content */
+  margin: 0 25px; 
+  white-space: nowrap; 
+  font-size: 14px; 
 }
 
 .user-info-container span {
-  font-weight: normal; /* Makes the span text normal weight */
-  margin-left: 10px; /* Adds a little space between label and information */
+  font-weight: normal; 
+  margin-left: 10px; 
 }
 
 

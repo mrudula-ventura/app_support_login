@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function searchClientId() {
         const emailOrPhone = document.getElementById('email-mobile').value;
-        const clientIdDisplay = document.getElementById('client-id-display');
+        // const clientIdDisplay = document.getElementById('client-id-display');
 
         if (!emailOrPhone) {
             alert('Please enter an email or phone number');

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Information Cards</title>
+  <link rel="stylesheet" href="../static/styles/SSO.css">
+</head>
+<body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+
+
+    <div class="navbar">
+        <div class="user-info-container">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
+        <div class="back-btn-container">
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+  <!-- <div id="account-cards" class="card"></div> -->
+
+   <!-- Card to display account information (Initially Hidden) -->
+ <div id="account-card" ></div>
+
+ <!-- Message Section -->
+ <div id="message" class="hidden"></div>
+
+  <a href="login.html"><button class="lo_btn">Logout</button></a>
+
+  <script src="../static/scripts/SSO.js"></script>
+</body>
+</html>
