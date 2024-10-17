@@ -157,7 +157,7 @@ body {
     background-color: #5a3397;
   }
 /* Style for the summary card */
-#position-summary {
+#positionSummary {
   display: flex; 
   justify-content: space-around; 
   align-items: center; 
@@ -172,7 +172,7 @@ body {
 }
 
 /* Common styles for all h3 fields */
-#position-summary h3 {
+#positionSummary h3 {
   font-size: 18px; 
   font-weight: bold; 
   text-align: center; 

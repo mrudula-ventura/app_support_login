@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     noMfMessage.style.display = 'block';
                     tableContainer.style.display = 'none';
                     searchInput.style.display='none';
+                    positionSummary.style.display='none';
                     console.log(data.message);
                     return;
                 }
