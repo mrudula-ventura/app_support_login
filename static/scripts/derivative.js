@@ -1,6 +1,16 @@
+
     // Set initial active tab
-    document.getElementById("holding-list").classList.add("active");
- 
+    document.getElementById("positions-tab").classList.add("active");
+    document.getElementById("positions").classList.add("active");
+
+    function showTab(tab) {
+        document.querySelectorAll('.tab').forEach(function (el) { el.classList.remove('active'); });
+        document.querySelectorAll('.nav').forEach(function (el) { el.classList.remove('active'); });
+
+        document.getElementById(tab).classList.add('active');
+        document.getElementById(tab + '-tab').classList.add('active');
+    }
+    
     function getClientId() {
         const params = new URLSearchParams(window.location.search);
         return params.get('clientId');

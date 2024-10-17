@@ -13,15 +13,13 @@ body {
     color: #333;
 }
 
-h2{
-   
+ h2 {
+
     color: #333;
     text-align: center;
 }
 
 h1 {
-    color: #333;
-    text-align: center;
     margin-top: 20px;
 }
 
@@ -45,8 +43,7 @@ h1 {
 
 /* Styles for the summary card */
 .summary-card {
-    margin-top: 55px;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #f1e8e8b3;
     font-size: large;
     border-radius: 10px;
@@ -89,7 +86,6 @@ th {
 td {
     background-color: #ccc;
 }
-
 /* Colors for Profit and Loss */
 .profit {
     color: #28a745;
@@ -110,17 +106,21 @@ table tbody tr:hover {
 .nav.active, .nav:hover {
     background-color: #1e1e1e;
 }
-/* Header and Footer Styles */
-header {
+
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
     background-color: #2a2a2a;
     color: #fff;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 24px;
-    border-bottom: 3px solid #1e1e1e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
-
-
+button:hover {
+    background-color: #1a1a1a;
+}
 /* Table-Specific Styles */
 table th {
     background-color:#007BFF;
@@ -154,7 +154,6 @@ table td.loss-value {
 }
 
 
-
 /* Back button */
 .back-btn {
     position: fixed;
@@ -172,25 +171,6 @@ table td.loss-value {
   .back-btn:hover {
     background-color: #5a3397;
   }
-
-  /* Logout button */
-.lo_btn {
-    position: fixed;
-      top: 6px;
-      right:40px;
-      background-color: #6f42c1;
-      padding: 8px 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    z-index: 2000;
-  }
-  
-  .lo_btn:hover {
-    background-color: #5a3397;
-  }
-
 
 
 /* Style for the user info container */

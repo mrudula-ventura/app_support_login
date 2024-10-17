@@ -1,45 +1,40 @@
-// Function to show loader
-function showLoader() {
-    document.getElementById('loader').style.display = 'flex';
-}
-
-// Function to hide loader
-function hideLoader() {
-    document.getElementById('loader').style.display = 'none';
-}
-
-// Function to display a message
-function showMessage(message) {
-    const messageElement = document.getElementById('message');
-    messageElement.textContent = message;
-    messageElement.classList.remove('hidden');
-}
 
 // Function to display account information in a card
 function displayAccountInfo(account) {
     const card = document.getElementById('account-card');
+    
+
+       // Extract the PLATFORM field, parse it as a proper array, and join the elements
+       let platformDisplay = 'N/A';
+       try {
+           const platformArray = JSON.parse(account.PLATFORM.replace(/'/g, '"'));  // Replace single quotes with double quotes for JSON parsing
+           platformDisplay = Array.isArray(platformArray) ? platformArray.join(', ') : 'N/A';
+       } catch (error) {
+           console.error('Error parsing platform:', error);
+       }
+    
     card.innerHTML = `
-        <h3>Account Status: ${account.ACCOUNT_STATUS}</h3>
-        <p><strong>Created Date:</strong> ${new Date(account.CREATED_DTTM).toLocaleString()}</p>
-        <p><strong>Google Auth Enabled:</strong> ${account.GOOGLE_AUTH_ENABLED ? 'Yes' : 'No'}</p>
-        <p><strong>Account Active:</strong> ${account.IS_ACTIVE ? 'Yes' : 'No'}</p>
-        <p><strong>BAU Account:</strong> ${account.IS_BAU ? 'Yes' : 'No'}</p>
-        <p><strong>Exclusive Account:</strong> ${account.IS_EXCLUSIVE ? 'Yes' : 'No'}</p>
-        <p><strong>Migration Source:</strong> ${account.MIGRATION_SOURCE}</p>
-        <p><strong>PAN:</strong> ${account.PAN}</p>
-        <p><strong>Platform PIN Set:</strong> ${account.pin_set ? 'Yes' : 'No'}</p>
+        <h3>Account Status: ${account.ACCOUNT_STATUS || 'N/A'}</h3>
+        <p><strong>Created Date:</strong> ${account.CREATED_DTTM || 'N/A'}</p>
+        <p><strong>Google Auth Enabled:</strong> ${account.GOOGLE_AUTH_ENABLED ? 'True' : 'False'}</p>
+        <p><strong>Account Active:</strong> ${account.IS_ACTIVE ? 'True' : 'False'}</p>
+        <p><strong>BAU Account:</strong> ${account.IS_BAU ? 'True' : 'False'}</p>
+        <p><strong>Exclusive Account:</strong> ${account.IS_EXCLUSIVE ? 'True' : 'False'}</p>
+        <p><strong>Migration Source:</strong> ${account.MIGRATION_SOURCE || 'N/A'}</p>
+        <p><strong>PAN:</strong> ${account.PAN || 'N/A'}</p>
+        <p><strong>Platform:</strong> ${platformDisplay}</p>
+        <p><strong>Platform PIN Set:</strong> ${account.pin_set ? 'True' : 'False'}</p>
     `;
-    card.classList.remove('hidden');  // Show the card
 }
 
+
 function getClientId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('clientId');
-}
+    const params = new URLSearchParams(window.location.search);
+    return params.get('clientId');
+  }
 // Function to fetch account data using a GET request
 async function fetchAccountData() {
   const clientId = getClientId();
-    showLoader();  // Show loader before fetching data
     try {
         const response = await fetch(`http://localhost:5000/sso?clientId=${clientId}`, {
             method: 'GET',
@@ -52,8 +47,9 @@ async function fetchAccountData() {
             const data = await response.json();
 
             // Check if data contains account information
-            if (data.account_info) {
-                displayAccountInfo(data.account_info);
+            if (data.data) {
+                displayAccountInfo(data.data[0]);
+                console.log(data.data[0])
             } else if (data.message) {
                 showMessage(data.message);  // Display any message from the backend
             }
@@ -65,8 +61,36 @@ async function fetchAccountData() {
         console.error('Error fetching data:', error);
         showMessage('Error fetching data.');
     } finally {
-        hideLoader();  // Hide loader after data is fetched
+
     }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Retrieve the data from localStorage
+    const storedData = localStorage.getItem('clientData');
+    
+    if (storedData) {
+        const clientData = JSON.parse(storedData);
+        
+        // Display the data on this page
+        document.getElementById('client-id-display').innerText = clientData.client_id;
+        document.getElementById('client-full-name').innerText = clientData.Full_Name;
+        document.getElementById('client-email').innerText = clientData.Email;
+        document.getElementById('client-mobile').innerText = clientData["Mobile_No."];
+    } else {
+        console.error('No data found in localStorage.');
+    }
+});
+
+
+
+
+
+
+
+function goBack() {
+    window.history.back();
 }
 
 // Call the fetch function when the page loads

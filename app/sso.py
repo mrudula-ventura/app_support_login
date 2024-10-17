@@ -35,7 +35,7 @@ def sso_details():
             "IS_EXCLUSIVE": is_exclusive,
             "ACCOUNT_STATUS": account_status if account_status else None,
             "MIGRATION_SOURCE": migration_source if migration_source else None, 
-            "CREATED_DTTM": created_dttm if created_dttm else None,
+            "CREATED_DTTM": created_dttm.strftime('%Y-%m-%d %H:%M:%S') if created_dttm else None,
             "PLATFORM": f'{platform_details}'
         })
     print(sso_details)

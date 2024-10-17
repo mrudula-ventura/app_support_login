@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivative Dashboard</title>
+    <link rel="stylesheet" href="../static/styles/derivative.css">
+</head>
+
+<body  style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+
+    <div class="navbar">
+        <div class="user-info-container">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
+        <div class="back-btn-container">
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+     <!-- Button Container -->
+     <div class="button-container">
+        <div class="btn" id="positions-tab" onclick="showTab('positions')">Positions</div>
+        <div class="btn" id="holdings-tab" onclick="showTab('holdings')">Holdings</div>
+    </div>
+
+    <!-- Position Tab Content -->
+     
+    <div id="positions">
+        <h2>Position Summary</h2>
+        <div id="position-summary" class="summary-card"></div>
+
+        <h2>Open Positions</h2>
+        <table id="open-position-list">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>PnL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Open Position Data Will Be Injected Here -->
+            </tbody>
+        </table>
+
+        <h2>Closed Positions</h2>
+        <table id="closed-position-list">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Action</th>
+                    <th>Quantity</th>
+                    <th>PnL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Closed Position Data Will Be Injected Here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Holding Tab Content
+    <div id="holdings" class="tab">
+        <h2>Holding Summary</h2>
+        <div id="holding-summary" class="summary-card"></div>
+
+        <h2>Holding List</h2>
+        <table id="holding-list" class="table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Quantity</th>
+                    <th>Avg. Price</th>
+                    <th>LTP</th>
+                    <th>Current Value</th>
+                    <th>Day PnL</th>
+                    <th>Overall PnL</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div> -->
+    <a href="login.html"><button class="lo_btn">Logout</button></a>
+
+    <!-- Script Section -->
+    <script src="../static/scripts/derivative.js">
+    </script>
+    
+</body>
+
+</html>

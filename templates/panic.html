@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panic Table</title>
+    <link rel="stylesheet" href="../static/styles/panic.css">
+</head>
+<body style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
+    
+
+    <div class="navbar">
+        <div class="user-info-container">
+            <h5>Client ID: <span id="client-id-display"></span></h5> 
+            <h5>Full Name: <span id="client-full-name"></span></h5>
+            <h5>Email: <span id="client-email"></span></h5>
+            <h5>Mobile No: <span id="client-mobile"></span></h5>
+        </div>
+        <div class="back-btn-container">
+          <button class="back-btn" onclick="goBack()">Back</button>
+        </div>
+    </div>
+
+    <!-- <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">Loading...</p>
+    </div> -->
+    
+    <input type="text" id="searchInput" placeholder="Search IPO" oninput="filterIpoTable()" >
+
+    <div class="no-data-message" >This user has no data.</div>
+    
+    <div class="table-container" > <!-- Hidden initially -->
+       
+
+        <table id="panic-table"> <!-- Hidden initially -->
+            <thead>
+                <tr>
+                    <th>URl</th>
+                    <th>Page Id</th>
+                    <th>response</th>
+                    <th>timestamp</th>
+                    <th>Latency</th>
+                    <th>Request Payload</th>
+                    <th>Response Payload</th>
+                    <th>Device Type</th>
+                    <th>Section</th>
+                </tr>
+            </thead>
+            <tbody>
+              <!-- dynamic additions of rows -->
+            </tbody>
+        </table>
+
+        <div id="pagination"></div>
+    </div>
+
+    <script src=""></script>
+    <a href="login.html"><button class="lo_btn">Logout</button></a>
+   
+</body>
+</html>

@@ -18,7 +18,7 @@ def wallet_details():
             amount as "amount",
             ventura_ref_no as "Reference no",
             case
-                when hdfc_create_payment_res_data::text like '%SUCCESS%' then 'SUCCESS'
+                when hdfc_status_check_polling_res_data::text like '%SUCCESS%' then 'SUCCESS'
                 else 'FAILED'
             end as "Bank Status",
             accord_hdfc_data_req_res_data::text as "accord status",
@@ -37,8 +37,14 @@ def wallet_details():
                 when trans_status = 'SUCCESS' then 'SUCCESS'
                 when trans_status in ('FAILED', 'REJECTED') then 'FAILED'
             end as "Bank Status",
-            'NA' as "accord status",
-            'NA' as "RS Status",
+            case
+                when trans_status = 'SUCCESS' then 'SUCCESS'
+                when trans_status in ('FAILED', 'REJECTED') then 'FAILED'
+            end as "accord status",
+            case
+                when trans_status = 'SUCCESS' then 'SUCCESS'
+                when trans_status in ('FAILED', 'REJECTED') then 'FAILED'
+            end as "RS Status",
             trans_status as "final Status",
             wallet.payment_request.client_code
         from
@@ -54,7 +60,10 @@ def wallet_details():
             wallet.netbanking_txns.total_amount as "amount",
             wallet.netbanking_txns.mvp_ref_no as "Reference no",
             bank_status as "Bank Status",
-            'NA' as "accord status",
+            case
+            when final_status = 'success' then 'SUCCESS'
+            when final_status = 'failed'  then 'FAILED'
+            end as "accord status",
             rs_status as "RS Status",
             final_status as "final Status",
             wallet.netbanking_txns.client_id
@@ -66,9 +75,18 @@ def wallet_details():
             'PAYOUT' as "Transaction type",
             payout_amount as "amount",
             payout_req_id_incr::text as "Reference no",
-            'NA' as "Bank Status",
-            'NA' as "accord status",
-            'NA' as "RS Status",
+            case
+                when payout_status = 'processed' then 'SUCCESS'
+                when payout_status = 'cancelled' then 'FAILED'
+            end as "Bank Status",
+            case
+                when payout_status = 'processed' then 'SUCCESS'
+                when payout_status = 'cancelled' then 'FAILED'
+            end as "accord status",
+            case
+                when payout_status = 'processed' then 'SUCCESS'
+                when payout_status = 'cancelled' then 'FAILED'
+            end as "RS Status",
             case
                 when payout_status = 'processed' then 'SUCCESS'
                 when payout_status = 'cancelled' then 'FAILED'
@@ -76,9 +94,34 @@ def wallet_details():
             wallet.payout_txns.client_code
         from
             wallet.payout_txns
+        union
+        select
+            wallet.accord_bank_payment_response.created_date as "Timestamp",
+            mode_of_payment as "Transaction type",
+            amount as "amount",
+            ref_no as "Reference no",
+            case
+                when is_rs_updated = 'true' then 'SUCCESS'
+                when is_rs_updated  = 'false' then 'FAILED'
+            end as "Bank Status",
+            case
+                when is_rs_updated = 'true' then 'SUCCESS'
+                when is_rs_updated  = 'false' then 'FAILED'
+            end as "accord status",
+            case
+                when is_rs_updated = 'true' then 'SUCCESS'
+                when is_rs_updated  = 'false' then 'FAILED'
+            end as "RS Status",
+            case
+                when is_rs_updated = 'true' then 'SUCCESS'
+                when is_rs_updated  = 'false' then 'FAILED'
+            end as "final Status",
+            wallet.accord_bank_payment_response.client_code    
+        from
+            wallet.accord_bank_payment_response
         ) as sub_query
-        where client_code like upper(:client_code)
-        order by 1 desc;
+        where client_code ='AA1679'
+        order by 1 desc
     '''
 
     try:
