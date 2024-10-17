@@ -46,8 +46,7 @@ document.getElementById('dltUser').addEventListener('click', function () {
 });
 
 function validateEmail(email) {
-    const domain = "@venturasecurities.com";
-    return email.endsWith(domain);
+    return email.includes('@');
 }
 
 

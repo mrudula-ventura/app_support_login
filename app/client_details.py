@@ -33,7 +33,7 @@ def get_client_id_from_mobile_email():
             "message": "Email / Mobile does not exist", 
             "clientId": None, 
             "clientId": None
-        }), 404
+        }), 400
     return jsonify({"clientId": sso_query[0]})
 
 def get_client_id_details():
@@ -42,10 +42,16 @@ def get_client_id_details():
     client_id = data['clientId']
     if client_id:
         client_id_backend = sso_session.query(UserInfo.client_id, UserInfo.first_name, UserInfo.last_name, UserInfo.mobile_no, UserInfo.email_id).filter(func.lower(UserInfo.client_id) == func.lower(client_id)).first()
+        if not client_id_backend:
+            return jsonify({"Message": "No client id in sso db"}), 400
         client_id_, f_name, l_name, mobile, email = client_id_backend
         l_name_decrypt = decrypt(l_name, pr_key)
         email_decrypt = decrypt(email, pr_key)
         mobile_decrypt = decrypt(mobile, pr_key)
-        if not client_id_backend:
-            return None
-        return jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile_No.": mobile_decrypt})
+        return jsonify({"client_id": client_id, "Full_Name": f_name + ' ' + l_name_decrypt, "Email": email_decrypt, "Mobile_No.": mobile_decrypt}), 200
+
+
+
+
+
+
