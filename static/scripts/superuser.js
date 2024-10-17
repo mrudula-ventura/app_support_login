@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = `client_page.html?clientId=${clientId}`; 
                     } else {
                         console.error("Client ID not found for the provided email/phone number.");
-                        alert("Client ID not found.");
+                        document.getElementById('error-message').textContent = "Client ID not found";;
                     }
                 } else {
                     console.error("Failed to fetch Client ID from the server.");
