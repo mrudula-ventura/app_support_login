@@ -2,11 +2,11 @@ from models import UserInfo, UserPlatform, UserPlatformMaster
 from db_connection import sso_session
 from sqlalchemy import func
 from ecncryption_decryption import get_keys, encrypt, decrypt
-from flask import jsonify
+from flask import jsonify, request
 from datetime import date, datetime
 
 def sso_details():
-    client_id = 'aa1255'
+    client_id = request.args.get('clientId')
     sso_details = []
     platform_details = []
     current_year = datetime.now().year
