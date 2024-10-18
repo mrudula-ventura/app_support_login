@@ -158,6 +158,14 @@ h2 {
   font-weight: bold;
 }
 
+h1 {
+  text-align: center;
+  color: rgb(18, 17, 17); /* Keep the color black as you desire */
+  font-weight: bold;
+  font-size: 10px;
+
+}
+
 
 /* Status colors */
 .status-active {

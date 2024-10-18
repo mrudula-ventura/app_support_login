@@ -1,26 +1,31 @@
-    // Set initial active tab
+  // Set initial active tab
     document.getElementById("holding-list").classList.add("active");
  
     function getClientId() {
         const params = new URLSearchParams(window.location.search);
         return params.get('clientId');
     }
-    
+    const loader = document.querySelector('.loader-container');
     async function loadData() {
+
+        
+        loader.style.display = 'flex';  
+
         const clientId = getClientId();
         const response = await fetch(`http://localhost:5000/get_equity?clientId=${clientId}`, { 
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         const data = await response.json();
-
+        loader.style.display = 'none';  // Ensure loader is hidden
+    
         // Display Holding Summary
         const holdingSummary = data[1].result;
         const dailyPLClass = holdingSummary.d_pl >= 0 ? 'profit' : 'loss';
         const totalPLClass = holdingSummary.t_pl >= 0 ? 'profit' : 'loss';
-
+    
         document.getElementById("holding-summary").innerHTML = `
             <div class="summary-row">
                 <div class="summary-item">
@@ -41,10 +46,15 @@
                 </div>
             </div>
         `;
-
+    
         // Display Holding List
         const holdingList = data[0][8];
-        if (Array.isArray(holdingList)) {
+    
+        if (!Array.isArray(holdingList) || holdingList.length === 0) {
+            // If holdingList is not an array or it's empty, show "No holdings available"
+            document.querySelector("#holding-list tbody").innerHTML = '<tr><td colspan="8" class="no-data">No holdings available.</td></tr>';
+        } else {
+            // If there are holdings, map them to the table
             document.querySelector("#holding-list tbody").innerHTML = holdingList.map(holding => {
                 const profitClass = holding[16] > 0 ? 'profit' : 'loss';
                 const dayProfitClass = holding[14] > 0 ? 'profit' : 'loss';
@@ -66,54 +76,9 @@
                         <td class="${profitClass}">${holding[17]}%</td>
                     </tr>`;
             }).join('');
-        } else {
-            document.querySelector("#holding-list tbody").innerHTML = '<tr><td colspan="8" class="no-data">No holdings available.</td></tr>';
-        }
-
-        // Display Position Summary
-        const positionSummary = data[3].result;
-        document.getElementById("position-summary").innerHTML = `
-            <strong>Net Obligation:</strong> ${positionSummary.net_obl}<br>
-            <strong>Total Profit/Loss:</strong> ${positionSummary.pl}
-        `;
-
-        // Display Open Positions
-        const openPositions = data[2].result.positions.opn_pos;
-        if (Array.isArray(openPositions) && openPositions.length > 0) {
-            document.querySelector("#open-position-list tbody").innerHTML = openPositions.map(position => {
-                const profitClass = position.pnl > 0 ? 'profit' : 'loss';
-                return `
-                    <tr>
-                        <td>${position.sym}</td>
-                        <td>${position.exch}</td>
-                        <td>${position.action}</td>
-                        <td>${position.t_qty}</td>
-                        <td class="${profitClass}">${position.pnl}</td>
-                    </tr>`;
-            }).join('');
-        } else {
-            document.querySelector("#open-position-list tbody").innerHTML = '<tr><td colspan="5" class="no-data">No open positions.</td></tr>';
-        }
-
-        // Display Closed Positions
-        const closedPositions = data[2].result.positions.cls_pos;
-        if (Array.isArray(closedPositions) && closedPositions.length > 0) {
-            document.querySelector("#closed-position-list tbody").innerHTML = closedPositions.map(position => {
-                const profitClass = position.pnl > 0 ? 'profit' : 'loss';
-                return `
-                    <tr>
-                        <td>${position.sym}</td>
-                        <td>${position.exch}</td>
-                        <td>${position.action}</td>
-                        <td>${position.t_qty}</td>
-                        <td class="${profitClass}">${position.pnl}</td>
-                    </tr>`;
-            }).join('');
-        } else {
-            document.querySelector("#closed-position-list tbody").innerHTML = '<tr><td colspan="5" class="no-data">No closed positions.</td></tr>';
         }
     }
-
+    
 
     
 document.addEventListener('DOMContentLoaded', () => {

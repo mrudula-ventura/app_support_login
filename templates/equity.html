@@ -9,7 +9,7 @@
 </head>
 
 <body  style="background-image: url('../static/styles/lbg.webp'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;">
-
+  
     <div class="navbar">
         <div class="user-info-container">
             <h5>Client ID: <span id="client-id-display"></span></h5> 
@@ -20,6 +20,12 @@
         <div class="back-btn-container">
           <button class="back-btn" onclick="goBack()">Back</button>
         </div>
+    </div>
+
+
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">Loading...</p>
     </div>
 
 
@@ -46,6 +52,8 @@
             <tbody></tbody>
         </table>
     </div>
+
+
     <a href="login.html"><button class="lo_btn">Logout</button></a>
 
     <!-- Script Section -->

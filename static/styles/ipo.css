@@ -195,5 +195,27 @@ td {
   margin-left: 10px; 
 }
 
+/* Style for the sort buttons */
+.sort-arrow {
+  background: transparent; /* Remove background color */
+  border: none; /* Remove border */
+  font-size: 14px; /* Adjust font size for the arrows */
+  padding: 0; /* Remove padding */
+  margin-left: 1px; /* Add minimal space between buttons */
+  cursor: pointer; /* Change cursor to pointer */
+  color: rgb(251, 249, 249); /* Set arrow color */
+  display: inline-block; /* Ensure buttons are inline */
+  width: auto;
+  height: auto;
+}
 
+/* Ensure the buttons align properly within the header */
+th {
+  white-space: nowrap; /* Prevent wrapping inside the th */
+  text-align: left; /* Ensure the text aligns left */
+}
 
+th .sort-arrow-container {
+  display: inline-flex; /* Display buttons side by side */
+  align-items: center; /* Vertically center the buttons */
+}

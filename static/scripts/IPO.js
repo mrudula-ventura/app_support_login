@@ -2,7 +2,6 @@ let ipoData = [];
 const rowsPerPage = 15; 
 let currentPage = 1;
 
-
 // Function to load client data from localStorage
 function loadClientData() {
     const clientData = JSON.parse(localStorage.getItem('clientData'));
@@ -19,11 +18,9 @@ function loadClientData() {
 // On page load, display the client data
 window.onload = loadClientData;
 
-
 // Function to display the IPO table
 function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
-    const tableHead = document.querySelector('#ipo-table');
     const loader = document.querySelector('.loader-container');
     const searchInput = document.getElementById('searchInput');
     const noIposMessage = document.querySelector('.no-ipos-message');
@@ -47,14 +44,12 @@ function displayIpoTable(filteredData = ipoData) {
             <td>${ipo.allocated}</td>
             <td>${ipo.allotment_status}</td>
             <td>${ipo.allotment_shares}</td>
-
-
         `;
         tableBody.appendChild(row);
     });
 
     // Hide the loader, show the table and search input
-     loader.style.display = 'none';
+    loader.style.display = 'none';
     if (filteredData.length > 0) {
         tableContainer.style.display = 'block';
         searchInput.style.display = 'block';
@@ -115,9 +110,6 @@ function getClientId() {
     return params.get('clientId');
 }
 
-
-
-
 // Function to fetch IPO data from the backend
 async function fetchIPOData() {
     const clientId = getClientId();
@@ -157,7 +149,6 @@ async function fetchIPOData() {
     }
 }
 
-
 // Function to filter the IPO table based on search input
 function filterIpoTable() {
     const searchValue = document.getElementById('searchInput').value.toLowerCase();
@@ -168,28 +159,69 @@ function filterIpoTable() {
 
     currentPage = 1;
 
-    // Always keep the search bar visible
-    const searchInput = document.getElementById('searchInput');
-    searchInput.style.display = 'block';
-
     if (filteredData.length === 0) {
-      
-
         const noIposMessage = document.querySelector('.no-ipos-message');
         noIposMessage.textContent = 'No IPOs match your search.';
         noIposMessage.style.display = 'block';
-        
-        
         const tableContainer = document.querySelector('.table-container');
         tableContainer.style.display = 'none';  // Hide the table if no matches
     } else {
-       
         const noIposMessage = document.querySelector('.no-ipos-message');
         noIposMessage.style.display = 'none';
-        
         displayIpoTable(filteredData); // Display filtered IPO data
     }
 }
+
+// Sorting function for strings and mandate date
+function sortTable(column, direction) {
+    const filteredData = ipoData.slice();  // Create a copy of the ipoData array
+
+    // Sort only the filtered data for the current page
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedIpoData = filteredData.slice(start, end);
+
+    paginatedIpoData.sort((a, b) => {
+        let valueA = a[column] ? a[column].toLowerCase() : '';
+        let valueB = b[column] ? b[column].toLowerCase() : '';
+
+        if (column === 'mandateSentDate') {
+            // Special handling for mandateSentDate (which is in date format)
+            valueA = new Date(a[column]);
+            valueB = new Date(b[column]);
+        }
+
+        if (direction === 'asc') {
+            return valueA < valueB ? -1 : (valueA > valueB ? 1 : 0);
+        } else {
+            return valueA > valueB ? -1 : (valueA < valueB ? 1 : 0);
+        }
+    });
+
+    // Update the original ipoData array with sorted data
+    for (let i = 0; i < paginatedIpoData.length; i++) {
+        filteredData[start + i] = paginatedIpoData[i];
+    }
+
+    displayIpoTable(filteredData);  // Re-render the table with sorted data
+}
+
+// Event listeners for the sorting arrows
+document.getElementById('ipo-name-asc').addEventListener('click', () => {
+    sortTable('name', 'asc');  // Sort by name in ascending order
+});
+
+document.getElementById('ipo-name-desc').addEventListener('click', () => {
+    sortTable('name', 'desc');  // Sort by name in descending order
+});
+
+document.getElementById('mandate-date-asc').addEventListener('click', () => {
+    sortTable('mandateSentDate', 'asc');  // Sort by mandateSentDate in ascending order
+});
+
+document.getElementById('mandate-date-desc').addEventListener('click', () => {
+    sortTable('mandateSentDate', 'desc');  // Sort by mandateSentDate in descending order
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,15 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
-
-
-function goBack() {
-    window.history.back();
-}
 
 
 // Load IPO data when the page is loaded
