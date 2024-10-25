@@ -407,3 +407,19 @@ class UserPlatformMaster(Base):
     updated_by = Column(TIMESTAMP)
     created_dttm = Column(TIMESTAMP)
     platform = Column(VARCHAR)
+
+
+class PanicAlerts(Base):
+    __tablename__ = 'panic_api_alert'
+    __table_args__ = {"schema": 'public'}
+    id = Column(Integer, primary_key=True)
+    client_id = Column(String)      
+    url = Column(String)  
+    page_id = Column(String) 
+    response_code = Column(Integer)
+    timestamp = Column(TIMESTAMP)
+    latency = Column(Integer)
+    response_payload = Column(String) 
+    request_payload = Column(String)  
+    device_type = Column(String)  
+    section = Column(String)

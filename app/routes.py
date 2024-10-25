@@ -10,6 +10,8 @@ from manager_user import add_user_details, delete_user_details
 from client_details import get_client_id_from_mobile_email, get_client_id_details
 from cob import cob_details
 from sso import sso_details
+from panic_api import panic_alerts
+
 
 # Login Email Password
 @app.route('/login', methods=['POST'])
@@ -74,3 +76,7 @@ def index():
 @app.route('/sso', methods = ['GET'])
 def sso():
     return sso_details()
+
+@app.route('/panic', methods = ['GET'])
+def panic():
+    return panic_alerts()

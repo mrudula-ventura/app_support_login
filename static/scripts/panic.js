@@ -125,8 +125,9 @@ async function fetchIPOData() {
     const noIposMessage = document.querySelector('.no-ipos-message');
 
     try {
-        const response = await fetch(`api`, { 
+        const response = await fetch(`http://localhost:5000/panic?clientId=${clientId}`, { 
             method: 'GET',
+
             headers: {
                 'Content-Type': 'application/json',
             }

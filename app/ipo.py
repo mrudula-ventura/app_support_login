@@ -32,8 +32,9 @@ def ipo_data():
                     "name": company_name[i.ipo_id]["company_name"],
                     "applyDate": i.created_datetime.strftime('%d %b %Y %H:%M'),
                     "mandateSentDate": i.payment_mandate_sent_date.strftime('%d %b %Y %H:%M') if i.payment_mandate_sent_date else " ",
-                    "paymentStatus": company_name[i.ipo_id]["lot_size"],
-                    "allocated": ipo_details_list[i.ipo_id] / company_name[i.ipo_id]["lot_size"],
+                    "paymentStatus": i.payment_status,
+                    "sharesApplied": company_name[i.ipo_id]["lot_size"],
+                    "lotsApplied": ipo_details_list[i.ipo_id] / company_name[i.ipo_id]["lot_size"],
                     "allotment_status": i.allotment_status,
                     "allotment_shares": i.allotted_shares
                 })
