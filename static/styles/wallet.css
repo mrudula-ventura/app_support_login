@@ -202,5 +202,5 @@ td {
 
 .user-info-container span {
   font-weight: normal; /* Makes the span text normal weight */
-  margin-left: 10px; /* Adds a little space between label and information */
+  margin-left: 0px; /* Adds a little space between label and information */
 }

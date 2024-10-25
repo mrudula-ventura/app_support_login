@@ -43,46 +43,47 @@ body {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Table container */
-.table-container {
-  width: 100%; /* Adjust width for better fit */
-  max-width: 100%;
-  margin: 10px auto;
-  overflow-x: auto;
-  background-color: #ccc;
-}
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px; /* Adjusted margin to keep space between search bar and table */
-}
-
-th, td {
-  padding: 12px;
-  text-align: left;
-  border: 1px solid #ddd; /* Add border to all cells */
-}
-
-th {
-  background-color: #007BFF;
-  color: white;
-  text-transform: uppercase;
-}
-
-tr:hover {
-  background-color: #f1f1f1;
-}
-
-td {
-  font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-  th, td {
-    font-size: 0.9rem;
+  /* Table container */
+  .table-container {
+    width: 100%; /* Adjust width for better fit */
+    max-width: 100%;
+    margin: 10px auto;
+    overflow-x: auto;
+    background-color: #ccc;
   }
-}
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Adjusted margin to keep space between search bar and table */
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd; /* Add border to all cells */
+  }
+  
+  th {
+    background-color: #007BFF;
+    color: white;
+    text-transform: uppercase;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  td {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    th, td {
+      font-size: 0.9rem;
+    }
+  }
 
 /* Logout button */
 .lo_btn {
@@ -140,6 +141,7 @@ td {
   color: #333;
 }
 
+
 /* Back button */
 .back-btn {
   position: fixed;
@@ -192,7 +194,7 @@ td {
 
 .user-info-container span {
   font-weight: normal; 
-  margin-left: 10px; 
+  margin-left: 0px; 
 }
 
 /* Style for the sort buttons */

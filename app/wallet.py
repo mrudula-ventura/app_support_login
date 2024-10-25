@@ -120,8 +120,8 @@ def wallet_details():
         from
             wallet.accord_bank_payment_response
         ) as sub_query
-        where client_code ='AA1679'
-        order by 1 desc
+        where client_code like upper(:client_code)
+        order by 1 desc;
     '''
 
     try:

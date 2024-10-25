@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const clientIdInput = document.getElementById('client-id');
     const manageUserButton = document.getElementById('manageUser');
     const dropdownMenu = document.getElementById('dropdownMenu');
-
+    const getClientIdButton=document.getElementById('get-client-id');
     console.log('submitButton:', submitButton);
     console.log('clientIdInput:', clientIdInput);
 
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // const clientIdDisplay = document.getElementById('client-id-display');
 
         if (!emailOrPhone) {
+    
             alert('Please enter an email or phone number');
             return;
         }
@@ -51,12 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (clientId) {
                         clientIdInput.value = clientId; 
                         window.location.href = `client_page.html?clientId=${clientId}`; 
-                    } else if (response.status === 400) {
-                        console.error("Client ID submission failed.");
+                    } else if (response.status == 400) {
                         alert("Client ID not found.");
+                        
                     }
                 } else {
-                    console.error("Failed to fetch Client ID from the server.");
+                    alert("Client ID not found.");
+                   
                     // alert("Error fetching Client ID from server.");
                 }
             } catch (error) {
@@ -69,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('get-client-id').addEventListener('click', function () {
+        
         console.log("Get Client ID button clicked");
         searchClientId(); // Call the searchClientId function
     });

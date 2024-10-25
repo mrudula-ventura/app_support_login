@@ -115,6 +115,7 @@ async function fetchIPOData() {
     const clientId = getClientId();
     const loader = document.querySelector('.loader-container');
     const noIposMessage = document.querySelector('.no-ipos-message');
+  
 
     try {
         const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, { 
@@ -123,9 +124,11 @@ async function fetchIPOData() {
                 'Content-Type': 'application/json',
             }
         });
+        
 
         if (response.ok) {
             const data = await response.json();
+            
             ipoData = data.ipoData;
             console.log(ipoData);  // Check the fetched data in console
 

@@ -90,14 +90,14 @@ background-position: right center;
 }
 
 .user-info-container h5 {
-  margin: 0 25px; 
-  white-space: nowrap; 
+  margin: 0 20px; 
+  /* white-space: nowrap;  */
   font-size: 14px; 
 }
 
 .user-info-container span {
   font-weight: normal; 
-  margin-left: 10px; 
+  margin-left: 0px; 
 }
 
 
