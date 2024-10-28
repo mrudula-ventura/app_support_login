@@ -40,13 +40,13 @@ function displayPanicTable(filteredData = ipoData) {
     paginatedIpoData.forEach(panic => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${panic.pageId}</td>
+            <td>${panic.page_id}</td>
             <td>${panic.response}</td>
             <td>${panic.timestamp}</td>
             <td>${panic.latency}</td>
-            <td>${panic.requestPayload}</td>
-            <td>${panic.responsePayload}</td>
-            <td>${panic.deviceType}</td>
+            <td>${panic.request_payload}</td>
+            <td>${panic.response_payload}</td>
+            <td>${panic.device_type}</td>
             <td>${panic.section}</td>
 
 `;
