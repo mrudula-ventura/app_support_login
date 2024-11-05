@@ -1,3 +1,19 @@
+// Password generation function
+function generatePassword() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
+    let password = '';
+    for (let i = 0; i < 12; i++) { 
+        password += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return password;
+}
+
+// Toggle password visibility
+function togglePasswordVisibility(passwordField, confirmPasswordField, isVisible) {
+    passwordField.type = isVisible ? "text" : "password";
+    confirmPasswordField.type = isVisible ? "text" : "password";
+}
+
 document.getElementById('reset').addEventListener('click', async function () {
     const email = document.getElementById('eUsrMail').value;
     const newPassword = document.getElementById('newPswd').value;
@@ -14,7 +30,7 @@ document.getElementById('reset').addEventListener('click', async function () {
     }
 
     if (!email.endsWith('@venturasecurities.com')) {
-        document.getElementById('email-error').textContent = "Email must end with @xyz.com.";
+        document.getElementById('email-error').textContent = "Email must end with @venturasecurities.com.";
         return;
     }
 
@@ -59,6 +75,18 @@ document.getElementById('reset').addEventListener('click', async function () {
     } catch (error) {
         alert('An unexpected error occurred. Please try again.');
     }
+});
+
+// Generate Password Button functionality
+document.getElementById('generatePswd').addEventListener('click', function () {
+    const passwordField = document.getElementById('newPswd');
+    const confirmPasswordField = document.getElementById('newCPswd');
+
+    const randomPassword = generatePassword();
+    passwordField.value = randomPassword;
+    confirmPasswordField.value = randomPassword;
+
+    togglePasswordVisibility(passwordField, confirmPasswordField, true);
 });
 
 function goBack() {

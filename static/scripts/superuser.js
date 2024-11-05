@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM fully loaded and parsed");
-
+     
+   
     const submitButton = document.getElementById('submit-btn');
     const clientIdInput = document.getElementById('client-id');
     const manageUserButton = document.getElementById('manageUser');
@@ -24,16 +25,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return regex.test(phone);
     }
 
+    
     async function searchClientId() {
         const emailOrPhone = document.getElementById('email-mobile').value;
-        // const clientIdDisplay = document.getElementById('client-id-display');
-
-        if (!emailOrPhone) {
+        const errorMessageElement = document.getElementById('error-message'); // Get the error message element
     
-            alert('Please enter an email or phone number');
+        // Clear any previous error message
+        errorMessageElement.textContent = '';
+    
+        if (!emailOrPhone) {
+            const errorMessageElement = document.getElementById('error-message');
+            errorMessageElement.textContent = 'Please enter email address or phone number.';
             return;
         }
-            
+    
         if (isValidEmail(emailOrPhone) || isValidPhoneNumber(emailOrPhone)) {
             try {
                 const response = await fetch('http://localhost:5000/get-client-id', {
@@ -43,32 +48,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({ emailOrPhone }),
                 });
-
+    
                 const data = await response.json();
-
+    
                 if (response.ok && response.status === 200) {
                     const clientId = data.clientId;
-                    // console.log(data);
+    
                     if (clientId) {
                         clientIdInput.value = clientId; 
                         window.location.href = `client_page.html?clientId=${clientId}`; 
-                    } else if (response.status == 400) {
-                        alert("Client ID not found.");
-                        
+                    } else {
+                        // Display backend error message if clientId is null
+                        errorMessageElement.textContent = data.message || "Client ID not found.";
                     }
                 } else {
-                    alert("Client ID not found.");
-                   
-                    // alert("Error fetching Client ID from server.");
+                    errorMessageElement.textContent = "Client ID not found.";
                 }
             } catch (error) {
                 console.error("Network error:", error);
-                alert('Error checking Client ID from the server');
+                errorMessageElement.textContent = 'Error checking Client ID from the server';
             }
         } else {
-            alert('Please enter a valid email address or a valid 10-digit phone number.');
+            errorMessageElement.textContent = 'Please enter a valid email address or a valid 10-digit phone number.';
         }
     }
+    
 
     document.getElementById('get-client-id').addEventListener('click', function () {
         
@@ -78,7 +82,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function submitClientId() {
         const clientId = clientIdInput.value.trim();
-        // console.log();
+        const errorMessageElement = document.getElementById('error-message'); // Get the error message element
+    
+        // Clear any previous error message
+        errorMessageElement.textContent = '';
+    
         if (clientId) {
             try {
                 const response = await fetch('http://localhost:5000/submit-client-id', {
@@ -88,31 +96,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({ clientId }),
                 });
-
-                
-
-
+    
                 const result = await response.json();
-
+    
                 if (response.ok && response.status === 200) {
-                    console.log(result);  
+                    console.log(result);
                     window.location.href = `client_page.html?clientId=${clientId}`;
                 } else if (response.status === 400) {
-                    console.error("Client ID submission failed.");
-                    alert("Client ID not found.");
+                    
+                    errorMessageElement.textContent = result.message || "Client ID not found.";
                 } else {
-                    console.error("Client id submission failed.", response.status);
-                    alert('Client id submission failed. Please try again.');
+                    errorMessageElement.textContent = 'Client ID submission failed. Please try again.';
                 }
-
+    
             } catch (error) {
                 console.error("Error submitting Client ID:", error);
-                alert('Error submitting Client ID to the server');
+                errorMessageElement.textContent = 'Error submitting Client ID to the server';
             }
         } else {
-            alert('Please enter a Client ID manually');
+            errorMessageElement.textContent = 'Please enter a Client ID manually';
         }
     }
+    
 
     submitButton.addEventListener('click', async function(event) {
         event.preventDefault();

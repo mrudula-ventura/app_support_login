@@ -1,6 +1,8 @@
 let ipoData = [];
-const rowsPerPage = 15; 
+const rowsPerPage = 15;
 let currentPage = 1;
+let currentSortColumn = '';
+let currentSortDirection = '';
 
 // Function to load client data from localStorage
 function loadClientData() {
@@ -18,26 +20,26 @@ function loadClientData() {
 // On page load, display the client data
 window.onload = loadClientData;
 
-// Function to display the IPO table
 function displayIpoTable(filteredData = ipoData) {
     const tableBody = document.querySelector('#ipo-table tbody');
     const loader = document.querySelector('.loader-container');
     const searchInput = document.getElementById('searchInput');
     const noIposMessage = document.querySelector('.no-ipos-message');
     const tableContainer = document.querySelector('.table-container');
+    const noMatchesMessage = document.querySelector('.noMatchesMessage'); 
     
     tableBody.innerHTML = ''; // Clear the table body
 
     // Pagination setup
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const paginatedIpoData = filteredData.slice(start, end); 
+    const paginatedIpoData = filteredData.slice(start, end);
 
     // Populate the table with IPO data
     paginatedIpoData.forEach(ipo => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${ipo.name}</td>
+             <td>${ipo.name}</td>
             <td>${ipo.applyDate}</td>
             <td>${ipo.mandateSentDate}</td>
             <td>${ipo.paymentStatus}</td>
@@ -49,20 +51,22 @@ function displayIpoTable(filteredData = ipoData) {
         tableBody.appendChild(row);
     });
 
-    // Hide the loader, show the table and search input
+    // Hide the loader
     loader.style.display = 'none';
+
+    // Always display search input and update the table and message visibility
+    searchInput.style.display = 'block';
     if (filteredData.length > 0) {
         tableContainer.style.display = 'block';
-        searchInput.style.display = 'block';
-        noIposMessage.style.display = 'none'; // Hide no IPO message if data exists
+        noMatchesMessage.style.display = 'none';
     } else {
-        noIposMessage.style.display = 'block'; // Show no IPO message if no data exists
-        tableContainer.style.display = 'none'; // Hide table and search input
-        searchInput.style.display = 'none';
+        noMatchesMessage.style.display = 'block';
+        tableContainer.style.display = 'none';
     }
 
     updatePaginationControls(filteredData);
 }
+
 
 // Function to update pagination controls
 function updatePaginationControls(filteredData) {
@@ -89,7 +93,7 @@ function updatePaginationControls(filteredData) {
             displayIpoTable(filteredData);
         };
         if (i === currentPage) {
-            pageButton.disabled = true; 
+            pageButton.disabled = true;
         }
         paginationContainer.appendChild(pageButton);
     }
@@ -116,36 +120,37 @@ async function fetchIPOData() {
     const clientId = getClientId();
     const loader = document.querySelector('.loader-container');
     const noIposMessage = document.querySelector('.no-ipos-message');
-  
+    const tableContainer = document.querySelector('.table-container');
+    const searchInput = document.getElementById('searchInput');
+
+    // Hide table and search input during data fetch
+    tableContainer.style.display = 'none';
+    searchInput.style.display = 'none';
+    loader.style.display = 'flex'; // Show loader
 
     try {
-        const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, { 
+        const response = await fetch(`http://localhost:5000/ipo?clientId=${clientId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
         });
-        
 
         if (response.ok) {
             const data = await response.json();
-            
             ipoData = data.ipoData;
-            console.log(ipoData);  // Check the fetched data in console
-
-            loader.style.display = 'none';  // Ensure loader is hidden
 
             if (ipoData.length === 0) {
                 noIposMessage.style.display = 'block'; // Show no IPOs message
+                loader.style.display = 'none'; // Hide loader
             } else {
                 displayIpoTable();  // Display IPO data if available
+                loader.style.display = 'none';  // Hide loader after data loads
             }
         } else {
-            loader.style.display = 'none';  // Ensure loader is hidden on error
+            loader.style.display = 'none';  // Hide loader on error
             noIposMessage.textContent = 'No IPOs available for this client ID.';
             noIposMessage.style.display = 'block';
-            searchInput.style.display='none';
-            document.querySelector('.table-container').style.display = 'none';
         }
     } catch (error) {
         loader.style.display = 'none';  // Hide loader on error
@@ -153,39 +158,23 @@ async function fetchIPOData() {
     }
 }
 
-// Function to filter the IPO table based on search input
+// Function to filter IPO table by search input
 function filterIpoTable() {
     const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = ipoData.filter(ipo => 
-        ipo.name.toLowerCase().includes(searchValue) ||
-        (ipo.applicationNo && ipo.applicationNo.toLowerCase().includes(searchValue))
+    const filteredData = ipoData.filter(ipo =>
+        ipo.name.toLowerCase().includes(searchValue)
     );
 
     currentPage = 1;
-
-    if (filteredData.length === 0) {
-        const noIposMessage = document.querySelector('.no-ipos-message');
-        noIposMessage.textContent = 'No IPOs match your search.';
-        noIposMessage.style.display = 'block';
-        const tableContainer = document.querySelector('.table-container');
-        tableContainer.style.display = 'none';  // Hide the table if no matches
-    } else {
-        const noIposMessage = document.querySelector('.no-ipos-message');
-        noIposMessage.style.display = 'none';
-        displayIpoTable(filteredData); // Display filtered IPO data
-    }
+    displayIpoTable(filteredData);
 }
 
 // Sorting function for strings and mandate date
 function sortTable(column, direction) {
     const filteredData = ipoData.slice();  // Create a copy of the ipoData array
 
-    // Sort only the filtered data for the current page
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedIpoData = filteredData.slice(start, end);
-
-    paginatedIpoData.sort((a, b) => {
+    // Sort the ipoData array by column and direction
+    filteredData.sort((a, b) => {
         let valueA = a[column] ? a[column].toLowerCase() : '';
         let valueB = b[column] ? b[column].toLowerCase() : '';
 
@@ -202,32 +191,39 @@ function sortTable(column, direction) {
         }
     });
 
-    // Update the original ipoData array with sorted data
-    for (let i = 0; i < paginatedIpoData.length; i++) {
-        filteredData[start + i] = paginatedIpoData[i];
-    }
-
     displayIpoTable(filteredData);  // Re-render the table with sorted data
 }
 
-// Event listeners for the sorting arrows
+// Function to toggle arrow visibility
+function toggleArrows(activeArrowId, inactiveArrowId) {
+    document.getElementById(activeArrowId).style.display = 'none';
+    document.getElementById(inactiveArrowId).style.display = 'inline';
+}
+
+// Event listeners for search input and sorting arrows
+document.getElementById('searchInput').addEventListener('input', filterIpoTable);
+
 document.getElementById('ipo-name-asc').addEventListener('click', () => {
     sortTable('name', 'asc');  // Sort by name in ascending order
+    toggleArrows('ipo-name-asc', 'ipo-name-desc');
 });
 
 document.getElementById('ipo-name-desc').addEventListener('click', () => {
     sortTable('name', 'desc');  // Sort by name in descending order
+    toggleArrows('ipo-name-desc', 'ipo-name-asc');
 });
 
 document.getElementById('mandate-date-asc').addEventListener('click', () => {
     sortTable('mandateSentDate', 'asc');  // Sort by mandateSentDate in ascending order
+    toggleArrows('mandate-date-asc', 'mandate-date-desc');
 });
 
 document.getElementById('mandate-date-desc').addEventListener('click', () => {
     sortTable('mandateSentDate', 'desc');  // Sort by mandateSentDate in descending order
+    toggleArrows('mandate-date-desc', 'mandate-date-asc');
 });
 
-
+    
 document.addEventListener('DOMContentLoaded', () => {
     // Retrieve the data from localStorage
     const storedData = localStorage.getItem('clientData');
@@ -246,6 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+    function goBack() {
+        window.history.back();
+    }
 
 // Load IPO data when the page is loaded
 window.onload = fetchIPOData;

@@ -1,113 +1,7 @@
-let ipoData = [];
-const rowsPerPage = 15; 
 let currentPage = 1;
-
-
-// Function to load client data from localStorage
-function loadClientData() {
-    const clientData = JSON.parse(localStorage.getItem('clientData'));
-    if (clientData) {
-        document.getElementById('client-id-display').innerText = clientData.clientId;
-        document.getElementById('client-full-name').innerText = clientData.fullName;
-        document.getElementById('client-email').innerText = clientData.email;
-        document.getElementById('client-mobile').innerText = clientData.mobile;
-    } else {
-        console.error('No client data found');
-    }
-}
-
-// On page load, display the client data
-window.onload = loadClientData;
-
-
-// Function to display the panic table
-function displayPanicTable(filteredData = ipoData) {
-    const tableBody = document.querySelector('#panic-table tbody');
-    const tableHead = document.querySelector('#panic-table');
-    const loader = document.querySelector('.loader-container');
-    const searchInput = document.getElementById('searchInput');
-    const noDataMessage = document.querySelector('.no-data-message');
-    const tableContainer = document.querySelector('.table-container');
-    
-    tableBody.innerHTML = ''; // Clear the table body
-
-    // Pagination setup
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedIpoData = filteredData.slice(start, end); 
-
-    // Populate the table with panic data
-    paginatedIpoData.forEach(panic => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${panic.page_id}</td>
-            <td>${panic.response}</td>
-            <td>${panic.timestamp}</td>
-            <td>${panic.latency}</td>
-            <td>${panic.request_payload}</td>
-            <td>${panic.response_payload}</td>
-            <td>${panic.device_type}</td>
-            <td>${panic.section}</td>
-
-`;
-        tableBody.appendChild(row);
-    });
-
-    // Hide the loader, show the table and search input
-     loader.style.display = 'none';
-    if (filteredData.length > 0) {
-        tableContainer.style.display = 'block';
-        searchInput.style.display = 'block';
-        noDataMessage.style.display = 'none'; 
-    } else {
-        noDataMessage.style.display = 'block'; 
-        tableContainer.style.display = 'none';
-        searchInput.style.display = 'none';
-    }
-
-    updatePaginationControls(filteredData);
-}
-
-// Function to update pagination controls
-function updatePaginationControls(filteredData) {
-    const paginationContainer = document.querySelector('#pagination');
-    paginationContainer.innerHTML = '';
-
-    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
-    if (currentPage > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.textContent = 'Previous';
-        prevButton.onclick = () => {
-            currentPage--;
-            displayPanicTable(filteredData);
-        };
-        paginationContainer.appendChild(prevButton);
-    }
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.onclick = () => {
-            currentPage = i;
-            displayPanicTable(filteredData);
-        };
-        if (i === currentPage) {
-            pageButton.disabled = true; 
-        }
-        paginationContainer.appendChild(pageButton);
-    }
-
-    if (currentPage < totalPages) {
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Next';
-        nextButton.onclick = () => {
-            currentPage++;
-            displayIpoTable(filteredData);
-        };
-        paginationContainer.appendChild(nextButton);
-    }
-}
+const rowsPerPage = 10; 
+let panicData = []; 
+let originalPanicData = []; 
 
 // Function to get the client ID from the URL
 function getClientId() {
@@ -115,83 +9,116 @@ function getClientId() {
     return params.get('clientId');
 }
 
-
-
-
-// Function to fetch panic data from the backend
-async function fetchIPOData() {
-    const clientId = getClientId();
-    const loader = document.querySelector('.loader-container');
-    const noIposMessage = document.querySelector('.no-ipos-message');
-
+// Function to fetch and display panic data
+async function fetchAndDisplayPanicData() {
     try {
-        const response = await fetch(`http://localhost:5000/panic?clientId=${clientId}`, { 
-            method: 'GET',
-
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            panicData = data.panicData;
-            console.log(panicData);  // Check the fetched data in console
-
-            loader.style.display = 'none';  // Ensure loader is hidden
-
-            if (panicData.length === 0) {
-                noDataMessage.style.display = 'block'; 
-            } else {
-                displayPanicTable();  
-            }
-        } else {
-            loader.style.display = 'none';  // Ensure loader is hidden on error
-            noDataMessage.textContent = 'No data available for this client ID.';
-            noDataMessage.style.display = 'block';
-            searchInput.style.display='none';
-            document.querySelector('.table-container').style.display = 'none';
+        const clientId = getClientId(); 
+        if (!clientId) {
+            throw new Error('Client ID not found in URL.');
         }
-    } catch (error) {
-        loader.style.display = 'none';  // Hide loader on error
-        console.error('Error fetching data:', error);
-    }
-}
 
+        document.getElementById('loader').style.display = 'flex'; 
+        const response = await fetch(`http://localhost:5000/panic?clientId=${clientId}`);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
 
-// Function to filter the table based on search input
-function filterPanicTable() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = panicData.filter(panic => 
-        panic.name.toLowerCase().includes(searchValue) ||
-        (panic.applicationNo && panic.applicationNo.toLowerCase().includes(searchValue))
-    );
-
-    currentPage = 1;
-
-    // Always keep the search bar visible
-    const searchInput = document.getElementById('searchInput');
-    searchInput.style.display = 'block';
-
-    if (filteredData.length === 0) {
-      
-
-        const noIposMessage = document.querySelector('.no-data-message');
-        noIposMessage.textContent = 'No data match your search.';
-        noIposMessage.style.display = 'block';
+        const data = await response.json();
+        panicData = data.data; // Adjust based on your API structure
+        originalPanicData = [...panicData]; // Save a copy of the original data
         
-        
-        const tableContainer = document.querySelector('.table-container');
-        tableContainer.style.display = 'none';  // Hide the table if no matches
-    } else {
        
-        const noIposMessage = document.querySelector('.no-data-message');
-        noIposMessage.style.display = 'none';
-        
-        displayIpoTable(filteredData); // Display filtered data
+        document.getElementById('loader').style.display = 'none'; 
+
+        // Check if there's any panic data
+        if (panicData.length === 0) {
+            document.getElementById('no-data-message').style.display = 'block'; // Show no data message
+            document.getElementById('table-container').style.display = 'none'; // Hide table
+            return;
+        }
+
+        document.getElementById('no-data-message').style.display = 'none'; // Hide no data message
+        document.getElementById('table-container').style.display = 'block'; // Show table
+
+        // Populate the table with data for the current page
+        displayPage(currentPage);
+    } catch (error) {
+        console.error('Failed to fetch panic data:', error);
     }
 }
 
+// Function to display the current page of panic data
+function displayPage(page) {
+    const tableBody = document.querySelector('#panic-table tbody');
+    tableBody.innerHTML = ''; // Clear previous table content
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = panicData.slice(start, end);
+
+    paginatedData.forEach(panic => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${panic.device_type}</td>
+            <td>${panic.latency}</td>
+            <td>${panic.page_id}</td>
+            <td>${panic.request_payload}</td>
+            <td>${panic.response_code}</td>
+            <td>${panic.response_payload}</td>
+            <td>${panic.section}</td>
+            <td>${panic.timestamp}</td>
+            <td>${panic.url}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    updatePaginationInfo(); // Update pagination info after displaying the current page
+}
+
+// Function to update pagination info
+function updatePaginationInfo() {
+    const totalPages = Math.ceil(panicData.length / rowsPerPage);
+    const paginationDiv = document.getElementById('pagination');
+
+    // Clear existing pagination content
+    paginationDiv.innerHTML = '';
+
+    // Create Previous button
+    if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.innerText = 'Previous';
+        prevButton.addEventListener('click', () => changePage(-1));
+        paginationDiv.appendChild(prevButton);
+    }
+
+    // Create page number buttons
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.innerText = i;
+        pageButton.disabled = (i === currentPage); // Disable the button for the current page
+        pageButton.addEventListener('click', () => {
+            currentPage = i;
+            displayPage(currentPage);
+        });
+        paginationDiv.appendChild(pageButton);
+    }
+
+    // Create Next button
+    if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.innerText = 'Next';
+        nextButton.addEventListener('click', () => changePage(1));
+        paginationDiv.appendChild(nextButton);
+    }
+}
+
+// Function to change page based on direction
+function changePage(direction) {
+    currentPage += direction;
+    displayPage(currentPage);
+}
+
+// Event listeners for search input
+document.getElementById('searchInput').addEventListener('input', filterPanicTable);
 
 document.addEventListener('DOMContentLoaded', () => {
     // Retrieve the data from localStorage
@@ -208,18 +135,49 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('No data found in localStorage.');
     }
+    
+    // Fetch data and populate table
+    fetchAndDisplayPanicData();
 });
 
+// Function to filter panic table based on search input
+function filterPanicTable() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const noMatchesMessage = document.getElementById('noMatchesMessage');
+    
+    // If search input is empty, restore the current page's original data
+    if (input === '') {
+        panicData = [...originalPanicData];
+        displayPage(currentPage);
+        noMatchesMessage.style.display = 'none';
+        return;
+    }
 
+    // Filter only within the current page's data
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = originalPanicData.slice(start, end);
 
+    const filteredData = paginatedData.filter(panic => {
+        return (
+            panic.device_type.toLowerCase().includes(input) ||
+            panic.page_id.toString().includes(input) ||
+            panic.section.toLowerCase().includes(input)
+        );
+    });
 
+    if (filteredData.length > 0) {
+        panicData = filteredData;
+        noMatchesMessage.style.display = 'none';
+        displayPage(currentPage);
+    } else {
+        noMatchesMessage.style.display = 'block';
+        const tableBody = document.querySelector('#panic-table tbody');
+        tableBody.innerHTML = ''; // Clear previous table content
+    }
+}
 
-
-
+// Function to go back to the previous page
 function goBack() {
     window.history.back();
 }
-
-
-// Load IPO data when the page is loaded
-window.onload = fetchIPOData;

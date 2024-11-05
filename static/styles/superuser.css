@@ -27,6 +27,11 @@ body {
   z-index: 3;
   
 }
+
+.navbar-title{
+  top:7px;
+  position: relative;
+}
   
   /* container for superusre page */
   .container {
@@ -148,7 +153,7 @@ body {
     display: none; 
     position:fixed;
     top: 50px; 
-    right: 10px;
+    right: 100px;
     background-color: #ffffff; 
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -169,7 +174,7 @@ body {
   
   .add-users-btn {
     position: fixed;
-    top: 10px;
+    top: 8px;
     right: 120px;
     background-color: #6f42c1;
     padding: 10px 15px;
@@ -189,7 +194,7 @@ body {
   /*logout button*/
   .lo_btn{
     position: fixed;
-    top: 10px;
+    top: 8px;
     right: 40px;
     background-color: #6f42c1;
     padding: 10px 15px;
@@ -219,3 +224,10 @@ body {
     z-index:2000;
   }
   
+
+  #error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
