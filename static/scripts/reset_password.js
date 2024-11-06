@@ -14,7 +14,8 @@ function togglePasswordVisibility(passwordField, confirmPasswordField, isVisible
     confirmPasswordField.type = isVisible ? "text" : "password";
 }
 
-document.getElementById('reset').addEventListener('click', async function () {
+// Function to handle reset password logic
+async function handleResetPassword() {
     const email = document.getElementById('eUsrMail').value;
     const newPassword = document.getElementById('newPswd').value;
     const confirmPassword = document.getElementById('newCPswd').value;
@@ -29,7 +30,7 @@ document.getElementById('reset').addEventListener('click', async function () {
         return;
     }
 
-    if (!email.endsWith('@venturasecurities.com')) {
+    if (!email.includes('@')) {
         document.getElementById('email-error').textContent = "Email must end with @venturasecurities.com.";
         return;
     }
@@ -53,11 +54,10 @@ document.getElementById('reset').addEventListener('click', async function () {
     const data = {
         email: email,
         newPassword: newPassword,
-        confirmPassword: confirmPassword
     };
 
     try {
-        const response = await fetch('http://localhost:5000/reset-passwordclientId=${clientId}', {
+        const response = await fetch('http://localhost:5000/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ document.getElementById('reset').addEventListener('click', async function () {
     } catch (error) {
         alert('An unexpected error occurred. Please try again.');
     }
-});
+}
 
 // Generate Password Button functionality
 document.getElementById('generatePswd').addEventListener('click', function () {
@@ -88,6 +88,9 @@ document.getElementById('generatePswd').addEventListener('click', function () {
 
     togglePasswordVisibility(passwordField, confirmPasswordField, true);
 });
+
+// Add event listener to Reset button
+document.getElementById('reset').addEventListener('click', handleResetPassword);
 
 function goBack() {
     window.history.back();

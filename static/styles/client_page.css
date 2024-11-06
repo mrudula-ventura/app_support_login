@@ -30,8 +30,9 @@ body {
 /* Button container with grid layout */
 .btn-container {
 display: grid;
-grid-template-columns: repeat(3, 1fr); 
-gap: 20px; /* Space between the buttons */
+grid-template-columns: repeat(4, 1fr); 
+row-gap: 80px; /* Increased space between top and bottom rows */
+column-gap: 20px;
 justify-items: center; 
 align-items: center; 
 width: 90%; 

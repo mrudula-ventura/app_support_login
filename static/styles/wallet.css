@@ -178,7 +178,8 @@ td {
 .noWalletMessage {
   display: none;
   font-size: 25px;
-  color: #48128f;
+  color:rgb(161, 52, 52);
+  font-weight: bold;
   text-align: center;
   margin-top: 20px;
 }
