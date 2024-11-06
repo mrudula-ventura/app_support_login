@@ -52,12 +52,11 @@ document.getElementById('reset').addEventListener('click', async function () {
 
     const data = {
         email: email,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword
+        newPassword: newPassword
     };
 
     try {
-        const response = await fetch('http://localhost:5000/reset-passwordclientId=${clientId}', {
+        const response = await fetch('http://localhost:5000/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

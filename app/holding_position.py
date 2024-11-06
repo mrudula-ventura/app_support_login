@@ -2,6 +2,7 @@ import os
 import requests
 from config import get_config
 from flask import Flask, render_template, jsonify, request
+from sqlalchemy import func
 
 
 # Get the current working directory
@@ -47,7 +48,7 @@ def get_equity_hp():
 
     # Set the header used for all the APIs
     header = {
-        'x-client-id': f'{client_id}',
+        'x-client-id': f'{client_id.upper()}',
         'x-api-key': f'{X_API_KEY}',
         'Content-Type': 'application/json'
     }

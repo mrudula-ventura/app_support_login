@@ -28,6 +28,5 @@ def panic_alerts():
         return jsonify({"data": panic_list})
             
     except Exception as e:
-        # pass
-        return jsonify({"error": "An error occurred in panic API function", "details": str(e)}), 500
+        return jsonify({"error": "An error occurred in panic API function", "error": str(e)}), 500
     

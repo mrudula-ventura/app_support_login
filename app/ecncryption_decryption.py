@@ -2,18 +2,22 @@ from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import  RSA
 
 def get_keys():
-    with open(r"C:\MyProfile\ProfileDetailsFunction\public_pem.pem", "r") as file:
-        file_content = file.read()
-        if not file_content:
-            return "Public key nahi mili"
-        pu_key = RSA.import_key(file_content)
+    try:
+        with open(r"C:\MyProfile\ProfileDetailsFunction\public_pem.pem", "r") as file:
+            file_content = file.read()
+            if not file_content:
+                return "Public key nahi mili"
+            pu_key = RSA.import_key(file_content)
 
-    with open(r'C:\MyProfile\ProfileDetailsFunction\private_pem.pem', "r") as file:
-        file_content = file.read()
-        if not file_content:
-            return "Private key nahi mili"
-        pr_key = RSA.import_key(file_content)
-    return pu_key, pr_key
+        with open(r'C:\MyProfile\ProfileDetailsFunction\private_pem.pem', "r") as file:
+            file_content = file.read()
+            if not file_content:
+                return "Private key nahi mili"
+            pr_key = RSA.import_key(file_content)
+        return pu_key, pr_key
+    except Exception as e:
+        print("Exception while reading public and private pem files", e)
+        return None, None
 
 
 def foo(size):

@@ -6,7 +6,7 @@ from wallet import wallet_details
 from myprofile import profile_details
 from mutual_fund import mf_details
 from login import login_details
-from manager_user import add_user_details, delete_user_details
+from manager_user import add_user_details, delete_user_details, update_password
 from client_details import get_client_id_from_mobile_email, get_client_id_details
 from cob import cob_details
 from sso import sso_details
@@ -27,6 +27,10 @@ def add_user():
 @app.route('/delete-user', methods=['POST'])
 def delete_user():
     return delete_user_details()
+
+@app.route('/reset-password', methods = ['POST'])
+def reset_password():
+    return update_password()
 
 # CHECK MOBILE / EMAIL EXISTS IN SSO DB 
 @app.route('/get-client-id', methods = ['POST'])
