@@ -55,12 +55,20 @@ async function handleResetPassword() {
         email: email,
         newPassword: newPassword,
     };
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
 
     try {
         const response = await fetch('http://localhost:5000/reset-password', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(data)
         });
@@ -69,6 +77,9 @@ async function handleResetPassword() {
 
         if (result.error) {
             alert(result.error); // Display error from server
+        } else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         } else {
             swal("Success!", result.message, "success"); // SweetAlert for success messages
         }

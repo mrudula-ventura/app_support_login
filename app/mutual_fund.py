@@ -5,7 +5,7 @@ from models import MutualFundPortfolio
 
 
 
-def mf_details():
+def mf_details(current_user):
     try:
         client_id = request.args.get('clientId')
         # client_id = func.upper('18j018')

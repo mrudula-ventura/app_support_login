@@ -4,7 +4,7 @@ from db_connection import app_support_session
 from ecncryption_decryption import get_keys, encrypt, decrypt
 import datetime
 
-def add_user_details():
+def add_user_details(current_user):
     try:
         data = request.json
         password = data['password']
@@ -32,7 +32,7 @@ def add_user_details():
         app_support_session.rollback()  
         return jsonify({"message": "Error adding user", "error": str(e)}), 500
     
-def delete_user_details():
+def delete_user_details(current_user):
     try:
         data = request.json
         user = app_support_session.query(Users).filter_by(email=data["email"]).first()
@@ -45,7 +45,7 @@ def delete_user_details():
     except Exception as e:
         return jsonify({"message": "Error in deleting user", "error": str(e)})
     
-def update_password():
+def update_password(current_user):
     try:
         data = request.json
         email = data.get('email')

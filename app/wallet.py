@@ -5,7 +5,7 @@ from db_connection import cash_session
 import datetime
 import json
 
-def wallet_details():
+def wallet_details(current_user):
     try:
         client_id = request.args.get('clientId')
 

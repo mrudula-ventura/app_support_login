@@ -13,14 +13,31 @@ function getClientId() {
 async function fetchAndDisplayPanicData() {
     try {
         const clientId = getClientId(); 
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.log('No token found. Please log in.');
+            window.location.href = 'login.html';
+            return;
+        }
         if (!clientId) {
             throw new Error('Client ID not found in URL.');
         }
 
         document.getElementById('loader').style.display = 'flex'; 
-        const response = await fetch(`http://localhost:5000/panic?clientId=${clientId}`);
+        const response = await fetch(`http://localhost:5000/panic?clientId=${clientId}`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
+        }
+        else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         }
 
         const data = await response.json();

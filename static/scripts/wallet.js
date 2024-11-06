@@ -96,11 +96,19 @@ function getClientId() {
 
 async function fetchWalletData() {
     const clientId = getClientId();
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
 
     const response = await fetch(`http://localhost:5000/wallet?clientId=${clientId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         }
     });
 
@@ -116,6 +124,9 @@ async function fetchWalletData() {
         } else {
             displayWalletTable();
         }
+    } else if (response.status === 401) {
+        // If unauthorized, redirect to login page
+        window.location.href = 'login.html';
     } else {
         const noWalletMessage = document.querySelector('.noWalletMessage');
         noWalletMessage.style.display = 'block';

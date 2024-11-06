@@ -4,21 +4,23 @@ from config import get_config
 from flask import Flask, render_template, jsonify, request
 from sqlalchemy import func
 
-
 # Get the current working directory
 current_directory = os.getcwd()
 # Get the parent directory
 parent_directory = os.path.abspath(os.path.join(current_directory, os.pardir))
 
-
-app = Flask(__name__, template_folder='../templates', 
-            static_folder='../static')
-
+app = Flask(__name__, template_folder='../templates', static_folder='../static')
 
 def get_api_resp(URL, header, payload=None):
+    # Get Authorization token from the request headers (if available)
+    authorization_token = request.headers.get('Authorization')  # Assuming token is passed in request headers
+    
+    if authorization_token:
+        header['Authorization'] = authorization_token  # Add the token to the header
+    
+    # Make the API request with the updated header
     req = requests.post(URL, headers=header, json=payload)
     return req.json()
-
 
 def format_floats(data):
     """Recursively format all floats in the given data structure to two decimal places."""
@@ -30,8 +32,7 @@ def format_floats(data):
         return round(data, 2)
     return data
 
-
-def get_equity_hp():
+def get_equity_hp(current_user):
     client_id = request.args.get('clientId')
     # Get and set all variables
     X_API_KEY = get_config("X_API_KEY")
@@ -50,7 +51,7 @@ def get_equity_hp():
     header = {
         'x-client-id': f'{client_id.upper()}',
         'x-api-key': f'{X_API_KEY}',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     }
 
     # Start getting all responses. All are post APIs
@@ -67,11 +68,9 @@ def get_equity_hp():
 
     return jsonify([holdings, holding_summary, positions, position_summary])
 
-
 @app.route('/equity')
 def index():
     return render_template('equity.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -28,11 +28,18 @@ function getClientId() {
 // Function to fetch account data using a GET request
 async function fetchClientData() {
   const clientId = getClientId();
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.log('No token found. Please log in.');
+    window.location.href = 'login.html';
+    return;
+}
     try {
         const response = await fetch(`http://localhost:5000/cob_details?clientId=${clientId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -46,6 +53,9 @@ async function fetchClientData() {
             } else if (data.message) {
                 showMessage(data.message);  // Display any message from the backend
             }
+        } else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         } else {
             console.error('Failed to fetch COB data.');
             showMessage('Failed to fetch COB data.');

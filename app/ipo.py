@@ -4,7 +4,7 @@ from sqlalchemy import func
 from db_connection import  ipo_session
 
 
-def ipo_data():
+def ipo_data(current_user):
     try:
         client_id = request.args.get('clientId')
         

@@ -21,11 +21,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchMFData() {
         const clientId = getClientId();
+        const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
         try {
             const response = await fetch(`http://localhost:5000/mf?clientId=${clientId}`, { 
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -60,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 purchaseAmountElem.innerText = `Purchase Amount: ₹${totalPurchaseAmount}`;
                 xirrElem.innerHTML = `XIRR : ${xirrelem}%`;
 
+            } else if (response.status === 401) {
+                // If unauthorized, redirect to login page
+                window.location.href = 'login.html';
             } else {
                 throw new Error('Failed to fetch data');
             }

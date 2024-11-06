@@ -20,12 +20,20 @@ document.getElementById('dltUser').addEventListener('click', function () {
   
         email: email
     };
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
 
   
     fetch('http://localhost:5000/delete-user', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(userData)
     })

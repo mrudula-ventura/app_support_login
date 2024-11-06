@@ -122,6 +122,13 @@ async function fetchIPOData() {
     const noIposMessage = document.querySelector('.no-ipos-message');
     const tableContainer = document.querySelector('.table-container');
     const searchInput = document.getElementById('searchInput');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
 
     // Hide table and search input during data fetch
     tableContainer.style.display = 'none';
@@ -133,6 +140,7 @@ async function fetchIPOData() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -147,6 +155,9 @@ async function fetchIPOData() {
                 displayIpoTable();  // Display IPO data if available
                 loader.style.display = 'none';  // Hide loader after data loads
             }
+        } else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         } else {
             loader.style.display = 'none';  // Hide loader on error
             noIposMessage.textContent = 'No IPOs available for this client ID.';

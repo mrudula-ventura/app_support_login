@@ -5,7 +5,7 @@ from ecncryption_decryption import get_keys, encrypt, decrypt
 from flask import jsonify, request
 from datetime import date, datetime
 
-def sso_details():
+def sso_details(current_user):
     try:
         client_id = request.args.get('clientId')
         sso_details = []

@@ -29,7 +29,13 @@ document.addEventListener('DOMContentLoaded', function() {
     async function searchClientId() {
         const emailOrPhone = document.getElementById('email-mobile').value;
         const errorMessageElement = document.getElementById('error-message'); // Get the error message element
-    
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.log('No token found. Please log in.');
+            window.location.href = 'login.html';
+            return;
+        }
         // Clear any previous error message
         errorMessageElement.textContent = '';
     
@@ -45,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({ emailOrPhone }),
                 });
@@ -61,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Display backend error message if clientId is null
                         errorMessageElement.textContent = data.message || "Client ID not found.";
                     }
+                } else if (response.status === 401) {
+                    // If unauthorized, redirect to login page
+                    window.location.href = 'login.html';
                 } else {
                     errorMessageElement.textContent = "Client ID not found.";
                 }
@@ -83,7 +93,13 @@ document.addEventListener('DOMContentLoaded', function() {
     async function submitClientId() {
         const clientId = clientIdInput.value.trim();
         const errorMessageElement = document.getElementById('error-message'); // Get the error message element
-    
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            console.log('No token found. Please log in.');
+            window.location.href = 'login.html';
+            return;
+        }
         // Clear any previous error message
         errorMessageElement.textContent = '';
     
@@ -93,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify({ clientId }),
                 });
@@ -105,6 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (response.status === 400) {
                     
                     errorMessageElement.textContent = result.message || "Client ID not found.";
+                }
+                else if (response.status === 401) {
+                    // If unauthorized, redirect to login page
+                    window.location.href = 'login.html';
                 } else {
                     errorMessageElement.textContent = 'Client ID submission failed. Please try again.';
                 }

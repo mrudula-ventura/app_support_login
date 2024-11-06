@@ -22,7 +22,13 @@ document.getElementById('addUser').addEventListener('click', function () {
     const password = document.getElementById('newUserPswd').value;
     const confirmPassword = document.getElementById('newUserCPswd').value;
     const isSuperuser = document.getElementById('isSuperuser').checked;
+    const token = localStorage.getItem('token');
 
+    if (!token) {
+        console.log('No token found. Please log in.');
+        window.location.href = 'login.html';
+        return;
+    }
 
     if (!validateEmail(email)) {
         alert("Please enter a valid email with @venturasecurities.com.");
@@ -44,7 +50,8 @@ document.getElementById('addUser').addEventListener('click', function () {
     fetch('http://localhost:5000/addUser', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(userData)
     })
@@ -54,6 +61,9 @@ document.getElementById('addUser').addEventListener('click', function () {
             const a = document.getElementById('error-message').textContent = result_1.message;
             alert("User added successfully.", a);
             window.location.href = "superuser.html";
+        } else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         } else {
             const result_2 = await response.json();
             let errorMessage;

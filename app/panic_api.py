@@ -4,7 +4,7 @@ from models import PanicAlerts
 from sqlalchemy import func
 from datetime import datetime
 
-def panic_alerts():
+def panic_alerts(current_user):
     try:
         client_id = request.args.get('clientId')
         panic_list = []

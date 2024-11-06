@@ -194,10 +194,18 @@ function showMessage(message) {
         showLoader();  // Show loader before fetching data
         try {
             const clientId = getClientId();
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                console.log('No token found. Please log in.');
+                window.location.href = 'login.html';
+                return;
+            }
             const response = await fetch(`http://localhost:5000/profile?clientId=${clientId}`, { 
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -217,6 +225,9 @@ function showMessage(message) {
                     displaySegments(data.segment);
                     displayDemats(data.demat);
                 }
+            } else if (response.status === 401) {
+                // If unauthorized, redirect to login page
+                window.location.href = 'login.html';
             } else {
                 console.error('Failed to fetch user or bank account data.');
             }

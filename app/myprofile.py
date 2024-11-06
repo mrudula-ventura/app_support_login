@@ -5,7 +5,7 @@ from db_connection import sso_session, profile_session
 from ecncryption_decryption import decrypt, get_keys
 
 
-def profile_details():
+def profile_details(current_user):
     try:
         client_id = request.args.get('clientId')
         pu_key, pr_key = get_keys()

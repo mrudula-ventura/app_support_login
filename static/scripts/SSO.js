@@ -1,17 +1,15 @@
-
 // Function to display account information in a card
 function displayAccountInfo(account) {
     const card = document.getElementById('account-card');
     
-
-       // Extract the PLATFORM field, parse it as a proper array, and join the elements
-       let platformDisplay = 'N/A';
-       try {
-           const platformArray = JSON.parse(account.PLATFORM.replace(/'/g, '"'));  // Replace single quotes with double quotes for JSON parsing
-           platformDisplay = Array.isArray(platformArray) ? platformArray.join(', ') : 'N/A';
-       } catch (error) {
-           console.error('Error parsing platform:', error);
-       }
+    // Extract the PLATFORM field, parse it as a proper array, and join the elements
+    let platformDisplay = 'N/A';
+    try {
+        const platformArray = JSON.parse(account.PLATFORM.replace(/'/g, '"'));  // Replace single quotes with double quotes for JSON parsing
+        platformDisplay = Array.isArray(platformArray) ? platformArray.join(', ') : 'N/A';
+    } catch (error) {
+        console.error('Error parsing platform:', error);
+    }
     
     card.innerHTML = `
         <h3>Account Status: ${account.ACCOUNT_STATUS || 'N/A'}</h3>
@@ -27,19 +25,36 @@ function displayAccountInfo(account) {
     `;
 }
 
-
+// Function to get clientId from the URL parameters
 function getClientId() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('clientId');
-  }
+    const clientId = params.get('clientId');
+    
+    if (!clientId) {
+        console.log('No clientId found in URL.');
+        return null;
+    }
+    
+    return clientId;
+}
+
 // Function to fetch account data using a GET request
 async function fetchAccountData() {
-  const clientId = getClientId();
+    const clientId = getClientId();
+    const token = localStorage.getItem('token');  // Get token from localStorage
+
+    if (!clientId || !token) {
+        console.error('Client ID or Token is missing.');
+        showMessage('Client ID or Token is missing. Please log in.');
+        return;
+    }
+
     try {
         const response = await fetch(`http://localhost:5000/sso?clientId=${clientId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -49,10 +64,13 @@ async function fetchAccountData() {
             // Check if data contains account information
             if (data.data) {
                 displayAccountInfo(data.data[0]);
-                console.log(data.data[0])
+                console.log(data.data[0]);
             } else if (data.message) {
                 showMessage(data.message);  // Display any message from the backend
             }
+        } else if (response.status === 401) {
+            // If unauthorized, redirect to login page
+            window.location.href = 'login.html';
         } else {
             console.error('Failed to fetch account data.');
             showMessage('Failed to fetch account data.');
@@ -60,14 +78,27 @@ async function fetchAccountData() {
     } catch (error) {
         console.error('Error fetching data:', error);
         showMessage('Error fetching data.');
-    } finally {
-
     }
 }
 
+// Function to show messages on the page
+function showMessage(message) {
+    const messageContainer = document.getElementById('message-container');
+    if (messageContainer) {
+        messageContainer.innerText = message;
+    }
+}
 
+// Function to go back to the previous page
+function goBack() {
+    window.history.back();
+}
+
+// Call the fetch function when the page loads
+document.addEventListener('DOMContentLoaded', fetchAccountData);
+
+// Additional code for displaying client information
 document.addEventListener('DOMContentLoaded', () => {
-    // Retrieve the data from localStorage
     const storedData = localStorage.getItem('clientData');
     
     if (storedData) {
@@ -82,16 +113,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('No data found in localStorage.');
     }
 });
-
-
-
-
-
-
-
-function goBack() {
-    window.history.back();
-}
-
-// Call the fetch function when the page loads
-document.addEventListener('DOMContentLoaded', fetchAccountData);

@@ -6,7 +6,7 @@ from ecncryption_decryption import get_keys, encrypt, decrypt
 
 pu_key, pr_key = get_keys()
 
-def get_client_id_from_mobile_email():
+def get_client_id_from_mobile_email(current_user):
     try:
         data = request.json
         email_mobile = data.get('emailOrPhone').lower()
@@ -39,7 +39,7 @@ def get_client_id_from_mobile_email():
     except Exception as e:
         return jsonify({"message": "Error in get_client_id_from_mobile_email", "error": str(e)})
 
-def get_client_id_details():
+def get_client_id_details(current_user):
     try:
         data = request.json
         # email_or_mobile = data['emailOrMobile']
