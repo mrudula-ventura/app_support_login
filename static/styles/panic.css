@@ -168,7 +168,8 @@ body {
   transform: translate(-50%, -50%);
   display: none;
   font-size: 25px;
-  color: #48128f;
+  color:rgb(161, 52, 52);
+  font-weight: bold;
   text-align: center;
   margin-top: 20px;
   display: none;
@@ -204,11 +205,20 @@ body {
   transform: translate(-50%, -50%);
   display: none;
   font-size: 25px;
-  color: #48128f;
+  color:rgb(161, 52, 52);
+  font-weight: bold;
   text-align: center;
   margin-top: 20px;
    
 
+}
+
+
+.expand-toggle {
+  font-size: 0.8em; /* Smaller font size */
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 

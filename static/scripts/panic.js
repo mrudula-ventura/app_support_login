@@ -26,21 +26,18 @@ async function fetchAndDisplayPanicData() {
         const data = await response.json();
         panicData = data.data; // Adjust based on your API structure
         originalPanicData = [...panicData]; // Save a copy of the original data
-        
        
         document.getElementById('loader').style.display = 'none'; 
 
-        // Check if there's any panic data
         if (panicData.length === 0) {
-            document.getElementById('no-data-message').style.display = 'block'; // Show no data message
-            document.getElementById('table-container').style.display = 'none'; // Hide table
+            document.getElementById('no-data-message').style.display = 'block'; 
+            document.getElementById('table-container').style.display = 'none';
             return;
         }
 
-        document.getElementById('no-data-message').style.display = 'none'; // Hide no data message
-        document.getElementById('table-container').style.display = 'block'; // Show table
+        document.getElementById('no-data-message').style.display = 'none'; 
+        document.getElementById('table-container').style.display = 'block';
 
-        // Populate the table with data for the current page
         displayPage(currentPage);
     } catch (error) {
         console.error('Failed to fetch panic data:', error);
@@ -50,39 +47,83 @@ async function fetchAndDisplayPanicData() {
 // Function to display the current page of panic data
 function displayPage(page) {
     const tableBody = document.querySelector('#panic-table tbody');
-    tableBody.innerHTML = ''; // Clear previous table content
+    tableBody.innerHTML = ''; 
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = panicData.slice(start, end);
 
     paginatedData.forEach(panic => {
         const row = document.createElement('tr');
+
         row.innerHTML = `
             <td>${panic.device_type}</td>
             <td>${panic.latency}</td>
             <td>${panic.page_id}</td>
-            <td>${panic.request_payload}</td>
+            <td class="request_payload">${truncateText(panic.request_payload)}</td>
             <td>${panic.response_code}</td>
-            <td>${panic.response_payload}</td>
+            <td class="response_payload">${truncateText(panic.response_payload)}</td>
             <td>${panic.section}</td>
             <td>${panic.timestamp}</td>
             <td>${panic.url}</td>
         `;
+
         tableBody.appendChild(row);
+
+        setupExpandableText(row, '.request_payload', panic.request_payload);
+        setupExpandableText(row, '.response_payload', panic.response_payload);
     });
 
-    updatePaginationInfo(); // Update pagination info after displaying the current page
+    updatePaginationInfo();
 }
+
+// Helper function to truncate text if it exceeds 20 characters
+function truncateText(text) {
+    return text.length > 20 
+        ? text.slice(0, 20) + '... <span class="expand-toggle" style="color: blue; cursor: pointer;">Show More</span>' 
+        : text;
+}
+
+// Function to truncate text if it exceeds 20 characters
+function truncateText(text) {
+    return text.length > 20 
+        ? text.slice(0, 20) + '... <span class="expand-toggle">Show More</span>' 
+        : text;
+}
+
+// Function to handle expanding/collapsing text for specific fields
+function setupExpandableText(row, fieldClass, fullText) {
+    const cell = row.querySelector(fieldClass);
+    if (cell && fullText.length > 20) {
+        const toggle = cell.querySelector('.expand-toggle');
+        let expanded = false;
+
+        toggle.addEventListener('click', () => {
+            if (expanded) {
+                cell.innerHTML = truncateText(fullText); 
+                setupExpandableText(row, fieldClass, fullText); // Reattach the toggle
+                expanded = false;
+            } else {
+                cell.innerHTML = fullText + ' <span class="expand-toggle">Show Less</span>';
+                expanded = true;
+
+                const lessToggle = cell.querySelector('.expand-toggle');
+                lessToggle.addEventListener('click', () => {
+                    cell.innerHTML = truncateText(fullText);
+                    setupExpandableText(row, fieldClass, fullText); // Reattach the toggle for "Show More"
+                });
+            }
+        });
+    }
+}
+
 
 // Function to update pagination info
 function updatePaginationInfo() {
     const totalPages = Math.ceil(panicData.length / rowsPerPage);
     const paginationDiv = document.getElementById('pagination');
 
-    // Clear existing pagination content
-    paginationDiv.innerHTML = '';
+    paginationDiv.innerHTML = ''; 
 
-    // Create Previous button
     if (currentPage > 1) {
         const prevButton = document.createElement('button');
         prevButton.innerText = 'Previous';
@@ -90,11 +131,10 @@ function updatePaginationInfo() {
         paginationDiv.appendChild(prevButton);
     }
 
-    // Create page number buttons
     for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement('button');
         pageButton.innerText = i;
-        pageButton.disabled = (i === currentPage); // Disable the button for the current page
+        pageButton.disabled = (i === currentPage); 
         pageButton.addEventListener('click', () => {
             currentPage = i;
             displayPage(currentPage);
@@ -102,7 +142,6 @@ function updatePaginationInfo() {
         paginationDiv.appendChild(pageButton);
     }
 
-    // Create Next button
     if (currentPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.innerText = 'Next';
@@ -121,13 +160,11 @@ function changePage(direction) {
 document.getElementById('searchInput').addEventListener('input', filterPanicTable);
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Retrieve the data from localStorage
     const storedData = localStorage.getItem('clientData');
     
     if (storedData) {
         const clientData = JSON.parse(storedData);
         
-        // Display the data on this page
         document.getElementById('client-id-display').innerText = clientData.client_id;
         document.getElementById('client-full-name').innerText = clientData.Full_Name;
         document.getElementById('client-email').innerText = clientData.Email;
@@ -136,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('No data found in localStorage.');
     }
     
-    // Fetch data and populate table
     fetchAndDisplayPanicData();
 });
 
@@ -145,7 +181,6 @@ function filterPanicTable() {
     const input = document.getElementById('searchInput').value.toLowerCase();
     const noMatchesMessage = document.getElementById('noMatchesMessage');
     
-    // If search input is empty, restore the current page's original data
     if (input === '') {
         panicData = [...originalPanicData];
         displayPage(currentPage);
@@ -153,7 +188,6 @@ function filterPanicTable() {
         return;
     }
 
-    // Filter only within the current page's data
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = originalPanicData.slice(start, end);
@@ -173,7 +207,7 @@ function filterPanicTable() {
     } else {
         noMatchesMessage.style.display = 'block';
         const tableBody = document.querySelector('#panic-table tbody');
-        tableBody.innerHTML = ''; // Clear previous table content
+        tableBody.innerHTML = ''; 
     }
 }
 

@@ -168,7 +168,8 @@ body {
   transform: translate(-50%, -50%);
   display: none;
   font-size: 25px;
-  color: #48128f;
+  color:rgb(161, 52, 52);
+  font-weight: bold;
   text-align: center;
   margin-top: 20px;
   display: none;
@@ -230,7 +231,8 @@ th .sort-arrow-container {
   transform: translate(-50%, -50%);
   display: none;
   font-size: 25px;
-  color: #ff0000;
+  color:rgb(161, 52, 52);
+  font-weight: bold;
   text-align: center;
   margin-top: 20px;
    
